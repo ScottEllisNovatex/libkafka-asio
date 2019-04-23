@@ -12,7 +12,9 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/../lib
     ${GTEST_INCLUDE_DIRS}
-    ${Boost_INCLUDE_DIRS})
+    ${Boost_INCLUDE_DIRS}
+	${SNAPPY_INCLUDE_DIR}
+	${ZLIB_INCLUDE_DIR})
 include_directories(
     ${ZLIB_INCLUDE_DIRS}
     ${SNAPPY_INCLUDE_DIRS})

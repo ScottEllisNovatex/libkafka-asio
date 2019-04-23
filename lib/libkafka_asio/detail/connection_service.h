@@ -49,7 +49,7 @@ public:
   // Construct a new connection service implementation
   void construct(implementation_type& impl)
   {
-    impl.reset(new Service(get_io_service()));
+    impl.reset(new Service(get_io_context()));
   }
 
   // Destroy a connection service implementation
