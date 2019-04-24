@@ -29,7 +29,7 @@ int main(int argc, char **argv)
   configuration.auto_connect = true;
   configuration.client_id = "libkafka_asio_example";
   configuration.socket_timeout = 10000;
-  configuration.SetBrokerFromString("192.168.15.137:49162");
+  configuration.SetBrokerFromString("localhost:9092");
 
   boost::asio::io_service ios;
   Connection connection(ios, configuration);
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
   // that message is set to "Hello World". The message is produced for topic
   // "mytopic" and partition 0.
   ProduceRequest request;
-  request.AddValue("Hello World", "mytopic", 0);
+  request.AddValue("Hello World", "Test", 0);
 
   // Send the prepared produce request.
   // The connection will attempt to automatically connect to one of the brokers,

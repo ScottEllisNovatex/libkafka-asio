@@ -5,19 +5,16 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/Modules")
 
 find_package(GTest REQUIRED)
 find_package(Boost REQUIRED COMPONENTS thread system)
-find_package(ZLIB)
-find_package(Snappy)
+find_package(ZLIB REQUIRED)
+find_package(Snappy REQUIRED)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/../lib
     ${GTEST_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
-	${SNAPPY_INCLUDE_DIR}
-	${ZLIB_INCLUDE_DIR})
-include_directories(
-    ${ZLIB_INCLUDE_DIRS}
-    ${SNAPPY_INCLUDE_DIRS})
+    ${ZLIB_INCLUDE_DIR}
+    ${SNAPPY_INCLUDE_DIR})
     
 file(GLOB_RECURSE ${PROJECT_NAME}_SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp")
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})

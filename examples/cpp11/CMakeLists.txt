@@ -7,9 +7,7 @@ find_package(Boost REQUIRED COMPONENTS thread system)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/../../lib
-        ${Boost_INCLUDE_DIRS}
-		${SNAPPY_INCLUDE_DIR}
-		${ZLIB_INCLUDE_DIR})
+        ${Boost_INCLUDE_DIRS})
 
 set(examples_LINK_LIBRARIES ${Boost_LIBRARIES})
 
