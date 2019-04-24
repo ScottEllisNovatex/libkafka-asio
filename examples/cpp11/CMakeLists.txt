@@ -1,15 +1,21 @@
 cmake_minimum_required(VERSION 3.1)
 project(libkafka_asio_examples_cxx11)
 
-add_definitions("-DLIBKAFKAASIO_NO_COMPRESSION")
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../../cmake/Modules")
+
+# add_definitions("-DLIBKAFKAASIO_NO_COMPRESSION")
 
 find_package(Boost REQUIRED COMPONENTS thread system)
+find_package(ZLIB REQUIRED)
+find_package(Snappy REQUIRED)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/../../lib
-        ${Boost_INCLUDE_DIRS})
+        ${Boost_INCLUDE_DIRS}   
+		${ZLIB_INCLUDE_DIR}
+		${SNAPPY_INCLUDE_DIR})
 
-set(examples_LINK_LIBRARIES ${Boost_LIBRARIES})
+set(examples_LINK_LIBRARIES ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES})
 
 if (UNIX)
     list(APPEND examples_LINK_LIBRARIES pthread)
