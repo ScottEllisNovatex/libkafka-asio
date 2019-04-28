@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   // "mytopic" and partition 0.
   ProduceRequest request;
   
-  std::string MessageValue = "Hello World 2";
+  std::string MessageValue = "Hello World 2 Big Dogg";
   std::string MessageTopic = "Test";
   std::string MessageKey = "RTU12";
 
@@ -50,18 +50,35 @@ int main(int argc, char **argv)
 #ifdef ONEWAY
   request.AddValue(MessageValue, MessageTopic, 0);
 #else
+  /*
+  MessageSet message_set(2);
+  message_set[0].set_offset(1);
+  message_set[1].set_offset(2);
+  boost::system::error_code ec;
+  using namespace libkafka_asio::constants;
+  Message msg = CompressMessageSet(message_set, kCompressionGZIP, ec);
+  ASSERT_EQ(libkafka_asio::kErrorSuccess, ec);
+  ASSERT_TRUE(static_cast<bool>(msg.value()));
+  ASSERT_FALSE(msg.value()->empty());
+  ASSERT_EQ(kCompressionGZIP, msg.compression());
+  */
+
   libkafka_asio::Message message;
   message.mutable_value().reset( new libkafka_asio::Bytes::element_type(MessageValue.begin(), MessageValue.end()));
   message.mutable_key().reset(new libkafka_asio::Bytes::element_type(MessageKey.begin(), MessageKey.end()));
   
-  libkafka_asio::MessageAndOffset messageandoffset(message, 0);
+  libkafka_asio::MessageAndOffset messageandoffset(message, 1);	// Offset seems to be 1 based??
   libkafka_asio::MessageSet messageset;
   messageset.push_back(messageandoffset);
 
   // Not sure if we have to do this or the library will if the flag is set...
   boost::system::error_code ec;
   libkafka_asio::Message smallmessage =  CompressMessageSet(messageset, libkafka_asio::constants::Compression::kCompressionSnappy, ec);
-
+  if (libkafka_asio::kErrorSuccess != ec)
+  {
+	  // Compression failed...
+	  std::cout << "Compression of message failed! " << ec << std::endl;
+  }
   request.AddMessage(smallmessage, MessageTopic, 0);
 #endif
 
