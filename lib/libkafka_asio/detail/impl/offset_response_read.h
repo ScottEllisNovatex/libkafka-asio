@@ -10,7 +10,7 @@
 #ifndef OFFSET_RESPONSE_READ_H_BAFF7FC5_03CA_46CD_B8EC_AD2CDBFF19F0
 #define OFFSET_RESPONSE_READ_H_BAFF7FC5_03CA_46CD_B8EC_AD2CDBFF19F0
 
-#include <boost/foreach.hpp>
+
 #include <libkafka_asio/detail/response_read.h>
 
 namespace libkafka_asio

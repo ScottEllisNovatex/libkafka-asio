@@ -10,7 +10,7 @@
 #ifndef FETCH_RESPONSE_READ_H_03C2A581_53D0_498E_AF6A_2082227485A3
 #define FETCH_RESPONSE_READ_H_03C2A581_53D0_498E_AF6A_2082227485A3
 
-#include <boost/foreach.hpp>
+
 #include <libkafka_asio/detail/response_read.h>
 
 namespace libkafka_asio

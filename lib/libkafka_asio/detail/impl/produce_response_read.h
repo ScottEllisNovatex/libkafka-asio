@@ -10,7 +10,7 @@
 #ifndef PRODUCE_RESPONSE_READ_H_9046BEF5_332B_4B67_8138_5964E836BF6C
 #define PRODUCE_RESPONSE_READ_H_9046BEF5_332B_4B67_8138_5964E836BF6C
 
-#include <boost/foreach.hpp>
+
 #include <libkafka_asio/error.h>
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/detail/response_read.h>

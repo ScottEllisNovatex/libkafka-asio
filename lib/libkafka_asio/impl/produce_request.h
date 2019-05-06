@@ -12,7 +12,7 @@
 
 #include <algorithm>
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
+
 #include <libkafka_asio/constants.h>
 
 namespace libkafka_asio

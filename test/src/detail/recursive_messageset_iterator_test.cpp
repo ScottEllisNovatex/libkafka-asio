@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <iterator>
 
-#include <boost/foreach.hpp>
+
 #include <boost/shared_ptr.hpp>
 #include <gtest/gtest.h>
 
@@ -117,7 +117,7 @@ TEST(RecursiveMessageSetIteratorTest, Recurse)
   // (5, 6), 1, (7), (8, (10, 11, 12)), (13, 14)
   Int64 expected_offsets[] = {5, 6, 1, 7, 8, 10, 11, 12, 13, 14};
   RecursiveMessageSetIterator iter(messages), end_iter;
-  BOOST_FOREACH(Int64 expected_offset, expected_offsets)
+  for(Int64 expected_offset: expected_offsets)
   {
     ASSERT_EQ(expected_offset, iter->offset());
     iter++;

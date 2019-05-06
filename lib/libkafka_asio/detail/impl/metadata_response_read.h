@@ -10,7 +10,7 @@
 #ifndef METADATA_RESPONSE_READ_EBB58854_D8E4_40DE_A2E6_BADBFC9D8DB8
 #define METADATA_RESPONSE_READ_EBB58854_D8E4_40DE_A2E6_BADBFC9D8DB8
 
-#include <boost/foreach.hpp>
+
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/detail/response_read.h>
 
@@ -27,7 +27,7 @@ inline void ReadResponseMessage(std::istream& is,
   (void)ec;
   // Brokers
   response.mutable_brokers().resize(ReadInt32(is));
-  BOOST_FOREACH(MetadataResponse::Broker& broker, response.mutable_brokers())
+ for(MetadataResponse::Broker& broker: response.mutable_brokers())
   {
     broker.node_id = ReadInt32(is);
     broker.host = ReadString(is);

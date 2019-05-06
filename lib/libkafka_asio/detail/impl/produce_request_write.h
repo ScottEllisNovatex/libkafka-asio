@@ -10,7 +10,7 @@
 #ifndef PRODUCE_REQUEST_WRITE_H_E92E8BE2_2AB8_4383_A2DD_698DD8482789
 #define PRODUCE_REQUEST_WRITE_H_E92E8BE2_2AB8_4383_A2DD_698DD8482789
 
-#include <boost/foreach.hpp>
+
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/detail/request_write.h>
 
@@ -27,14 +27,13 @@ inline Int32 RequestMessageWireSize(const ProduceRequest& request)
 
   // Topic Array
   size += sizeof(Int32);
-  BOOST_FOREACH(const ProduceRequest::Topic& topic, request.topics())
+  for(const ProduceRequest::Topic& topic: request.topics())
   {
     size += StringWireSize(topic.topic_name);
 
     // Partition array
     size += sizeof(Int32);
-    BOOST_FOREACH(const ProduceRequest::Partition& partition,
-                  topic.partitions)
+    for(const ProduceRequest::Partition& partition: topic.partitions)
     {
       size +=
         sizeof(Int32) +  // Partition
@@ -52,14 +51,13 @@ inline void WriteRequestMessage(const ProduceRequest& request, std::ostream& os)
 
   // Topic Array
   WriteInt32(static_cast<Int32>(request.topics().size()), os);
-  BOOST_FOREACH(const ProduceRequest::Topic& topic, request.topics())
+  for(const ProduceRequest::Topic& topic: request.topics())
   {
     WriteString(topic.topic_name, os);
 
     // Partition Array
     WriteInt32(static_cast<Int32>(topic.partitions.size()), os);
-    BOOST_FOREACH(const ProduceRequest::Partition& partition,
-                  topic.partitions)
+    for(const ProduceRequest::Partition& partition: topic.partitions)
     {
       WriteInt32(partition.partition, os);
       WriteInt32(MessageSetWireSize(partition.messages), os);

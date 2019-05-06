@@ -12,7 +12,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/crc.hpp>
-#include <boost/foreach.hpp>
+
 #include <libkafka_asio/detail/request_write.h>
 
 namespace libkafka_asio
@@ -33,7 +33,7 @@ inline Int32 MessageWireSize(const Message& message)
 inline Int32 MessageSetWireSize(const MessageSet& message_set)
 {
   Int32 size = 0;
-  BOOST_FOREACH(const MessageAndOffset &message, message_set)
+ for(const MessageAndOffset &message: message_set)
   {
     size +=
       sizeof(Int64) +  // Offset
@@ -69,7 +69,7 @@ inline void WriteMessage(const Message& value, std::ostream& os)
 
 inline void WriteMessageSet(const MessageSet& value, std::ostream& os)
 {
-  BOOST_FOREACH(const MessageAndOffset &message, value)
+  for(const MessageAndOffset &message: value)
   {
     WriteInt64(message.offset(), os);
     WriteInt32(MessageWireSize(message), os);
