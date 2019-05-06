@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <libkafka_asio/optional.hpp>
+#include <libkafka_asio/optional.hpp>		// Replace with #include <optional> in future
 #include <libkafka_asio/primitives.h>
 
 namespace libkafka_asio
