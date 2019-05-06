@@ -61,9 +61,10 @@ struct ConnectionConfiguration
   void SetBroker(const T& broker);
 
   // Set the broker address using the given hostname and service parameter.
-  // Both will be casted to string using a lexical_cast.
-  template<typename Tx, typename Ty>
-  void SetBroker(const Tx& hostname, const Ty& service);
+  // Both will be casted to string.
+
+  void SetBroker(const std::string& hostname, const uint32_t & service);
+  void SetBroker(const std::string& hostname, const std::string & service);
 
 };
 

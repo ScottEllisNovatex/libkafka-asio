@@ -11,7 +11,6 @@
 #define BASIC_CONNECTION_H_C3BEC97E_D24D_4938_BCAE_7A746C0989B4
 
 #include <boost/asio.hpp>
-#include <boost/lexical_cast.hpp>
 #include <libkafka_asio/connection_configuration.h>
 
 namespace libkafka_asio
@@ -85,8 +84,7 @@ public:
   }
 
   // Asynchronously connects to the Kafka server, identified by the given
-  // hostname and service. Both arguments will be casted to string using
-  // lexical_cast.
+  // hostname and service. 
   // The given handler function object will be called on success as well as
   // on error.
   // The function always returns immediately.
@@ -102,9 +100,8 @@ public:
                     Ty service,
                     const ConnectionHandlerType& handler)
   {
-    using boost::lexical_cast;
-    this->AsyncConnect(lexical_cast<std::string>(host),
-                       lexical_cast<std::string>(service),
+    this->AsyncConnect(to_string(host),
+                       to_string>(service),
                        handler);
   }
 
