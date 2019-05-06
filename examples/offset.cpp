@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <boost/asio.hpp>
+#include <libkafka_asio/optional.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
 using libkafka_asio::Connection;

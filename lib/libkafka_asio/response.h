@@ -11,6 +11,7 @@
 #define RESPONSE_H_96E99D03_30D1_4F88_B5E8_002B7CF6A32E
 
 #include <libkafka_asio/primitives.h>
+#include <libkafka_asio/optional.hpp>
 
 namespace libkafka_asio
 {
