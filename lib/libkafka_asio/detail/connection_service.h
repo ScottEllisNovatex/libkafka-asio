@@ -13,7 +13,6 @@
 #include <deque>
 #include <memory>
 #include <boost/asio.hpp>
-#include <boost/function.hpp>
 #include <boost/system/error_code.hpp>
 #include <libkafka_asio/connection_configuration.h>
 
@@ -76,17 +75,17 @@ public:
   typedef boost::system::error_code ErrorCodeType;
 
   // Handler type definition for connection operations
-  typedef boost::function<void(const ErrorCodeType&)> ConnectionHandlerType;
+  typedef std::function<void(const ErrorCodeType&)> ConnectionHandlerType;
 
   // Handler type definitions for transmission operations
-  typedef boost::function<void(const ErrorCodeType&, size_t)> TxHandlerType;
+  typedef std::function<void(const ErrorCodeType&, size_t)> TxHandlerType;
 
   // Handler type deduction template depending on the type of request
   template<typename TRequest>
   struct Handler
   {
     typedef typename TRequest::ResponseType::OptionalType ResponseType;
-    typedef boost::function<void(const ErrorCodeType&,
+    typedef std::function<void(const ErrorCodeType&,
                                  const ResponseType&)> Type;
   };
 

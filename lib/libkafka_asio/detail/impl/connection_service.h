@@ -12,7 +12,6 @@
 
 #include <functional>
 #include <chrono>
-#include <boost/ref.hpp>
 #include <libkafka_asio/constants.h>
 #include <libkafka_asio/detail/request_write.h>
 #include <libkafka_asio/detail/response_read.h>
@@ -128,7 +127,7 @@ inline void ConnectionServiceImpl::SetDeadline(
       std::bind(
         &ConnectionServiceImpl::HandleDeadline, this,
         std::placeholders::_1,
-        boost::ref(timer))));
+        std::ref(timer))));
 }
 
 template<typename TRequest>
