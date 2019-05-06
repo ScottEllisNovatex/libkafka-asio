@@ -11,10 +11,9 @@
 #define CONNECTION_SERVICE_H_BD87CD55_1B15_4F19_AE8C_B78C42BBE950
 
 #include <deque>
+#include <memory>
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <boost/system/error_code.hpp>
 #include <libkafka_asio/connection_configuration.h>
 
@@ -30,7 +29,7 @@ class BasicConnectionService :
 public:
 
   // Service implementation type
-  typedef boost::shared_ptr<Service> implementation_type;
+  typedef std::shared_ptr<Service> implementation_type;
 
   // Unique service identifier
   static boost::asio::io_service::id id;
@@ -70,7 +69,7 @@ public:
 // pending on the socket.
 //
 class ConnectionServiceImpl :
-  public boost::enable_shared_from_this<ConnectionServiceImpl>
+  public std::enable_shared_from_this<ConnectionServiceImpl>
 {
 public:
   // Error codes use this type
@@ -95,7 +94,7 @@ private:
   typedef boost::asio::ip::tcp::socket SocketType;
   typedef boost::asio::deadline_timer DeadlineTimerType;
   typedef boost::asio::ip::tcp::resolver ResolverType;
-  typedef boost::shared_ptr<boost::asio::streambuf> StreambufType;
+  typedef std::shared_ptr<boost::asio::streambuf> StreambufType;
 
   enum ConnectionState
   {

@@ -65,7 +65,7 @@ private:
   Int8 attributes_;
   Bytes key_;
   Bytes value_;
-  boost::shared_ptr<MessageSet> nested_message_set_;
+  std::shared_ptr<MessageSet> nested_message_set_;
 };
 
 // Message data structure with an additional offset

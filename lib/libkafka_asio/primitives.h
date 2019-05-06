@@ -13,7 +13,6 @@
 #include <string>
 #include <vector>
 #include <boost/integer.hpp>
-#include <boost/shared_ptr.hpp>
 
 namespace libkafka_asio
 {
@@ -28,7 +27,7 @@ typedef boost::int_t<32>::exact Int32;
 typedef boost::int_t<64>::exact Int64;
 typedef boost::uint_t<8>::exact Byte;
 typedef std::string String;
-typedef boost::shared_ptr<std::vector<Byte> > Bytes;
+typedef std::shared_ptr<std::vector<Byte> > Bytes;
 
 }  // namespace libkafka_asio
 

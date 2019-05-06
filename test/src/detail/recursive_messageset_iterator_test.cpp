@@ -11,7 +11,6 @@
 #include <iterator>
 
 
-#include <boost/shared_ptr.hpp>
 #include <gtest/gtest.h>
 
 #include <libkafka_asio/detail/recursive_messageset_iterator.h>
