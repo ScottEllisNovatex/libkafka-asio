@@ -7,6 +7,8 @@ option(USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON
 
 # Platform configuration
 if(WIN32)
+	set(CMAKE_SUPPRESS_REGENERATION true)	# removes the ZERO_CHECK project for VS, which rebuilds on CMake file change.
+
 	# for ASIO
 	add_definitions(-D_WIN32_WINNT=0x0502)		# Windows Server 2003 and up
 	add_definitions(-DBOOST_ALL_NO_LIB)				# Otherwise, boost trys to tell the linker where the libraries are.
