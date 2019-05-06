@@ -11,8 +11,7 @@
 #define PRODUCE_REQUEST_H_36D7E2BC_EF71_420F_B3D1_12614A1FD535
 
 #include <algorithm>
-#include <boost/bind.hpp>
-
+#include <functional>
 #include <libkafka_asio/constants.h>
 
 namespace libkafka_asio
@@ -89,8 +88,8 @@ inline void ProduceRequest::AddMessageSet(const MessageSet& message_set,
                                           Int32 partition)
 {
   std::for_each(message_set.begin(), message_set.end(),
-                boost::bind(&ProduceRequest::AddMessage,
-                            this, ::_1, topic_name, partition));
+                std::bind(&ProduceRequest::AddMessage,
+                            this, std::placeholders::_1, topic_name, partition));
 }
 
 inline void ProduceRequest::Clear()

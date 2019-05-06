@@ -10,7 +10,7 @@
 #ifndef CONNECTION_SERVICE_H_5310FB3D_9D78_4C52_AE32_EB71E000F4ED
 #define CONNECTION_SERVICE_H_5310FB3D_9D78_4C52_AE32_EB71E000F4ED
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/ref.hpp>
 #include <libkafka_asio/constants.h>
 #include <libkafka_asio/detail/request_write.h>
@@ -71,7 +71,7 @@ inline void ConnectionServiceImpl::AsyncConnect(
 {
   if (connection_state_ != kConnectionStateClosed)
   {
-    io_service_.post(boost::bind(handler, kErrorAlreadyConnected));
+    io_service_.post(std::bind(handler, kErrorAlreadyConnected));
     return;
   }
   ResolverType::query query(host, service);
@@ -79,10 +79,10 @@ inline void ConnectionServiceImpl::AsyncConnect(
     query,
     WeakImpl<ConnectionServiceImpl>::ResolveHandler(
       shared_from_this(),
-      boost::bind(
+      std::bind(
         &ConnectionServiceImpl::HandleAsyncResolve, this,
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::iterator,
+        std::placeholders::_1,
+        std::placeholders::_2,
         handler)));
   connection_state_ = kConnectionStateConnecting;
   SetDeadline(connect_deadline_);
@@ -93,7 +93,7 @@ inline void ConnectionServiceImpl::AsyncConnect(
 {
   if (!configuration_.broker_address)
   {
-    io_service_.post(boost::bind(handler, kErrorNoBroker));
+    io_service_.post(std::bind(handler, kErrorNoBroker));
     return;
   }
   AsyncConnect(
@@ -110,7 +110,7 @@ inline void ConnectionServiceImpl::AsyncRequest(
   io_service_.post(
     WeakImpl<ConnectionServiceImpl>::NullaryHandler(
       shared_from_this(),
-      boost::bind(
+      std::bind(
         &ConnectionServiceImpl::EnqueueRequest<TRequest>, this,
         request,
         handler)));
@@ -124,9 +124,9 @@ inline void ConnectionServiceImpl::SetDeadline(
   timer.async_wait(
     WeakImpl<ConnectionServiceImpl>::DeadlineHandler(
       shared_from_this(),
-      boost::bind(
+      std::bind(
         &ConnectionServiceImpl::HandleDeadline, this,
-        boost::asio::placeholders::error,
+        std::placeholders::_1,
         boost::ref(timer))));
 }
 
@@ -151,14 +151,14 @@ inline void ConnectionServiceImpl::EnqueueRequest(
     {
       typename TRequest::ResponseType::OptionalType empty_response;
       io_service_.post(
-        boost::bind(handler, kErrorNotConnected, empty_response));
+        std::bind(handler, kErrorNotConnected, empty_response));
       return;
     }
     else if (!configuration_.broker_address)
     {
       typename TRequest::ResponseType::OptionalType empty_response;
       io_service_.post(
-        boost::bind(handler, kErrorNoBroker, empty_response));
+        std::bind(handler, kErrorNoBroker, empty_response));
       return;
     }
   }
@@ -166,10 +166,10 @@ inline void ConnectionServiceImpl::EnqueueRequest(
   item.buffer = Serialize(request);
   bool response_expected = request.ResponseExpected();
   item.handler =
-    boost::bind(
+    std::bind(
       &ConnectionServiceImpl::HandleAsyncRequestWrite<TRequest>, this,
-      boost::asio::placeholders::error,
-      boost::asio::placeholders::bytes_transferred,
+      std::placeholders::_1,
+      std::placeholders::_2,
       item.buffer,
       handler,
       response_expected);
@@ -200,11 +200,11 @@ inline void ConnectionServiceImpl::EnqueueResponse(
   if (connection_state_ != kConnectionStateConnected)
   {
     typename TRequest::ResponseType::OptionalType empty_response;
-    io_service_.post(boost::bind(handler, kErrorNotConnected, empty_response));
+    io_service_.post(std::bind(handler, kErrorNotConnected, empty_response));
     while (!read_queue_.empty())
     {
       QueueItem& item = read_queue_.front();
-      io_service_.post(boost::bind(item.handler, kErrorNotConnected, 0));
+      io_service_.post(std::bind(item.handler, kErrorNotConnected, 0));
       read_queue_.pop_front();
     }
     NextRequest();
@@ -213,10 +213,10 @@ inline void ConnectionServiceImpl::EnqueueResponse(
   QueueItem item;
   item.buffer = buffer;
   item.handler =
-    boost::bind(
+    std::bind(
       &ConnectionServiceImpl::HandleAsyncResponseSizeRead<TRequest>, this,
-      boost::asio::placeholders::error,
-      boost::asio::placeholders::bytes_transferred,
+      std::placeholders::_1,
+      std::placeholders::_2,
       buffer,
       handler);
   if (read_state_ == kTxStateIdle)
@@ -249,8 +249,8 @@ inline void ConnectionServiceImpl::NextRequest()
     AsyncConnect(
       WeakImpl<ConnectionServiceImpl>::ErrorHandler(
         shared_from_this(),
-        boost::bind(&ConnectionServiceImpl::HandleAsyncAutoConnect, this,
-                    boost::asio::placeholders::error)));
+        std::bind(&ConnectionServiceImpl::HandleAsyncAutoConnect, this,
+                    std::placeholders::_1)));
     return;
   }
   if (connection_state_ == kConnectionStateConnected)
@@ -305,7 +305,7 @@ inline void ConnectionServiceImpl::HandleAsyncResolve(
 {
   if (error)
   {
-    io_service_.post(boost::bind(handler, error));
+    io_service_.post(std::bind(handler, error));
     Close();
     return;
   }
@@ -313,10 +313,10 @@ inline void ConnectionServiceImpl::HandleAsyncResolve(
     socket_, iter,
     WeakImpl<ConnectionServiceImpl>::ConnectHandler(
       shared_from_this(),
-      boost::bind(
+      std::bind(
         &ConnectionServiceImpl::HandleAsyncConnect, this,
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::iterator,
+        std::placeholders::_1,
+        std::placeholders::_2,
         handler)));
   SetDeadline(connect_deadline_);
 }
@@ -335,7 +335,7 @@ inline void ConnectionServiceImpl::HandleAsyncConnect(
     connection_state_ = kConnectionStateConnected;
     connect_deadline_.cancel();
   }
-  io_service_.post(boost::bind(handler, error));
+  io_service_.post(std::bind(handler, error));
 }
 
 inline void ConnectionServiceImpl::HandleAsyncAutoConnect(
@@ -346,7 +346,7 @@ inline void ConnectionServiceImpl::HandleAsyncAutoConnect(
     while (!write_queue_.empty())
     {
       QueueItem& item = write_queue_.front();
-      io_service_.post(boost::bind(item.handler, error, 0));
+      io_service_.post(std::bind(item.handler, error, 0));
       write_queue_.pop_front();
     }
     return;
@@ -376,14 +376,14 @@ inline void ConnectionServiceImpl::HandleAsyncRequestWrite(
   if (error)
   {
     OptionalResponse empty_response;
-    io_service_.post(boost::bind(handler, error, empty_response));
+    io_service_.post(std::bind(handler, error, empty_response));
     Close();
     return;
   }
   if (!response_expected)
   {
     OptionalResponse empty_response;
-    io_service_.post(boost::bind(handler, error, empty_response));
+    io_service_.post(std::bind(handler, error, empty_response));
     NextRequest();
     return;
   }
@@ -402,7 +402,7 @@ inline void ConnectionServiceImpl::HandleAsyncResponseSizeRead(
   if (error)
   {
     OptionalResponse empty_response;
-    io_service_.post(boost::bind(handler, error, empty_response));
+    io_service_.post(std::bind(handler, error, empty_response));
     Close();
     return;
   }
@@ -412,7 +412,7 @@ inline void ConnectionServiceImpl::HandleAsyncResponseSizeRead(
   if (size >= configuration_.message_max_bytes)
   {
     OptionalResponse empty_response;
-    io_service_.post(boost::bind(handler, kErrorMessageSizeTooLarge,
+    io_service_.post(std::bind(handler, kErrorMessageSizeTooLarge,
                                  empty_response));
     Close();
     return;
@@ -423,10 +423,10 @@ inline void ConnectionServiceImpl::HandleAsyncResponseSizeRead(
     boost::asio::transfer_exactly(size),
     WeakImpl<ConnectionServiceImpl>::ReadHandler(
       shared_from_this(),
-      boost::bind(
+      std::bind(
         &ConnectionServiceImpl::HandleAsyncResponseRead<TRequest>, this,
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred,
+        std::placeholders::_1,
+        std::placeholders::_2,
         buffer,
         handler)));
   SetDeadline(read_deadline_);
@@ -443,7 +443,7 @@ inline void ConnectionServiceImpl::HandleAsyncResponseRead(
   if (error)
   {
     OptionalResponse empty_response;
-    io_service_.post(boost::bind(handler, error, empty_response));
+    io_service_.post(std::bind(handler, error, empty_response));
     Close();
     return;
   }
@@ -457,11 +457,11 @@ inline void ConnectionServiceImpl::HandleAsyncResponseRead(
   if (ec)
   {
     OptionalResponse empty_response;
-    io_service_.post(boost::bind(handler, ec, empty_response));
+    io_service_.post(std::bind(handler, ec, empty_response));
   }
   else
   {
-    io_service_.post(boost::bind(handler, ec, response.response()));
+    io_service_.post(std::bind(handler, ec, response.response()));
   }
   NextRequest();
 }
