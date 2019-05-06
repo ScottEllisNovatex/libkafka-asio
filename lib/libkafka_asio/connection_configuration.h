@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <boost/optional.hpp>
+#include <libkafka_asio/optional.hpp>
 #include <libkafka_asio/primitives.h>
 
 namespace libkafka_asio
@@ -15,7 +15,7 @@ struct ConnectionConfiguration
   // Broker address configuration data structure
   struct BrokerAddress
   {
-    typedef boost::optional<BrokerAddress> OptionalType;
+    typedef std::experimental::optional<BrokerAddress> OptionalType;
     std::string hostname;
     std::string service;
   };
