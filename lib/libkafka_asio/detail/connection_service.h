@@ -92,7 +92,7 @@ public:
 
 private:
   typedef boost::asio::ip::tcp::socket SocketType;
-  typedef boost::asio::deadline_timer DeadlineTimerType;
+  typedef boost::asio::basic_waitable_timer<std::chrono::system_clock> TimerType;
   typedef boost::asio::ip::tcp::resolver ResolverType;
   typedef std::shared_ptr<boost::asio::streambuf> StreambufType;
 
@@ -149,7 +149,7 @@ public:
 private:
 
   // Resets the operation timeout
-  void SetDeadline(DeadlineTimerType& timer);
+  void SetDeadline(TimerType& timer);
 
   // Serialize the given request to the Kafka wire format
   template<typename TRequest>
@@ -223,7 +223,7 @@ private:
 
   // Handle operation timeout
   void HandleDeadline(const ErrorCodeType& error,
-                      DeadlineTimerType& timer);
+                      TimerType& timer);
 
 private:
   ConnectionConfiguration configuration_;
@@ -235,9 +235,9 @@ private:
 
   boost::asio::io_service& io_service_;
   SocketType socket_;
-  DeadlineTimerType connect_deadline_;
-  DeadlineTimerType write_deadline_;
-  DeadlineTimerType read_deadline_;
+  TimerType connect_deadline_;
+  TimerType write_deadline_;
+  TimerType read_deadline_;
   ResolverType resolver_;
 };
 

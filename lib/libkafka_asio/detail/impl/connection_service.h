@@ -11,6 +11,7 @@
 #define CONNECTION_SERVICE_H_5310FB3D_9D78_4C52_AE32_EB71E000F4ED
 
 #include <functional>
+#include <chrono>
 #include <boost/ref.hpp>
 #include <libkafka_asio/constants.h>
 #include <libkafka_asio/detail/request_write.h>
@@ -117,9 +118,9 @@ inline void ConnectionServiceImpl::AsyncRequest(
 }
 
 inline void ConnectionServiceImpl::SetDeadline(
-  ConnectionServiceImpl::DeadlineTimerType& timer)
+  ConnectionServiceImpl::TimerType& timer)
 {
-  using boost::posix_time::milliseconds;
+  using std::chrono::milliseconds;
   timer.expires_from_now(milliseconds(configuration_.socket_timeout));
   timer.async_wait(
     WeakImpl<ConnectionServiceImpl>::DeadlineHandler(
@@ -468,17 +469,17 @@ inline void ConnectionServiceImpl::HandleAsyncResponseRead(
 
 inline void ConnectionServiceImpl::HandleDeadline(
   const ConnectionServiceImpl::ErrorCodeType& error,
-  ConnectionServiceImpl::DeadlineTimerType& timer)
+  ConnectionServiceImpl::TimerType& timer)
 {
   if (error)
   {
     return;
   }
-  if (timer.expires_at() <= DeadlineTimerType::traits_type::now())
+  if (timer.expires_at() <= std::chrono::system_clock::now())
   {
-    connect_deadline_.expires_at(boost::posix_time::pos_infin);
-    write_deadline_.expires_at(boost::posix_time::pos_infin);
-    read_deadline_.expires_at(boost::posix_time::pos_infin);
+    connect_deadline_.expires_at(std::chrono::system_clock::time_point::max());
+    write_deadline_.expires_at(std::chrono::system_clock::time_point::max());
+    read_deadline_.expires_at(std::chrono::system_clock::time_point::max());
     Close();
   }
 }
