@@ -10,7 +10,6 @@
 #ifndef RESPONSE_H_96E99D03_30D1_4F88_B5E8_002B7CF6A32E
 #define RESPONSE_H_96E99D03_30D1_4F88_B5E8_002B7CF6A32E
 
-#include <boost/optional.hpp>
 #include <libkafka_asio/primitives.h>
 
 namespace libkafka_asio
@@ -26,7 +25,7 @@ class Response
   friend class MutableResponse<TResponse>;
 
 public:
-  typedef boost::optional<TResponse> OptionalType;
+  typedef std::experimental::optional<TResponse> OptionalType;
 
   Int32 correlation_id() const
   {

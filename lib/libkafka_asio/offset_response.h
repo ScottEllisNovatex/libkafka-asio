@@ -11,7 +11,6 @@
 #define OFFSET_RESPONSE_H_23EABE67_36C3_4D9E_8C37_4C8E916DE537
 
 #include <vector>
-#include <boost/optional.hpp>
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/response.h>
 #include <libkafka_asio/detail/topics_partitions.h>
