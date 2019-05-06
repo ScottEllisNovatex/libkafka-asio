@@ -41,6 +41,7 @@ int main(int argc, char **argv)
   ProduceRequest request;
   
   std::string MessageValue = "Hello World 2 Big Dogg";
+  std::string MessageValue2 = "2 Big Dogg 22222";
   std::string MessageTopic = "Test";
   std::string MessageKey = "RTU12";
 
@@ -50,26 +51,19 @@ int main(int argc, char **argv)
 #ifdef ONEWAY
   request.AddValue(MessageValue, MessageTopic, 0);
 #else
-  /*
-  MessageSet message_set(2);
-  message_set[0].set_offset(1);
-  message_set[1].set_offset(2);
-  boost::system::error_code ec;
-  using namespace libkafka_asio::constants;
-  Message msg = CompressMessageSet(message_set, kCompressionGZIP, ec);
-  ASSERT_EQ(libkafka_asio::kErrorSuccess, ec);
-  ASSERT_TRUE(static_cast<bool>(msg.value()));
-  ASSERT_FALSE(msg.value()->empty());
-  ASSERT_EQ(kCompressionGZIP, msg.compression());
-  */
-
+ 
   libkafka_asio::Message message;
   message.mutable_value().reset( new libkafka_asio::Bytes::element_type(MessageValue.begin(), MessageValue.end()));
   message.mutable_key().reset(new libkafka_asio::Bytes::element_type(MessageKey.begin(), MessageKey.end()));
   
   libkafka_asio::MessageAndOffset messageandoffset(message, 1);	// Offset seems to be 1 based??
+
+  message.mutable_value().reset(new libkafka_asio::Bytes::element_type(MessageValue2.begin(), MessageValue2.end()));
+  libkafka_asio::MessageAndOffset messageandoffset2(message, 2);	
+
   libkafka_asio::MessageSet messageset;
   messageset.push_back(messageandoffset);
+  messageset.push_back(messageandoffset2);
 
   // Not sure if we have to do this or the library will if the flag is set...
   boost::system::error_code ec;
