@@ -9,21 +9,24 @@ find_package(ZLIB REQUIRED)
 find_package(Snappy REQUIRED)
 
 include_directories(
-    ${PROJECT_SOURCE_DIR}/src
-    ${PROJECT_SOURCE_DIR}/../lib
-    ${GTEST_INCLUDE_DIRS}
-    ${Boost_INCLUDE_DIRS}
-    ${ZLIB_INCLUDE_DIR}
-    ${SNAPPY_INCLUDE_DIR})
-    
-file(GLOB_RECURSE ${PROJECT_NAME}_SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp")
+    "${PROJECT_SOURCE_DIR}/src"
+    "${PROJECT_SOURCE_DIR}/../lib"
+    "${GTEST_INCLUDE_DIRS}"
+	#"${ASIO_HOME}/include"    
+    "${ZLIB_INCLUDE_DIR}"
+    "${SNAPPY_INCLUDE_DIR}"
+    "${Boost_INCLUDE_DIRS}")
+	 
+file(GLOB_RECURSE ${PROJECT_NAME}_SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/../lib/*.h")
+
+
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
-target_link_libraries(${PROJECT_NAME} ${GTEST_LIBRARIES} ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${GTEST_LIBRARIES}  ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES} ${Boost_LIBRARIES})  #
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
-if(UNIX)
-target_link_libraries(${PROJECT_NAME} pthread)
-endif()
+#if(UNIX)
+#target_link_libraries(${PROJECT_NAME} pthread)
+#endif()
 
 if(COMMAND GTEST_ADD_TESTS)
     enable_testing()
