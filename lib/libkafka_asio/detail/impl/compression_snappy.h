@@ -39,7 +39,7 @@ inline Bytes SnappyCompressionAlgorithm::Compress(
 {
   if (!data || data->empty())
   {
-	  ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
   Bytes result(
@@ -50,7 +50,7 @@ inline Bytes SnappyCompressionAlgorithm::Compress(
   ::snappy::RawCompress(raw_input_ptr, data->size(), raw_output_ptr,
                         &result_size);
   result->resize(result_size);
-  ec = make_error_code(kErrorSuccess);
+  ec = kErrorSuccess;
   return result;
 }
 
@@ -59,7 +59,7 @@ inline Bytes SnappyCompressionAlgorithm::Decompress(
 {
   if (!data || data->empty())
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
   bool is_stream = std::equal(kSnappyStreamMagic()->begin(),
@@ -84,17 +84,17 @@ inline Bytes SnappyCompressionAlgorithm::DecompressChunk(
       !::snappy::GetUncompressedLength(raw_input_ptr, data->size(),
                                        &uncompressed_size))
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
   Bytes result(new Bytes::element_type(uncompressed_size));
   char *raw_output_ptr = reinterpret_cast<char *>(&(*result)[0]);
   if (!::snappy::RawUncompress(raw_input_ptr, data->size(), raw_output_ptr))
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
-  ec = make_error_code(kErrorSuccess);
+  ec = kErrorSuccess;
   return result;
 }
 
@@ -119,7 +119,7 @@ inline Bytes SnappyCompressionAlgorithm::DecompressStream(
     ReadBytes(is, chunk);
     if (!chunk)
     {
-      ec = make_error_code(kErrorCompressionFailed);
+      ec = kErrorCompressionFailed;
       return Bytes();
     }
     chunk = DecompressChunk(chunk, ec);
@@ -139,7 +139,7 @@ inline Bytes SnappyCompressionAlgorithm::DecompressStream(
     buffer_cast<const Bytes::element_type::value_type *>(output_buffer_data) +
     buffer_size(output_buffer_data)
   ));
-  ec = make_error_code(kErrorSuccess);
+  ec = kErrorSuccess;
   return result;
 }
 

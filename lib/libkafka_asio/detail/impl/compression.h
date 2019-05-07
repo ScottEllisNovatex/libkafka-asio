@@ -36,10 +36,10 @@ inline Bytes Compress(const Bytes& data,
       return CompressionPolicy<kCompressionLz4>::
       Algorithm::Compress(data, ec);
     case kCompressionNone:
-      ec = make_error_code(kErrorSuccess);
+      ec = kErrorSuccess;
       break;
     default:
-      ec = make_error_code(kErrorCompressionNotAvailable);
+      ec = kErrorCompressionNotAvailable;
       break;
   }
 
@@ -64,10 +64,10 @@ inline Bytes Decompress(const Bytes& data,
       return CompressionPolicy<kCompressionLz4>::
       Algorithm::Decompress(data, ec);
     case kCompressionNone:
-      ec = make_error_code(kErrorSuccess);
+      ec = kErrorSuccess;
       break;
     default:
-      ec = make_error_code(kErrorCompressionNotAvailable);
+      ec = kErrorCompressionNotAvailable;
       break;
   }
 
@@ -77,14 +77,14 @@ inline Bytes Decompress(const Bytes& data,
 inline Bytes FallbackCompressionAlgorithm::Compress(
   const Bytes&, asio::error_code& ec)
 {
-  ec = make_error_code(kErrorCompressionNotAvailable);
+  ec = kErrorCompressionNotAvailable;
   return Bytes();
 }
 
 inline Bytes FallbackCompressionAlgorithm::Decompress(
   const Bytes&, asio::error_code& ec)
 {
-  ec = make_error_code(kErrorCompressionNotAvailable);
+  ec = kErrorCompressionNotAvailable;
   return Bytes();
 }
 

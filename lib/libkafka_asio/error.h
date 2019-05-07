@@ -51,7 +51,7 @@ class ClientErrorCategory :
   public asio::error_category
 {
 public:
-	inline const char* name() const noexcept
+  inline const char *name() const noexcept
   {
     return "libkafka_asio::ClientError";
   }
@@ -88,7 +88,7 @@ class KafkaErrorCategory :
   public asio::error_category
 {
 public:
-	inline const char* name()  const noexcept
+  inline const char *name() const noexcept
   {
     return "libkafka_asio::KafkaError";
   }
@@ -149,7 +149,7 @@ public:
 };
 
 //
-// asio::system integration code following:
+// asio / std integration code following:
 //
 
 inline asio::error_code make_error_code(ClientError e)
@@ -166,8 +166,8 @@ inline asio::error_code make_error_code(KafkaError e)
 
 }  // namespace libkafka_asio
 
-/*
-namespace asio
+
+namespace std
 {
 
 template<>
@@ -182,7 +182,7 @@ struct is_error_code_enum<libkafka_asio::KafkaError>
   static const bool value = true;
 };
 
-}  // namespace asio
-*/
+}  // namespace std
+
 
 #endif  // ERROR_H_20BBD26A_1B33_4F9E_94E9_5989EC105D5D

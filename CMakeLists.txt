@@ -3,12 +3,19 @@ project(libkafka_asio)
 
 option(USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON)
 
+# Only when we use asio standalone.. 
+add_definitions(-DASIO_STANDALONE) # required for ASIO in C++11 only mode
+
 # Platform configuration
 if(WIN32)
+	set(CMAKE_SUPPRESS_REGENERATION true)	# removes the ZERO_CHECK project for VS, which rebuilds on CMake file change.
+
 	# for ASIO
-	add_definitions(-D_WIN32_WINNT=0x0502)	
+	add_definitions(-D_WIN32_WINNT=0x0502)		# Windows Server 2003 and up
+	add_definitions(-DBOOST_ALL_NO_LIB)				# Otherwise, boost trys to tell the linker where the libraries are.
 	add_definitions(-DASIO_HAS_STD_SYSTEM_ERROR)
-	add_definitions(-DVC_EXTRALEAN)
+#	add_definitions(-DASIO_HAS_BOOST_DATE_TIME)	#SJE
+	add_definitions(-DVC_EXTRALEAN)				# This and next one reduce size of windows header files.
 	add_definitions(-DWIN32_LEAN_AND_MEAN)
 	
 	# Auto generate def files that export all symbols of STATIC libraries
@@ -52,7 +59,7 @@ endif()
 
 # Compiler configuration
 
-add_definitions(-DASIO_STANDALONE) # required for ASIO in C++11 only mode
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 	# using Visual Studio C++
 	message("CMAKE configuring opendatacon for Visual Studio C++" )

@@ -28,7 +28,7 @@ inline void ReadResponseMessage(std::istream& is,
   response.set_coordinator_port(ReadInt32(is));
   if (response.response().error_code())
   {
-    ec = make_error_code((KafkaError) response.response().error_code());
+    ec = (KafkaError) response.response().error_code();
   }
 }
 

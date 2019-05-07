@@ -10,6 +10,7 @@
 #ifndef PRODUCE_RESPONSE_READ_H_9046BEF5_332B_4B67_8138_5964E836BF6C
 #define PRODUCE_RESPONSE_READ_H_9046BEF5_332B_4B67_8138_5964E836BF6C
 
+
 #include <libkafka_asio/error.h>
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/detail/response_read.h>
@@ -41,7 +42,7 @@ inline void ReadResponseMessage(std::istream& is,
 
       if (partition.error_code)
       {
-        ec = make_error_code((KafkaError) partition.error_code);
+        ec = (KafkaError) partition.error_code;
         return;
       }
       topic.partitions.insert(std::make_pair(key, partition));

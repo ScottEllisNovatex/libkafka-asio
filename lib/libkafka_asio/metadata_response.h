@@ -11,7 +11,6 @@
 #define METADATA_RESPONSE_H_3EEE6475_7990_4611_B8E6_5CA255FB9791
 
 #include <vector>
-#include <boost/optional.hpp>
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/response.h>
 #include <libkafka_asio/detail/topics_partitions.h>
@@ -50,7 +49,7 @@ class MetadataResponse :
 public:
   struct Broker
   {
-    typedef boost::optional<Broker> OptionalType;
+    typedef std::experimental::optional<Broker> OptionalType;
     Int32 node_id;
     String host;
     Int32 port;

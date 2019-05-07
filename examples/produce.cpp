@@ -16,6 +16,7 @@
 //
 
 #include <iostream>
+#include <chrono>
 #include <asio.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
@@ -40,9 +41,14 @@ int main(int argc, char **argv)
   // "mytopic" and partition 0.
   ProduceRequest request;
   
+  std::chrono::system_clock::time_point today = std::chrono::system_clock::now();
+
+  time_t tt = std::chrono::system_clock::to_time_t(today);
+
   std::string MessageValue = "Hello World 2 Big Dogg";
+  std::string MessageValue2 = "2 Big Dogg 22222";
   std::string MessageTopic = "Test";
-  std::string MessageKey = "RTU12";
+  std::string MessageKey = "RTU12-" + std::string(ctime(&tt));
 
 //#define ONEWAY
   request.set_required_acks(1);	// This is the default anyway. We can set to 0 so we dont need an ack, or more than 1 of there is more than one message in a message (I think)
@@ -50,31 +56,24 @@ int main(int argc, char **argv)
 #ifdef ONEWAY
   request.AddValue(MessageValue, MessageTopic, 0);
 #else
-  /*
-  MessageSet message_set(2);
-  message_set[0].set_offset(1);
-  message_set[1].set_offset(2);
-  asio::error_code ec;
-  using namespace libkafka_asio::constants;
-  Message msg = CompressMessageSet(message_set, kCompressionGZIP, ec);
-  ASSERT_EQ(libkafka_asio::kErrorSuccess, ec);
-  ASSERT_TRUE(static_cast<bool>(msg.value()));
-  ASSERT_FALSE(msg.value()->empty());
-  ASSERT_EQ(kCompressionGZIP, msg.compression());
-  */
-
+ 
   libkafka_asio::Message message;
   message.mutable_value().reset( new libkafka_asio::Bytes::element_type(MessageValue.begin(), MessageValue.end()));
   message.mutable_key().reset(new libkafka_asio::Bytes::element_type(MessageKey.begin(), MessageKey.end()));
   
   libkafka_asio::MessageAndOffset messageandoffset(message, 1);	// Offset seems to be 1 based??
+
+  message.mutable_value().reset(new libkafka_asio::Bytes::element_type(MessageValue2.begin(), MessageValue2.end()));
+  libkafka_asio::MessageAndOffset messageandoffset2(message, 2);	
+
   libkafka_asio::MessageSet messageset;
   messageset.push_back(messageandoffset);
+  messageset.push_back(messageandoffset2);
 
   // Not sure if we have to do this or the library will if the flag is set...
   asio::error_code ec;
   libkafka_asio::Message smallmessage =  CompressMessageSet(messageset, libkafka_asio::constants::Compression::kCompressionSnappy, ec);
-  if (make_error_code(libkafka_asio::kErrorSuccess) != ec)
+  if (libkafka_asio::kErrorSuccess != ec)
   {
 	  // Compression failed...
 	  std::cout << "Compression of message failed! " << ec << std::endl;
@@ -93,7 +92,7 @@ int main(int argc, char **argv)
     if (err)
     {
       std::cerr
-        << "Error: " <<asio::system_error(err).what()
+        << "Error: " << asio::system_error(err).what()
         << std::endl;
       return;
     }

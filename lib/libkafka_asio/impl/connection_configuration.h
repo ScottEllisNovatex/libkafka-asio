@@ -18,8 +18,7 @@ inline void ConnectionConfiguration::SetBrokerFromString(const std::string& str)
 {
   if (str.empty())
   {
-    broker_address.hostname = "";
-	broker_address.service = "";
+    broker_address.reset();
     return;
   }
   BrokerAddress broker;
@@ -42,19 +41,26 @@ inline void ConnectionConfiguration::SetBrokerFromString(const std::string& str)
   }
   broker_address = broker;
 }
-/*
+
 template<typename T>
-inline void ConnectionConfiguration::SetBroker(const  BrokerAddress& broker)
+inline void ConnectionConfiguration::SetBroker(const T& broker)
 {
   SetBroker(broker.host, broker.port);
 }
-*/
-inline void ConnectionConfiguration::SetBroker(const String& hostname, const uint32_t& service)
+
+inline void ConnectionConfiguration::SetBroker(const std::string & hostname, const uint32_t & service)
 {
   BrokerAddress broker;
   broker.hostname = hostname;
   broker.service = std::to_string(service);
   broker_address = broker;
+}
+inline void ConnectionConfiguration::SetBroker(const std::string& hostname,	const std::string & service)
+{
+	BrokerAddress broker;
+	broker.hostname = hostname;
+	broker.service = service;
+	broker_address = broker;
 }
 
 }  // namespace libkafka_asio

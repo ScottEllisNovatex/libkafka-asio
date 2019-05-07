@@ -143,7 +143,7 @@ inline Message CompressMessageSet(const MessageSet& message_set,
 
   if (compression == constants::kCompressionNone)
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Message();
   }
   streambuf intermediate_buffer;
@@ -152,7 +152,7 @@ inline Message CompressMessageSet(const MessageSet& message_set,
   size_t size = intermediate_buffer.size();
   if (size == 0)
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Message();
   }
   intermediate_buffer.commit(size);
@@ -166,7 +166,7 @@ inline Message CompressMessageSet(const MessageSet& message_set,
   {
     return Message();
   }
-  ec = make_error_code(kErrorSuccess);
+  ec = kErrorSuccess;
   return result;
 }
 

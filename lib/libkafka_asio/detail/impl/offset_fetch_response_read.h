@@ -10,6 +10,7 @@
 #ifndef OFFSET_FETCH_RESPONSE_READ_H_EF46A204_533F_42EF_837F_877019C5989E
 #define OFFSET_FETCH_RESPONSE_READ_H_EF46A204_533F_42EF_837F_877019C5989E
 
+
 #include <libkafka_asio/detail/response_read.h>
 
 namespace libkafka_asio

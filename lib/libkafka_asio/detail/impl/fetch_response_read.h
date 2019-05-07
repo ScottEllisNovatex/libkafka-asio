@@ -10,6 +10,7 @@
 #ifndef FETCH_RESPONSE_READ_H_03C2A581_53D0_498E_AF6A_2082227485A3
 #define FETCH_RESPONSE_READ_H_03C2A581_53D0_498E_AF6A_2082227485A3
 
+
 #include <libkafka_asio/detail/response_read.h>
 
 namespace libkafka_asio
@@ -41,14 +42,14 @@ inline void ReadResponseMessage(std::istream& is,
 
       if (partition.error_code)
       {
-        ec = make_error_code((KafkaError) partition.error_code);
+        ec = (KafkaError) partition.error_code;
         return;
       }
 
       // MessageSet
       Int32 message_set_size = ReadInt32(is);
       ReadMessageSet(is, partition.messages, message_set_size, ec);
-      if (ec != make_error_code(kErrorSuccess))
+      if (ec != kErrorSuccess)
       {
         return;
       }

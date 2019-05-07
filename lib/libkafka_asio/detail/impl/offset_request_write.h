@@ -10,6 +10,7 @@
 #ifndef OFFSET_REQUEST_WRITE_H_B5A2F2C0_18BC_4AD5_B892_27834F8D87DE
 #define OFFSET_REQUEST_WRITE_H_B5A2F2C0_18BC_4AD5_B892_27834F8D87DE
 
+
 #include <libkafka_asio/detail/request_write.h>
 
 namespace libkafka_asio
@@ -43,7 +44,7 @@ inline void WriteRequestMessage(const OffsetRequest& request, std::ostream& os)
 
   // Topics array
   WriteInt32(static_cast<Int32>(request.topics().size()), os);
- for(const OffsetRequest::Topic& topic: request.topics())
+  for(const OffsetRequest::Topic& topic: request.topics())
   {
     WriteString(topic.topic_name, os);
 

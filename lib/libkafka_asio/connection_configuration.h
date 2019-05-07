@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <boost/optional.hpp>
+#include <libkafka_asio/optional.hpp>		// Replace with #include <optional> in future
 #include <libkafka_asio/primitives.h>
 
 namespace libkafka_asio
@@ -15,8 +15,9 @@ struct ConnectionConfiguration
   // Broker address configuration data structure
   struct BrokerAddress
   {
-    std::string hostname = "";
-    std::string service = "";
+    typedef std::experimental::optional<BrokerAddress> OptionalType;
+    std::string hostname;
+    std::string service;
   };
 
   // List of broker address configurations
@@ -38,7 +39,7 @@ struct ConnectionConfiguration
   bool auto_connect;
 
   // The broker address, used for auto-connect
-  BrokerAddress broker_address;
+  BrokerAddress::OptionalType broker_address;
 
   // Construct using default values
   ConnectionConfiguration();
@@ -56,11 +57,14 @@ struct ConnectionConfiguration
   //     - host
   //     - port
   // A lexical cast is done on both fields.
-
-  void SetBroker(const BrokerAddress& broker);
+  template<typename T>
+  void SetBroker(const T& broker);
 
   // Set the broker address using the given hostname and service parameter.
-  void SetBroker(const String& hostname, const String& service);
+  // Both will be casted to string.
+
+  void SetBroker(const std::string& hostname, const uint32_t & service);
+  void SetBroker(const std::string& hostname, const std::string & service);
 
 };
 

@@ -12,7 +12,6 @@
 
 #include <asio.hpp>
 
-
 namespace libkafka_asio
 {
 namespace detail

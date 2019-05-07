@@ -22,7 +22,7 @@ namespace detail
 template< typename TProperties, typename TPartitions >
 struct Topic : TProperties
 {
-  typedef boost::optional< Topic<TProperties, TPartitions> > OptionalType;
+  typedef std::experimental::optional< Topic<TProperties, TPartitions> > OptionalType;
   TPartitions partitions;
 };
 
@@ -31,7 +31,7 @@ struct Topic : TProperties
 template< typename TProperties >
 struct Partition : TProperties
 {
-  typedef boost::optional< Partition<TProperties> > OptionalType;
+  typedef std::experimental::optional< Partition<TProperties> > OptionalType;
 };
 
 // Used by the `TopicsPartitionsVector` to add a `topic_name` property to

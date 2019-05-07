@@ -14,7 +14,6 @@
 #include <functional>
 #include <libkafka_asio/constants.h>
 
-
 namespace libkafka_asio
 {
 
@@ -89,7 +88,8 @@ inline void ProduceRequest::AddMessageSet(const MessageSet& message_set,
                                           Int32 partition)
 {
   std::for_each(message_set.begin(), message_set.end(),
-                std::bind(&ProduceRequest::AddMessage, this, std::placeholders::_1, topic_name, partition));
+                std::bind(&ProduceRequest::AddMessage,
+                            this, std::placeholders::_1, topic_name, partition));
 }
 
 inline void ProduceRequest::Clear()

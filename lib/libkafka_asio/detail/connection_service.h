@@ -11,9 +11,8 @@
 #define CONNECTION_SERVICE_H_BD87CD55_1B15_4F19_AE8C_B78C42BBE950
 
 #include <deque>
-#include <chrono>
+#include <memory>
 #include <asio.hpp>
-#include <asio/basic_waitable_timer.hpp>
 #include <libkafka_asio/connection_configuration.h>
 
 namespace libkafka_asio
@@ -47,7 +46,7 @@ public:
   // Construct a new connection service implementation
   void construct(implementation_type& impl)
   {
-	  impl.reset(new Service(get_io_service())); // get_io_context()));	// SJE returns an io_context object
+    impl.reset(new Service(get_io_context()));	// Was get_io_servce() SJE change to get Boost 1.70 / asio 1.12.2 working
   }
 
   // Destroy a connection service implementation
@@ -91,7 +90,7 @@ public:
 
 private:
   typedef asio::ip::tcp::socket SocketType;
-  typedef asio::basic_waitable_timer<std::chrono::system_clock > DeadlineTimerType;
+  typedef asio::basic_waitable_timer<std::chrono::system_clock> TimerType;
   typedef asio::ip::tcp::resolver ResolverType;
   typedef std::shared_ptr<asio::streambuf> StreambufType;
 
@@ -148,7 +147,7 @@ public:
 private:
 
   // Resets the operation timeout
-  void SetDeadline(DeadlineTimerType& timer);
+  void SetDeadline(TimerType& timer);
 
   // Serialize the given request to the Kafka wire format
   template<typename TRequest>
@@ -222,7 +221,7 @@ private:
 
   // Handle operation timeout
   void HandleDeadline(const ErrorCodeType& error,
-                      DeadlineTimerType& timer);
+                      TimerType& timer);
 
 private:
   ConnectionConfiguration configuration_;
@@ -234,9 +233,9 @@ private:
 
   asio::io_service& io_service_;
   SocketType socket_;
-  DeadlineTimerType connect_deadline_;
-  DeadlineTimerType write_deadline_;
-  DeadlineTimerType read_deadline_;
+  TimerType connect_deadline_;
+  TimerType write_deadline_;
+  TimerType read_deadline_;
   ResolverType resolver_;
 };
 

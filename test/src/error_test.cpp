@@ -14,27 +14,28 @@ using namespace libkafka_asio;
 
 TEST(ErrorTest, ClientErrorCategory)
 {
-  //using asio::error_code;
-  asio::error_code error = make_error_code(kErrorAlreadyConnected);
+  using asio::error_code;
+  error_code error = error_code(kErrorAlreadyConnected);
   ASSERT_STREQ("libkafka_asio::ClientError", error.category().name());
-  error = make_error_code(kErrorNotConnected);
+  error = error_code(kErrorNotConnected);
   ASSERT_STREQ("libkafka_asio::ClientError", error.category().name());
-  error = make_error_code(kErrorInProgress);
+  error = error_code(kErrorInProgress);
   ASSERT_STREQ("libkafka_asio::ClientError", error.category().name());
-  error = make_error_code(kErrorNoBroker);
+  error = error_code(kErrorNoBroker);
   ASSERT_STREQ("libkafka_asio::ClientError", error.category().name());
-  // Boost system should be able to generate an error message:
+  // Asio system should be able to generate an error message:
   ASSERT_STREQ("No broker found", asio::system_error(error).what());
 }
 
 TEST(ErrorTest, KafkaErrorCategory)
 {
+  using asio::error_code;
   // 'Testing' two errors should suffice here
-  asio::error_code error = make_error_code(kErrorNoError);
+  error_code error = error_code(kErrorNoError);
   ASSERT_STREQ("libkafka_asio::KafkaError", error.category().name());
-  error = make_error_code(kErrorMessageSizeTooLarge);
+  error = error_code(kErrorMessageSizeTooLarge);
   ASSERT_STREQ("libkafka_asio::KafkaError", error.category().name());
-  // Boost system should be able to generate an error message:
+  //Asio system should be able to generate an error message:
   ASSERT_STREQ("Message was too large",
                asio::system_error(error).what());
 }

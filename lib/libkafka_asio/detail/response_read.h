@@ -11,7 +11,6 @@
 #define RESPONSE_READ_H_TODO
 
 #include <iostream>
-#include <asio.hpp>
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/response.h>
 #include <libkafka_asio/message_fwd.h>

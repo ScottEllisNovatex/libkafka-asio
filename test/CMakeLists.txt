@@ -4,7 +4,7 @@ project(libkafka_asio_test)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/Modules")
 
 find_package(GTest REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED) # COMPONENTS thread system)
 find_package(ZLIB REQUIRED)
 find_package(Snappy REQUIRED)
 
@@ -17,11 +17,11 @@ include_directories(
     "${SNAPPY_INCLUDE_DIR}"
     "${Boost_INCLUDE_DIRS}")
 	 
-file(GLOB_RECURSE ${PROJECT_NAME}_SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/../lib/*.h")
+file(GLOB_RECURSE ${PROJECT_NAME}_SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DIR}/src/*.h" "${PROJECT_SOURCE_DIR}/../lib/*.h")
 
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
-target_link_libraries(${PROJECT_NAME} ${GTEST_LIBRARIES}  ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES})  #${Boost_LIBRARIES}
+target_link_libraries(${PROJECT_NAME} ${GTEST_LIBRARIES}  ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES})# ${Boost_LIBRARIES})  #
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 #if(UNIX)

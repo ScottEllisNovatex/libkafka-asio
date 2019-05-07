@@ -11,7 +11,7 @@
 #define STREAM_TEST_H_FE8E717B_A2CE_4CA4_8A94_EA5C745A278F
 
 #include <iostream>
-#include <asio/streambuf.hpp>
+#include <asio.hpp>
 #include <libkafka_asio/primitives.h>
 
 // Little helper for testing stream based operations

@@ -11,7 +11,6 @@
 #define PRODUCE_RESPONSE_H_8880F422_07A4_42F6_9B3B_D500A69EF83A
 
 #include <vector>
-#include <boost/optional.hpp>
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/response.h>
 #include <libkafka_asio/detail/functional.h>

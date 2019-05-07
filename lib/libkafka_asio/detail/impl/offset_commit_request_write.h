@@ -10,6 +10,7 @@
 #ifndef OFFSET_COMMIT_REQUEST_WRITE_H_8C84B333_19EF_4E81_8E1D_0236C0EA7061
 #define OFFSET_COMMIT_REQUEST_WRITE_H_8C84B333_19EF_4E81_8E1D_0236C0EA7061
 
+
 #include <libkafka_asio/detail/request_write.h>
 
 namespace libkafka_asio
@@ -46,13 +47,13 @@ inline void WriteRequestMessage(const OffsetCommitRequest& request,
   
   // Topics Array
   WriteInt32(static_cast<Int32>(request.topics().size()), os);
- for(const OffsetCommitRequest::Topic& topic: request.topics())
+  for(const OffsetCommitRequest::Topic& topic: request.topics())
   {
     WriteString(topic.topic_name, os);
 
     // Partitions Array
     WriteInt32(static_cast<Int32>(topic.partitions.size()), os);
-   for(const OffsetCommitRequest::Partition& partition: topic.partitions)
+    for(const OffsetCommitRequest::Partition& partition: topic.partitions)
     {
       WriteInt32(partition.partition, os);
       WriteInt64(partition.offset, os);

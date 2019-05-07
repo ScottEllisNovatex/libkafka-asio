@@ -10,6 +10,7 @@
 #ifndef METADATA_REQUEST_WRITE_H_28BB9709_A65B_44C9_91C3_0A380BD76F7D
 #define METADATA_REQUEST_WRITE_H_28BB9709_A65B_44C9_91C3_0A380BD76F7D
 
+
 #include <libkafka_asio/detail/request_write.h>
 
 namespace libkafka_asio

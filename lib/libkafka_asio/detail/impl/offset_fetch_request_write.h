@@ -10,6 +10,7 @@
 #ifndef OFFSET_FETCH_REQUEST_WRITE_H_508FD276_A6DC_4FC5_B188_1C8ABB9BBDC6
 #define OFFSET_FETCH_REQUEST_WRITE_H_508FD276_A6DC_4FC5_B188_1C8ABB9BBDC6
 
+
 #include <libkafka_asio/detail/request_write.h>
 
 namespace libkafka_asio

@@ -10,7 +10,8 @@
 #ifndef CONNECTION_SERVICE_H_5310FB3D_9D78_4C52_AE32_EB71E000F4ED
 #define CONNECTION_SERVICE_H_5310FB3D_9D78_4C52_AE32_EB71E000F4ED
 
-
+#include <functional>
+#include <chrono>
 #include <libkafka_asio/constants.h>
 #include <libkafka_asio/detail/request_write.h>
 #include <libkafka_asio/detail/response_read.h>
@@ -81,7 +82,7 @@ inline void ConnectionServiceImpl::AsyncConnect(
       std::bind(
         &ConnectionServiceImpl::HandleAsyncResolve, this,
         std::placeholders::_1,
-		  std::placeholders::_2,
+        std::placeholders::_2,
         handler)));
   connection_state_ = kConnectionStateConnecting;
   SetDeadline(connect_deadline_);
@@ -116,7 +117,7 @@ inline void ConnectionServiceImpl::AsyncRequest(
 }
 
 inline void ConnectionServiceImpl::SetDeadline(
-  ConnectionServiceImpl::DeadlineTimerType& timer)
+  ConnectionServiceImpl::TimerType& timer)
 {
   using std::chrono::milliseconds;
   timer.expires_from_now(milliseconds(configuration_.socket_timeout));
@@ -467,7 +468,7 @@ inline void ConnectionServiceImpl::HandleAsyncResponseRead(
 
 inline void ConnectionServiceImpl::HandleDeadline(
   const ConnectionServiceImpl::ErrorCodeType& error,
-  ConnectionServiceImpl::DeadlineTimerType& timer)
+  ConnectionServiceImpl::TimerType& timer)
 {
   if (error)
   {

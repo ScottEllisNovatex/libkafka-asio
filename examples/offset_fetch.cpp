@@ -20,8 +20,6 @@
 #include <memory>
 #include <thread>
 #include <asio.hpp>
-#include <boost/lexical_cast.hpp>
-#include <libkafka_asio/constants.h>
 #include <libkafka_asio/libkafka_asio.h>
 
 using asio::system_error;
@@ -121,7 +119,7 @@ int main(int argc, char **argv)
     connection.Close();
     connection.AsyncConnect(
       coordinator.coordinator_host(),
-      boost::lexical_cast<String>(coordinator.coordinator_port()),
+      std::to_string(coordinator.coordinator_port()),
       [&](const Connection::ErrorCodeType& err)
       {
         if (err)

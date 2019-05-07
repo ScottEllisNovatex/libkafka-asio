@@ -31,7 +31,7 @@ inline Bytes GZIPCompressionAlgorithm::Compress(
 
   if (!data || data->empty())
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
   // Initialize a new zlib stream
@@ -40,7 +40,7 @@ inline Bytes GZIPCompressionAlgorithm::Compress(
   if (::deflateInit2(&gz, Z_DEFAULT_COMPRESSION, Z_DEFLATED, kGZIPWindowBits,
                      8, Z_DEFAULT_STRATEGY) != Z_OK)
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
   gz.next_in = reinterpret_cast< ::Bytef *>(&(*data)[0]);
@@ -63,11 +63,11 @@ inline Bytes GZIPCompressionAlgorithm::Compress(
   ::deflateEnd(&gz);
   if (ret != Z_STREAM_END)
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
 
-  ec = make_error_code(kErrorSuccess);
+  ec = kErrorSuccess;
   return out;
 }
 
@@ -79,7 +79,7 @@ inline Bytes GZIPCompressionAlgorithm::Decompress(
 
   if (!data || data->empty())
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
   // Initialize a new zlib stream
@@ -87,7 +87,7 @@ inline Bytes GZIPCompressionAlgorithm::Decompress(
   ::gz_header header = {};
   if (::inflateInit2(&gz, kGZIPWindowBits) != Z_OK)
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
   gz.next_in = reinterpret_cast< ::Bytef *>(&(*data)[0]);
@@ -112,11 +112,11 @@ inline Bytes GZIPCompressionAlgorithm::Decompress(
   ::inflateEnd(&gz);
   if (ret != Z_STREAM_END)
   {
-    ec = make_error_code(kErrorCompressionFailed);
+    ec = kErrorCompressionFailed;
     return Bytes();
   }
 
-  ec = make_error_code(kErrorSuccess);
+  ec = kErrorSuccess;
   return out;
 }
 

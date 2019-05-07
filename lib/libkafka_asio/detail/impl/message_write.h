@@ -12,6 +12,7 @@
 
 #include <asio.hpp>
 #include <boost/crc.hpp>
+
 #include <libkafka_asio/detail/request_write.h>
 
 namespace libkafka_asio
@@ -32,7 +33,7 @@ inline Int32 MessageWireSize(const Message& message)
 inline Int32 MessageSetWireSize(const MessageSet& message_set)
 {
   Int32 size = 0;
-  for(const MessageAndOffset &message: message_set)
+ for(const MessageAndOffset &message: message_set)
   {
     size +=
       sizeof(Int64) +  // Offset

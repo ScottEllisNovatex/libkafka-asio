@@ -72,7 +72,7 @@ public:
   // The signature of the handler function must be:
   // ```
   // void handler(
-  //   const asio::system::error_code& error  // Success status
+  //   const asio::error_code& error  // Success status
   // );
   // ```
   //
@@ -84,15 +84,14 @@ public:
   }
 
   // Asynchronously connects to the Kafka server, identified by the given
-  // hostname and service. Both arguments will be casted to string using
-  // lexical_cast.
+  // hostname and service. 
   // The given handler function object will be called on success as well as
   // on error.
   // The function always returns immediately.
   // The signature of the handler function must be:
   // ```
   // void handler(
-  //   const asio::system::error_code& error  // Success status
+  //   const asio::error_code& error  // Success status
   // );
   // ```
   //
@@ -101,9 +100,8 @@ public:
                     Ty service,
                     const ConnectionHandlerType& handler)
   {
-    using asio::lexical_cast;
-    this->AsyncConnect(lexical_cast<std::string>(host),
-                       lexical_cast<std::string>(service),
+    this->AsyncConnect(to_string(host),
+                       to_string>(service),
                        handler);
   }
 
@@ -114,7 +112,7 @@ public:
   // The signature of the handler function must be:
   // ```
   // void handler(
-  //   const asio::system::error_code& error  // Success status
+  //   const asio::error_code& error  // Success status
   // );
   // ```
   //
@@ -134,7 +132,7 @@ public:
   // The signature of the handler function must be:
   // ```
   // void handler(
-  //   const asio::system::error_code& error,  // Success status
+  //   const asio::error_code& error,  // Success status
   //   const Response::OptionalType& response   // Optional response object
   // );
   // ```

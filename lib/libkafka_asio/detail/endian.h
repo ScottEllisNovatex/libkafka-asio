@@ -12,8 +12,7 @@
 
 #include <libkafka_asio/primitives.h>
 #include <asio.hpp>
-#include <boost/detail/endian.hpp>
-
+#include <boost/predef/other/endian.h>
 
 namespace libkafka_asio
 {
@@ -23,7 +22,7 @@ namespace detail
 // Convert the given 64 bit integer to big endian.
 inline Int64 be_to_host_64(Int64 ll)
 {
-#ifdef BOOST_LITTLE_ENDIAN
+#ifdef BOOST_ENDIAN_LITTLE_BYTE 
   ll = (((uint64_t) htonl((uint32_t) ((ll << 32) >> 32))) << 32) |
        (uint32_t) htonl((uint32_t) (ll >> 32));
 #endif  // LITTLE_ENDIAN

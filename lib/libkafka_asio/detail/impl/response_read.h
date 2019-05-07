@@ -3,7 +3,7 @@
 // ---------------------------------
 //
 // Copyright (c) 2015 Daniel Joos
-//
+//endian.h
 // Distributed under MIT license. (See file LICENSE)
 //
 

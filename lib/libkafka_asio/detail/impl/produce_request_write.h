@@ -10,6 +10,7 @@
 #ifndef PRODUCE_REQUEST_WRITE_H_E92E8BE2_2AB8_4383_A2DD_698DD8482789
 #define PRODUCE_REQUEST_WRITE_H_E92E8BE2_2AB8_4383_A2DD_698DD8482789
 
+
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/detail/request_write.h>
 
@@ -56,7 +57,7 @@ inline void WriteRequestMessage(const ProduceRequest& request, std::ostream& os)
 
     // Partition Array
     WriteInt32(static_cast<Int32>(topic.partitions.size()), os);
-   for(const ProduceRequest::Partition& partition: topic.partitions)
+    for(const ProduceRequest::Partition& partition: topic.partitions)
     {
       WriteInt32(partition.partition, os);
       WriteInt32(MessageSetWireSize(partition.messages), os);

@@ -26,7 +26,7 @@ typedef int32_t Int32;
 typedef int64_t Int64;
 typedef uint8_t Byte;
 typedef std::string String;
-typedef std::shared_ptr<std::vector<Byte> > Bytes;
+typedef std::shared_ptr<std::vector<Byte>> Bytes;
 
 }  // namespace libkafka_asio
 

@@ -16,7 +16,7 @@
 
 #include <iostream>
 #include <asio.hpp>
-#include <libkafka_asio/libkafka_asio.h>asio::
+#include <libkafka_asio/libkafka_asio.h>
 
 using libkafka_asio::Connection;
 using libkafka_asio::FetchRequest;
