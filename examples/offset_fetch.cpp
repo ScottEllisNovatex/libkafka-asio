@@ -19,11 +19,10 @@
 #include <future>
 #include <memory>
 #include <thread>
-#include <boost/asio.hpp>
-#include <boost/system/system_error.hpp>
+#include <asio.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
-using boost::system::system_error;
+using asio::system_error;
 using libkafka_asio::Connection;
 using libkafka_asio::String;
 using libkafka_asio::Int32;
@@ -68,8 +67,8 @@ int main(int argc, char **argv)
 {
   // Run all IO work inside of another thread.
   // All request handlers are invoked from inside that thread as well.
-  boost::asio::io_service ios;
-  boost::asio::io_service::work work(ios);
+  asio::io_service ios;
+  asio::io_service::work work(ios);
   std::thread worker([&ios]()
                      { ios.run(); });
 

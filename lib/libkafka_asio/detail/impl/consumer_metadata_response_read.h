@@ -20,7 +20,7 @@ namespace detail
 
 inline void ReadResponseMessage(std::istream& is,
                                 MutableConsumerMetadataResponse& response,
-                                boost::system::error_code& ec)
+                                asio::error_code& ec)
 {
   response.set_error_code(ReadInt16(is));
   response.set_coordinator_id(ReadInt32(is));

@@ -21,7 +21,7 @@ namespace detail
 
 inline void ReadResponseMessage(std::istream& is,
                                 MutableMetadataResponse& response,
-                                boost::system::error_code& ec)
+                                asio::error_code& ec)
 {
   // error code not used
   (void)ec;

@@ -11,8 +11,7 @@
 #define STREAM_TEST_H_FE8E717B_A2CE_4CA4_8A94_EA5C745A278F
 
 #include <iostream>
-#include <boost/asio/streambuf.hpp>
-#include <boost/shared_ptr.hpp>
+#include <asio.hpp>
 #include <libkafka_asio/primitives.h>
 
 // Little helper for testing stream based operations
@@ -22,7 +21,7 @@ protected:
 
   void ResetStream()
   {
-    streambuf.reset(new boost::asio::streambuf());
+    streambuf.reset(new asio::streambuf());
     stream.reset(new std::iostream(streambuf.get()));
   }
 
@@ -42,8 +41,8 @@ protected:
     return result;
   }
 
-  typedef boost::shared_ptr<boost::asio::streambuf> StreamBufType;
-  typedef boost::shared_ptr<std::iostream> StreamType;
+  typedef std::shared_ptr<asio::streambuf> StreamBufType;
+  typedef std::shared_ptr<std::iostream> StreamType;
   StreamBufType streambuf;
   StreamType stream;
 };

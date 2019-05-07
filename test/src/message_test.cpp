@@ -72,7 +72,7 @@ TEST(MessageTest, CompressMessageSet)
   MessageSet message_set(2);
   message_set[0].set_offset(1);
   message_set[1].set_offset(2);
-  boost::system::error_code ec;
+  asio::error_code ec;
   using namespace libkafka_asio::constants;
   Message msg = CompressMessageSet(message_set, kCompressionGZIP, ec);
   ASSERT_EQ(libkafka_asio::kErrorSuccess, ec);
@@ -86,7 +86,7 @@ TEST(MessageTest, CompressMessageSetNoneCompression)
   MessageSet message_set(2);
   message_set[0].set_offset(1);
   message_set[1].set_offset(2);
-  boost::system::error_code ec;
+  asio::error_code ec;
   using namespace libkafka_asio::constants;
   Message msg = CompressMessageSet(message_set, kCompressionNone, ec);
   ASSERT_EQ(libkafka_asio::kErrorCompressionFailed, ec);

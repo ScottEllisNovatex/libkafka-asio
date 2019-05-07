@@ -3,7 +3,8 @@ project(libkafka_asio)
 
 option(USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON)
 
-# Only when we use asio standalone.. add_definitions(-DASIO_STANDALONE) # required for ASIO in C++11 only mode
+# Only when we use asio standalone.. 
+add_definitions(-DASIO_STANDALONE) # required for ASIO in C++11 only mode
 
 # Platform configuration
 if(WIN32)

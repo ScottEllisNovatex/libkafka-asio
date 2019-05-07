@@ -12,8 +12,7 @@
 
 #include <deque>
 #include <memory>
-#include <boost/asio.hpp>
-#include <boost/system/error_code.hpp>
+#include <asio.hpp>
 #include <libkafka_asio/connection_configuration.h>
 
 namespace libkafka_asio
@@ -23,7 +22,7 @@ namespace detail
 
 template<typename Service>
 class BasicConnectionService :
-  public boost::asio::io_service::service
+  public asio::io_service::service
 {
 public:
 
@@ -31,11 +30,11 @@ public:
   typedef std::shared_ptr<Service> implementation_type;
 
   // Unique service identifier
-  static boost::asio::io_service::id id;
+  static asio::io_service::id id;
 
   // Construct a new connection service
-  explicit BasicConnectionService(boost::asio::io_service& io_service) :
-    boost::asio::io_service::service(io_service)
+  explicit BasicConnectionService(asio::io_service& io_service) :
+    asio::io_service::service(io_service)
   {
   }
 
@@ -47,7 +46,7 @@ public:
   // Construct a new connection service implementation
   void construct(implementation_type& impl)
   {
-    impl.reset(new Service(get_io_context()));	// Was get_io_servce() SJE change to get Boost 1.70 working
+    impl.reset(new Service(get_io_context()));	// Was get_io_servce() SJE change to get Boost 1.70 / asio 1.12.2 working
   }
 
   // Destroy a connection service implementation
@@ -72,7 +71,7 @@ class ConnectionServiceImpl :
 {
 public:
   // Error codes use this type
-  typedef boost::system::error_code ErrorCodeType;
+  typedef asio::error_code ErrorCodeType;
 
   // Handler type definition for connection operations
   typedef std::function<void(const ErrorCodeType&)> ConnectionHandlerType;
@@ -90,10 +89,10 @@ public:
   };
 
 private:
-  typedef boost::asio::ip::tcp::socket SocketType;
-  typedef boost::asio::basic_waitable_timer<std::chrono::system_clock> TimerType;
-  typedef boost::asio::ip::tcp::resolver ResolverType;
-  typedef std::shared_ptr<boost::asio::streambuf> StreambufType;
+  typedef asio::ip::tcp::socket SocketType;
+  typedef asio::basic_waitable_timer<std::chrono::system_clock> TimerType;
+  typedef asio::ip::tcp::resolver ResolverType;
+  typedef std::shared_ptr<asio::streambuf> StreambufType;
 
   enum ConnectionState
   {
@@ -120,7 +119,7 @@ private:
 public:
 
   // Construct a new connection service object
-  ConnectionServiceImpl(boost::asio::io_service& io_service);
+  ConnectionServiceImpl(asio::io_service& io_service);
 
   // Gets the connection configuration
   const ConnectionConfiguration& configuration() const;
@@ -232,7 +231,7 @@ private:
   TxState write_state_;
   TxState read_state_;
 
-  boost::asio::io_service& io_service_;
+  asio::io_service& io_service_;
   SocketType socket_;
   TimerType connect_deadline_;
   TimerType write_deadline_;

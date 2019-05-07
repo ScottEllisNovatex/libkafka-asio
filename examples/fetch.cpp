@@ -15,7 +15,7 @@
 //
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
 using libkafka_asio::Connection;
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
   configuration.socket_timeout = 10000;
   configuration.SetBrokerFromString("192.168.15.137:49162");
 
-  boost::asio::io_service ios;
+  asio::io_service ios;
   Connection connection(ios, configuration);
 
   // Create a 'Fetch' request and try to get data for partition 0 of topic
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     if (err)
     {
       std::cerr
-        << "Error: " << boost::system::system_error(err).what()
+        << "Error: " << asio::system_error(err).what()
         << std::endl;
       return;
     }

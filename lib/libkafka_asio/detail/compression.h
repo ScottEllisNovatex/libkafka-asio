@@ -24,7 +24,7 @@ namespace detail
 // the error code will be set correspondingly.
 Bytes Compress(const Bytes& data,
                constants::Compression compression,
-               boost::system::error_code& ec);
+               asio::error_code& ec);
 
 
 // De-compress the given bytes using the specified compression algorithm.
@@ -32,7 +32,7 @@ Bytes Compress(const Bytes& data,
 // given error code will be set.
 Bytes Decompress(const Bytes& data,
                  constants::Compression compression,
-                 boost::system::error_code& ec);
+                 asio::error_code& ec);
 
 
 // Fallback implementation, which will be used in case an algorithm was disabled
@@ -40,9 +40,9 @@ Bytes Decompress(const Bytes& data,
 // returns an empty value.
 struct FallbackCompressionAlgorithm
 {
-  static Bytes Compress(const Bytes&, boost::system::error_code& ec);
+  static Bytes Compress(const Bytes&, asio::error_code& ec);
 
-  static Bytes Decompress(const Bytes&, boost::system::error_code& ec);
+  static Bytes Decompress(const Bytes&, asio::error_code& ec);
 };
 
 

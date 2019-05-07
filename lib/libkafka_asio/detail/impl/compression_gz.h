@@ -24,7 +24,7 @@ namespace detail
 {
 
 inline Bytes GZIPCompressionAlgorithm::Compress(
-  const Bytes& data, boost::system::error_code& ec)
+  const Bytes& data, asio::error_code& ec)
 {
   static const size_t kBufferSize = 32 * 1024;
   static const int kGZIPWindowBits = 15 + 16;
@@ -72,7 +72,7 @@ inline Bytes GZIPCompressionAlgorithm::Compress(
 }
 
 inline Bytes GZIPCompressionAlgorithm::Decompress(
-  const Bytes& data, boost::system::error_code& ec)
+  const Bytes& data, asio::error_code& ec)
 {
   static const size_t kBufferSize = 32 * 1024;
   static const int kGZIPWindowBits = 15 + 32;

@@ -91,7 +91,7 @@ private:
 // `Message` object will be returned by this function.
 Message CompressMessageSet(const MessageSet& message_set,
                            constants::Compression compression,
-                           boost::system::error_code& ec);
+                           asio::error_code& ec);
 
 }  // namespace libkafka_asio
 

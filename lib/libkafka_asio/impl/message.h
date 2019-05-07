@@ -132,12 +132,12 @@ inline void MessageAndOffset::set_offset(Int64 offset)
 
 inline Message CompressMessageSet(const MessageSet& message_set,
                                   constants::Compression compression,
-                                  boost::system::error_code& ec)
+                                  asio::error_code& ec)
 {
-  using boost::asio::buffer;
-  using boost::asio::buffer_copy;
-  using boost::asio::streambuf;
-  using boost::system::error_code;
+  using asio::buffer;
+  using asio::buffer_copy;
+  using asio::streambuf;
+  using asio::error_code;
   using detail::WriteMessageSet;
   using detail::Compress;
 

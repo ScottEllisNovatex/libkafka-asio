@@ -10,6 +10,8 @@
 #ifndef TOPICS_PARTITIONS_H_45ED10ED_C3C9_428E_9468_FF1412DB2D22
 #define TOPICS_PARTITIONS_H_45ED10ED_C3C9_428E_9468_FF1412DB2D22
 
+#include <map>
+
 namespace libkafka_asio
 {
 namespace detail

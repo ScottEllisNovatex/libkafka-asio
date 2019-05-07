@@ -20,7 +20,7 @@ namespace detail
 
 inline void ReadResponseMessage(std::istream& is,
                                 MutableFetchResponse& response,
-                                boost::system::error_code& ec)
+                                asio::error_code& ec)
 {
   // Topic array
   int topic_count = ReadInt32(is);

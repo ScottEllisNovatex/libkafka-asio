@@ -20,7 +20,7 @@ namespace detail
 
 inline void ReadResponseMessage(std::istream& is,
                                 MutableOffsetCommitResponse& response,
-                                boost::system::error_code& ec)
+                                asio::error_code& ec)
 {
   // error code not used    
   (void)ec;

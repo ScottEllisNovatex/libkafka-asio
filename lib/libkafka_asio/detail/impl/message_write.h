@@ -10,7 +10,7 @@
 #ifndef MESSAGE_WRITE_H_201F6605_6810_441C_9F25_47D8D669A771
 #define MESSAGE_WRITE_H_201F6605_6810_441C_9F25_47D8D669A771
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <boost/crc.hpp>
 
 #include <libkafka_asio/detail/request_write.h>
@@ -45,10 +45,10 @@ inline Int32 MessageSetWireSize(const MessageSet& message_set)
 
 inline void WriteMessage(const Message& value, std::ostream& os)
 {
-  using boost::asio::buffer_cast;
+  using asio::buffer_cast;
 
   // Write everything (except crc) to an intermediate buffer
-  boost::asio::streambuf intermediate_buffer;
+  asio::streambuf intermediate_buffer;
   std::ostream intermediate_os(&intermediate_buffer);
   WriteInt8(value.magic_byte(), intermediate_os);
   WriteInt8(value.attributes(), intermediate_os);

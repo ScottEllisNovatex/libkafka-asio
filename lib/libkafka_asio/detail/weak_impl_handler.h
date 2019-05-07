@@ -10,7 +10,7 @@
 #ifndef WEAK_IMPL_HANDLER_H_1A3CF0E2_1A7C_4889_8C48_843FBDD9CFD0
 #define WEAK_IMPL_HANDLER_H_1A3CF0E2_1A7C_4889_8C48_843FBDD9CFD0
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
 namespace libkafka_asio
 {
@@ -53,7 +53,7 @@ public:
   {
   }
 
-  void operator()(const boost::system::error_code& error)
+  void operator()(const asio::error_code& error)
   {
     if (impl_.expired())
     {
@@ -78,8 +78,8 @@ public:
   {
   }
 
-  void operator()(const boost::system::error_code& error,
-                  const boost::asio::ip::tcp::resolver::iterator& iterator)
+  void operator()(const asio::error_code& error,
+                  const asio::ip::tcp::resolver::iterator& iterator)
   {
     if (impl_.expired())
     {
@@ -104,7 +104,7 @@ public:
   {
   }
 
-  void operator()(const boost::system::error_code& error,
+  void operator()(const asio::error_code& error,
                   size_t transferred_bytes)
   {
     if (impl_.expired())

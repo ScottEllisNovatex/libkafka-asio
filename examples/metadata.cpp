@@ -16,7 +16,7 @@
 //
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
 using libkafka_asio::Connection;
@@ -31,7 +31,7 @@ int main(int argc, char** argv)
   configuration.socket_timeout = 2000;
   configuration.SetBrokerFromString("192.168.59.104:49156");
 
-  boost::asio::io_service ios;
+  asio::io_service ios;
   Connection connection(ios, configuration);
 
   MetadataRequest request;
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
       if (err || !response)
       {
         std::cerr
-          << "Error: " << boost::system::system_error(err).what()
+          << "Error: " << asio::system_error(err).what()
           << std::endl;
         return;
       }

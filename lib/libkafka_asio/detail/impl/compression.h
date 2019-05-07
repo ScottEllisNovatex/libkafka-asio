@@ -20,7 +20,7 @@ namespace detail
 
 inline Bytes Compress(const Bytes& data,
                       constants::Compression compression,
-                      boost::system::error_code& ec)
+                      asio::error_code& ec)
 {
   using namespace libkafka_asio::constants;
 
@@ -48,7 +48,7 @@ inline Bytes Compress(const Bytes& data,
 
 inline Bytes Decompress(const Bytes& data,
                         constants::Compression compression,
-                        boost::system::error_code& ec)
+                        asio::error_code& ec)
 {
   using namespace libkafka_asio::constants;
 
@@ -75,14 +75,14 @@ inline Bytes Decompress(const Bytes& data,
 }
 
 inline Bytes FallbackCompressionAlgorithm::Compress(
-  const Bytes&, boost::system::error_code& ec)
+  const Bytes&, asio::error_code& ec)
 {
   ec = kErrorCompressionNotAvailable;
   return Bytes();
 }
 
 inline Bytes FallbackCompressionAlgorithm::Decompress(
-  const Bytes&, boost::system::error_code& ec)
+  const Bytes&, asio::error_code& ec)
 {
   ec = kErrorCompressionNotAvailable;
   return Bytes();

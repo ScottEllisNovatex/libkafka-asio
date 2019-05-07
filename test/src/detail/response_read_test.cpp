@@ -115,7 +115,7 @@ TEST_F(ResponseReadTest, ReadMessage)
   };
   stream->write((const char*)test_data, sizeof(test_data));
   Message message;
-  boost::system::error_code ec;
+  asio::error_code ec;
   ReadMessage(*stream, message, ec);
   ASSERT_EQ(kErrorSuccess, ec);
   ASSERT_FALSE(static_cast<bool>(message.key()));
@@ -141,7 +141,7 @@ TEST_F(ResponseReadTest, ReadMessageSet)
   };
   stream->write((const char*)test_data, sizeof(test_data));
   MessageSet message_set;
-  boost::system::error_code ec;
+  asio::error_code ec;
   ReadMessageSet(*stream, message_set, sizeof(test_data), ec);
   ASSERT_EQ(kErrorSuccess, ec);
   ASSERT_EQ(2, message_set.size());

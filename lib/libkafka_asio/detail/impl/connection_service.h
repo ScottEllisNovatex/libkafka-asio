@@ -24,10 +24,10 @@ namespace detail
 {
 
 template<typename Service>
-boost::asio::io_service::id BasicConnectionService<Service>::id;
+asio::io_service::id BasicConnectionService<Service>::id;
 
 inline ConnectionServiceImpl::ConnectionServiceImpl(
-  boost::asio::io_service& io_service) :
+  asio::io_service& io_service) :
   connection_state_(kConnectionStateClosed),
   write_state_(kTxStateIdle),
   read_state_(kTxStateIdle),
@@ -55,7 +55,7 @@ inline void ConnectionServiceImpl::set_configuration(
 inline void ConnectionServiceImpl::Close()
 {
   connection_state_ = kConnectionStateClosed;
-  boost::system::error_code ec;
+  asio::error_code ec;
   resolver_.cancel();
   socket_.shutdown(SocketType::shutdown_both, ec);
   socket_.close(ec);
@@ -275,7 +275,7 @@ inline void ConnectionServiceImpl::NextResponse()
 inline void ConnectionServiceImpl::SendRequest(
   const ConnectionServiceImpl::QueueItem& item)
 {
-  boost::asio::async_write(
+  asio::async_write(
     socket_, *item.buffer,
     WeakImpl<ConnectionServiceImpl>::WriteHandler(
       shared_from_this(),
@@ -287,10 +287,10 @@ inline void ConnectionServiceImpl::SendRequest(
 inline void ConnectionServiceImpl::ReceiveResponse(
   const ConnectionServiceImpl::QueueItem& item)
 {
-  boost::asio::async_read(
+  asio::async_read(
     socket_,
     item.buffer->prepare(sizeof(Int32)),
-    boost::asio::transfer_exactly(sizeof(Int32)),
+    asio::transfer_exactly(sizeof(Int32)),
     WeakImpl<ConnectionServiceImpl>::ReadHandler(
       shared_from_this(),
       item.handler));
@@ -309,7 +309,7 @@ inline void ConnectionServiceImpl::HandleAsyncResolve(
     Close();
     return;
   }
-  boost::asio::async_connect(
+  asio::async_connect(
     socket_, iter,
     WeakImpl<ConnectionServiceImpl>::ConnectHandler(
       shared_from_this(),
@@ -417,10 +417,10 @@ inline void ConnectionServiceImpl::HandleAsyncResponseSizeRead(
     Close();
     return;
   }
-  boost::asio::async_read(
+  asio::async_read(
     socket_,
     buffer->prepare(size),
-    boost::asio::transfer_exactly(size),
+    asio::transfer_exactly(size),
     WeakImpl<ConnectionServiceImpl>::ReadHandler(
       shared_from_this(),
       std::bind(
@@ -452,7 +452,7 @@ inline void ConnectionServiceImpl::HandleAsyncResponseRead(
   buffer->commit(bytes_transferred);
   std::istream is(buffer.get());
   typename TRequest::MutableResponseType response;
-  boost::system::error_code ec;
+  asio::error_code ec;
   detail::ReadResponse(is, response, ec);
   if (ec)
   {

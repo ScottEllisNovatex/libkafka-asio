@@ -2,7 +2,7 @@
 // The BCP commands (for my machine) are listed below.
 
 #include <boost/crc.hpp>
-#include <boost/predef/other/endian.hpp>
+#include <boost/predef/other/endian.h>
 #include <boost/iterator/iterator_facade.hpp>
 
 // cd C:\local\boost_1_70_0\bin.v2\tools\bcp\msvc-14.2\release\link-static\threading-multi

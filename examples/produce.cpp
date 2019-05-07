@@ -16,7 +16,8 @@
 //
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <chrono>
+#include <asio.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
 using libkafka_asio::Connection;
@@ -32,7 +33,7 @@ int main(int argc, char **argv)
   configuration.SetBrokerFromString("localhost:9092");
 
 
-  boost::asio::io_service ios;
+  asio::io_service ios;
   Connection connection(ios, configuration);
 
   // Create a 'Produce' request and add a single message to it. The value of
@@ -40,10 +41,14 @@ int main(int argc, char **argv)
   // "mytopic" and partition 0.
   ProduceRequest request;
   
+  std::chrono::system_clock::time_point today = std::chrono::system_clock::now();
+
+  time_t tt = std::chrono::system_clock::to_time_t(today);
+
   std::string MessageValue = "Hello World 2 Big Dogg";
   std::string MessageValue2 = "2 Big Dogg 22222";
   std::string MessageTopic = "Test";
-  std::string MessageKey = "RTU12";
+  std::string MessageKey = "RTU12-" + std::string(ctime(&tt));
 
 //#define ONEWAY
   request.set_required_acks(1);	// This is the default anyway. We can set to 0 so we dont need an ack, or more than 1 of there is more than one message in a message (I think)
@@ -66,7 +71,7 @@ int main(int argc, char **argv)
   messageset.push_back(messageandoffset2);
 
   // Not sure if we have to do this or the library will if the flag is set...
-  boost::system::error_code ec;
+  asio::error_code ec;
   libkafka_asio::Message smallmessage =  CompressMessageSet(messageset, libkafka_asio::constants::Compression::kCompressionSnappy, ec);
   if (libkafka_asio::kErrorSuccess != ec)
   {
@@ -87,7 +92,7 @@ int main(int argc, char **argv)
     if (err)
     {
       std::cerr
-        << "Error: " << boost::system::system_error(err).what()
+        << "Error: " << asio::system_error(err).what()
         << std::endl;
       return;
     }
