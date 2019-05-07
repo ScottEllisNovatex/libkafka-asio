@@ -16,7 +16,7 @@
 //
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
 using libkafka_asio::Connection;
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
   configuration.SetBrokerFromString("localhost:9092");
 
 
-  boost::asio::io_service ios;
+  asio::io_service ios;
   Connection connection(ios, configuration);
 
   // Create a 'Produce' request and add a single message to it. The value of
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
   MessageSet message_set(2);
   message_set[0].set_offset(1);
   message_set[1].set_offset(2);
-  boost::system::error_code ec;
+  asio::error_code ec;
   using namespace libkafka_asio::constants;
   Message msg = CompressMessageSet(message_set, kCompressionGZIP, ec);
   ASSERT_EQ(libkafka_asio::kErrorSuccess, ec);
@@ -72,9 +72,9 @@ int main(int argc, char **argv)
   messageset.push_back(messageandoffset);
 
   // Not sure if we have to do this or the library will if the flag is set...
-  boost::system::error_code ec;
+  asio::error_code ec;
   libkafka_asio::Message smallmessage =  CompressMessageSet(messageset, libkafka_asio::constants::Compression::kCompressionSnappy, ec);
-  if (libkafka_asio::kErrorSuccess != ec)
+  if (make_error_code(libkafka_asio::kErrorSuccess) != ec)
   {
 	  // Compression failed...
 	  std::cout << "Compression of message failed! " << ec << std::endl;
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
     if (err)
     {
       std::cerr
-        << "Error: " << boost::system::system_error(err).what()
+        << "Error: " <<asio::system_error(err).what()
         << std::endl;
       return;
     }

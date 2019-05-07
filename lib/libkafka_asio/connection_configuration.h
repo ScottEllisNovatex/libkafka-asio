@@ -15,9 +15,8 @@ struct ConnectionConfiguration
   // Broker address configuration data structure
   struct BrokerAddress
   {
-    typedef boost::optional<BrokerAddress> OptionalType;
-    std::string hostname;
-    std::string service;
+    std::string hostname = "";
+    std::string service = "";
   };
 
   // List of broker address configurations
@@ -39,7 +38,7 @@ struct ConnectionConfiguration
   bool auto_connect;
 
   // The broker address, used for auto-connect
-  BrokerAddress::OptionalType broker_address;
+  BrokerAddress broker_address;
 
   // Construct using default values
   ConnectionConfiguration();
@@ -57,13 +56,11 @@ struct ConnectionConfiguration
   //     - host
   //     - port
   // A lexical cast is done on both fields.
-  template<typename T>
-  void SetBroker(const T& broker);
+
+  void SetBroker(const BrokerAddress& broker);
 
   // Set the broker address using the given hostname and service parameter.
-  // Both will be casted to string using a lexical_cast.
-  template<typename Tx, typename Ty>
-  void SetBroker(const Tx& hostname, const Ty& service);
+  void SetBroker(const String& hostname, const String& service);
 
 };
 

@@ -73,7 +73,7 @@ inline void ReadBytes(std::istream& is, Bytes& bytes)
 template<typename TMutableResponse>
 void ReadResponse(std::istream& is,
                   TMutableResponse& response,
-                  boost::system::error_code& ec)
+                  asio::error_code& ec)
 {
   response.set_correlation_id(ReadInt32(is));
   ReadResponseMessage(is, response, ec);

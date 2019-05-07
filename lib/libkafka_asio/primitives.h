@@ -12,8 +12,6 @@
 
 #include <string>
 #include <vector>
-#include <boost/integer.hpp>
-#include <boost/shared_ptr.hpp>
 
 namespace libkafka_asio
 {
@@ -22,13 +20,13 @@ namespace libkafka_asio
 // The Kafka protocol primitives, as described in the Kafka wiki.
 //
 
-typedef boost::int_t<8>::exact Int8;
-typedef boost::int_t<16>::exact Int16;
-typedef boost::int_t<32>::exact Int32;
-typedef boost::int_t<64>::exact Int64;
-typedef boost::uint_t<8>::exact Byte;
+typedef int8_t Int8;
+typedef int16_t Int16;
+typedef int32_t Int32;
+typedef int64_t Int64;
+typedef uint8_t Byte;
 typedef std::string String;
-typedef boost::shared_ptr<std::vector<Byte> > Bytes;
+typedef std::shared_ptr<std::vector<Byte> > Bytes;
 
 }  // namespace libkafka_asio
 

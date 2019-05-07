@@ -10,7 +10,6 @@
 #ifndef METADATA_REQUEST_WRITE_H_28BB9709_A65B_44C9_91C3_0A380BD76F7D
 #define METADATA_REQUEST_WRITE_H_28BB9709_A65B_44C9_91C3_0A380BD76F7D
 
-#include <boost/foreach.hpp>
 #include <libkafka_asio/detail/request_write.h>
 
 namespace libkafka_asio
@@ -21,7 +20,7 @@ namespace detail
 inline Int32 RequestMessageWireSize(const MetadataRequest& request)
 {
   Int32 size = sizeof(Int32);
-  BOOST_FOREACH(const String& topic_name, request.topic_names())
+  for(const String& topic_name: request.topic_names())
   {
     size += StringWireSize(topic_name);
   }
@@ -33,7 +32,7 @@ inline void WriteRequestMessage(const MetadataRequest& request,
 {
   // Topic Names
   WriteInt32(static_cast<Int32>(request.topic_names().size()), os);
-  BOOST_FOREACH(const String& topic_name, request.topic_names())
+  for(const String& topic_name: request.topic_names())
   {
     WriteString(topic_name, os);
   }

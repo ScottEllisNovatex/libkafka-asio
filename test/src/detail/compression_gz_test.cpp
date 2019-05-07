@@ -71,7 +71,7 @@ protected:
 
 TEST_F(CompressionGzTest, SimpleDecompress)
 {
-  boost::system::error_code ec;
+  asio::error_code ec;
   using namespace libkafka_asio::constants;
   Bytes result = Decompress(TestCase1Compressed(), kCompressionGZIP, ec);
   Bytes expected_result = TestCase1Uncompressed();
@@ -83,7 +83,7 @@ TEST_F(CompressionGzTest, EmptyDecompress)
 {
   {
     Bytes test_data;
-    boost::system::error_code ec;
+    asio::error_code ec;
     using namespace libkafka_asio::constants;
     Bytes result = Decompress(test_data, kCompressionGZIP, ec);
     ASSERT_EQ(libkafka_asio::kErrorCompressionFailed, ec);
@@ -91,7 +91,7 @@ TEST_F(CompressionGzTest, EmptyDecompress)
   }
   {
     Bytes test_data(new Bytes::element_type());
-    boost::system::error_code ec;
+    asio::error_code ec;
     ASSERT_EQ(0, test_data->size());
     using namespace libkafka_asio::constants;
     Bytes result = Decompress(test_data, kCompressionGZIP, ec);
@@ -102,7 +102,7 @@ TEST_F(CompressionGzTest, EmptyDecompress)
 
 TEST_F(CompressionGzTest, SimpleCompress)
 {
-  boost::system::error_code ec;
+  asio::error_code ec;
   using namespace libkafka_asio::constants;
   Bytes result = Compress(TestCase1Uncompressed(), kCompressionGZIP, ec);
   Bytes expected_result = TestCase1Compressed();
@@ -116,7 +116,7 @@ TEST_F(CompressionGzTest, EmptyCompress)
 {
   {
     Bytes test_data;
-    boost::system::error_code ec;
+    asio::error_code ec;
     using namespace libkafka_asio::constants;
     Bytes result = Compress(test_data, kCompressionGZIP, ec);
     ASSERT_EQ(libkafka_asio::kErrorCompressionFailed, ec);
@@ -124,7 +124,7 @@ TEST_F(CompressionGzTest, EmptyCompress)
   }
   {
     Bytes test_data(new Bytes::element_type());
-    boost::system::error_code ec;
+    asio::error_code ec;
     ASSERT_EQ(0, test_data->size());
     using namespace libkafka_asio::constants;
     Bytes result = Compress(test_data, kCompressionGZIP, ec);

@@ -65,7 +65,7 @@ private:
   Int8 attributes_;
   Bytes key_;
   Bytes value_;
-  boost::shared_ptr<MessageSet> nested_message_set_;
+  std::shared_ptr<MessageSet> nested_message_set_;
 };
 
 // Message data structure with an additional offset
@@ -91,7 +91,7 @@ private:
 // `Message` object will be returned by this function.
 Message CompressMessageSet(const MessageSet& message_set,
                            constants::Compression compression,
-                           boost::system::error_code& ec);
+                           asio::error_code& ec);
 
 }  // namespace libkafka_asio
 

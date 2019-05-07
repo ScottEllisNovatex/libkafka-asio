@@ -10,8 +10,7 @@
 #ifndef BASIC_CONNECTION_H_C3BEC97E_D24D_4938_BCAE_7A746C0989B4
 #define BASIC_CONNECTION_H_C3BEC97E_D24D_4938_BCAE_7A746C0989B4
 
-#include <boost/asio.hpp>
-#include <boost/lexical_cast.hpp>
+#include <asio.hpp>
 #include <libkafka_asio/connection_configuration.h>
 
 namespace libkafka_asio
@@ -21,7 +20,7 @@ namespace detail
 
 template<typename Service>
 class BasicConnection :
-  public boost::asio::basic_io_object<Service>
+  public asio::basic_io_object<Service>
 {
   typedef typename Service::implementation_type::element_type
     ServiceImplType;
@@ -53,9 +52,9 @@ public:
   // Connection attempts and requests to the Kafka server will be scheduled
   // on the given io_service object.
   explicit BasicConnection(
-    boost::asio::io_service& io_service,
+    asio::io_service& io_service,
     const Configuration& configuration = Configuration()) :
-    boost::asio::basic_io_object<Service>(io_service)
+    asio::basic_io_object<Service>(io_service)
   {
     this->get_implementation()->set_configuration(configuration);
   }
@@ -73,7 +72,7 @@ public:
   // The signature of the handler function must be:
   // ```
   // void handler(
-  //   const boost::system::error_code& error  // Success status
+  //   const asio::system::error_code& error  // Success status
   // );
   // ```
   //
@@ -93,7 +92,7 @@ public:
   // The signature of the handler function must be:
   // ```
   // void handler(
-  //   const boost::system::error_code& error  // Success status
+  //   const asio::system::error_code& error  // Success status
   // );
   // ```
   //
@@ -102,7 +101,7 @@ public:
                     Ty service,
                     const ConnectionHandlerType& handler)
   {
-    using boost::lexical_cast;
+    using asio::lexical_cast;
     this->AsyncConnect(lexical_cast<std::string>(host),
                        lexical_cast<std::string>(service),
                        handler);
@@ -115,7 +114,7 @@ public:
   // The signature of the handler function must be:
   // ```
   // void handler(
-  //   const boost::system::error_code& error  // Success status
+  //   const asio::system::error_code& error  // Success status
   // );
   // ```
   //
@@ -135,7 +134,7 @@ public:
   // The signature of the handler function must be:
   // ```
   // void handler(
-  //   const boost::system::error_code& error,  // Success status
+  //   const asio::system::error_code& error,  // Success status
   //   const Response::OptionalType& response   // Optional response object
   // );
   // ```

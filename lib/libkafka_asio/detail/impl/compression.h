@@ -20,7 +20,7 @@ namespace detail
 
 inline Bytes Compress(const Bytes& data,
                       constants::Compression compression,
-                      boost::system::error_code& ec)
+                      asio::error_code& ec)
 {
   using namespace libkafka_asio::constants;
 
@@ -36,10 +36,10 @@ inline Bytes Compress(const Bytes& data,
       return CompressionPolicy<kCompressionLz4>::
       Algorithm::Compress(data, ec);
     case kCompressionNone:
-      ec = kErrorSuccess;
+      ec = make_error_code(kErrorSuccess);
       break;
     default:
-      ec = kErrorCompressionNotAvailable;
+      ec = make_error_code(kErrorCompressionNotAvailable);
       break;
   }
 
@@ -48,7 +48,7 @@ inline Bytes Compress(const Bytes& data,
 
 inline Bytes Decompress(const Bytes& data,
                         constants::Compression compression,
-                        boost::system::error_code& ec)
+                        asio::error_code& ec)
 {
   using namespace libkafka_asio::constants;
 
@@ -64,10 +64,10 @@ inline Bytes Decompress(const Bytes& data,
       return CompressionPolicy<kCompressionLz4>::
       Algorithm::Decompress(data, ec);
     case kCompressionNone:
-      ec = kErrorSuccess;
+      ec = make_error_code(kErrorSuccess);
       break;
     default:
-      ec = kErrorCompressionNotAvailable;
+      ec = make_error_code(kErrorCompressionNotAvailable);
       break;
   }
 
@@ -75,16 +75,16 @@ inline Bytes Decompress(const Bytes& data,
 }
 
 inline Bytes FallbackCompressionAlgorithm::Compress(
-  const Bytes&, boost::system::error_code& ec)
+  const Bytes&, asio::error_code& ec)
 {
-  ec = kErrorCompressionNotAvailable;
+  ec = make_error_code(kErrorCompressionNotAvailable);
   return Bytes();
 }
 
 inline Bytes FallbackCompressionAlgorithm::Decompress(
-  const Bytes&, boost::system::error_code& ec)
+  const Bytes&, asio::error_code& ec)
 {
-  ec = kErrorCompressionNotAvailable;
+  ec = make_error_code(kErrorCompressionNotAvailable);
   return Bytes();
 }
 

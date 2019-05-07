@@ -11,7 +11,7 @@
 #define RESPONSE_READ_H_TODO
 
 #include <iostream>
-#include <boost/system/error_code.hpp>
+#include <asio.hpp>
 #include <libkafka_asio/primitives.h>
 #include <libkafka_asio/response.h>
 #include <libkafka_asio/message_fwd.h>
@@ -54,45 +54,45 @@ void ReadBytes(std::istream& is, Bytes& bytes);
 
 void ReadMessage(std::istream& is,
                  Message& message,
-                 boost::system::error_code& ec);
+                 asio::error_code& ec);
 
 void ReadMessageSet(std::istream& is,
                     MessageSet& message_set,
                     size_t size,
-                    boost::system::error_code& ec);
+                    asio::error_code& ec);
 
 template<typename TMutableResponse>
 void ReadResponse(std::istream& is,
                   TMutableResponse& response,
-                  boost::system::error_code& ec);
+                  asio::error_code& ec);
 
 void ReadResponseMessage(std::istream& is,
                          MutableMetadataResponse& response,
-                         boost::system::error_code& ec);
+                         asio::error_code& ec);
 
 void ReadResponseMessage(std::istream& is,
                          MutableProduceResponse& response,
-                         boost::system::error_code& ec);
+                         asio::error_code& ec);
 
 void ReadResponseMessage(std::istream& is,
                          MutableFetchResponse& response,
-                         boost::system::error_code& ec);
+                         asio::error_code& ec);
 
 void ReadResponseMessage(std::istream& is,
                          MutableOffsetResponse& response,
-                         boost::system::error_code& ec);
+                         asio::error_code& ec);
 
 void ReadResponseMessage(std::istream& is,
                          MutableConsumerMetadataResponse& response,
-                         boost::system::error_code& ec);
+                         asio::error_code& ec);
 
 void ReadResponseMessage(std::istream& is,
                          MutableOffsetCommitResponse& response,
-                         boost::system::error_code& ec);
+                         asio::error_code& ec);
 
 void ReadResponseMessage(std::istream& is,
                          MutableOffsetFetchResponse& response,
-                         boost::system::error_code& ec);
+                         asio::error_code& ec);
 
 }  // namespace detail
 }  // namespace libkafka_asio

@@ -1,5 +1,5 @@
 //
-// examples/fetch_cxx03.cpp
+// examples/fetch_cxx11.cpp
 // ------------------------
 //
 // Copyright (c) 2015 Daniel Joos
@@ -11,44 +11,17 @@
 // This example shows how to create a 'FetchRequest' to get messages for a
 // specific Topic & partition. On success, all received messages will be print
 // to stdout.
+// Your compiler needs to know about C++11 and respective flags need to be set!
 //
 
-#include <string>
 #include <iostream>
-#include <boost/asio.hpp>
-#include <libkafka_asio/libkafka_asio.h>
+#include <asio.hpp>
+#include <libkafka_asio/libkafka_asio.h>asio::
 
 using libkafka_asio::Connection;
 using libkafka_asio::FetchRequest;
 using libkafka_asio::FetchResponse;
 using libkafka_asio::MessageAndOffset;
-
-std::string BytesToString(const libkafka_asio::Bytes& bytes)
-{
-  if (!bytes || bytes->empty())
-  {
-    return "";
-  }
-  return std::string((const char*) &(*bytes)[0], bytes->size());
-};
-
-void PrintMessage(const MessageAndOffset& message)
-{
-  std::cout << BytesToString(message.value()) << std::endl;
-}
-
-void HandleFetch(const Connection::ErrorCodeType& err,
-                 const FetchResponse::OptionalType& response)
-{
-  if (err)
-  {
-    std::cerr
-      << "Error: " << boost::system::system_error(err).what()
-      << std::endl;
-    return;
-  }
-  std::for_each(response->begin(), response->end(), &PrintMessage);
-}
 
 int main(int argc, char **argv)
 {
@@ -58,7 +31,7 @@ int main(int argc, char **argv)
   configuration.socket_timeout = 10000;
   configuration.SetBrokerFromString("192.168.15.137:49162");
 
-  boost::asio::io_service ios;
+  asio::io_service ios;
   Connection connection(ios, configuration);
 
   // Create a 'Fetch' request and try to get data for partition 0 of topic
@@ -66,10 +39,40 @@ int main(int argc, char **argv)
   FetchRequest request;
   request.FetchTopic("mytopic", 0, 1);
 
+  // Helper to interpret the received bytes as string
+  auto BytesToString = [](const libkafka_asio::Bytes& bytes) -> std::string
+  {
+    if (!bytes || bytes->empty())
+    {
+      return "";
+    }
+    return std::string((const char*) &(*bytes)[0], bytes->size());
+  };
+
   // Send the prepared fetch request.
   // The connection will attempt to automatically connect to the broker,
   // specified in the configuration.
-  connection.AsyncRequest(request, &HandleFetch);
+  connection.AsyncRequest(
+    request,
+    [&](const Connection::ErrorCodeType& err,
+        const FetchResponse::OptionalType& response)
+  {
+    if (err)
+    {
+      std::cerr
+        << "Error: " << asio::system_error(err).what()
+        << std::endl;
+      return;
+    }
+
+    // Loop through the received messages.
+    // A range based for loop might also work.
+    std::for_each(response->begin(), response->end(),
+      [&](const MessageAndOffset& message)
+    {
+      std::cout << BytesToString(message.value()) << std::endl;
+    });
+  });
 
   // Let's go!
   ios.run();

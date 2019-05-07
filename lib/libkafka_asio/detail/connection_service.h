@@ -11,11 +11,9 @@
 #define CONNECTION_SERVICE_H_BD87CD55_1B15_4F19_AE8C_B78C42BBE950
 
 #include <deque>
-#include <boost/asio.hpp>
-#include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/system/error_code.hpp>
+#include <chrono>
+#include <asio.hpp>
+#include <asio/basic_waitable_timer.hpp>
 #include <libkafka_asio/connection_configuration.h>
 
 namespace libkafka_asio
@@ -25,19 +23,19 @@ namespace detail
 
 template<typename Service>
 class BasicConnectionService :
-  public boost::asio::io_service::service
+  public asio::io_service::service
 {
 public:
 
   // Service implementation type
-  typedef boost::shared_ptr<Service> implementation_type;
+  typedef std::shared_ptr<Service> implementation_type;
 
   // Unique service identifier
-  static boost::asio::io_service::id id;
+  static asio::io_service::id id;
 
   // Construct a new connection service
-  explicit BasicConnectionService(boost::asio::io_service& io_service) :
-    boost::asio::io_service::service(io_service)
+  explicit BasicConnectionService(asio::io_service& io_service) :
+    asio::io_service::service(io_service)
   {
   }
 
@@ -49,7 +47,7 @@ public:
   // Construct a new connection service implementation
   void construct(implementation_type& impl)
   {
-    impl.reset(new Service(get_io_context()));
+	  impl.reset(new Service(get_io_service())); // get_io_context()));	// SJE returns an io_context object
   }
 
   // Destroy a connection service implementation
@@ -70,32 +68,32 @@ public:
 // pending on the socket.
 //
 class ConnectionServiceImpl :
-  public boost::enable_shared_from_this<ConnectionServiceImpl>
+  public std::enable_shared_from_this<ConnectionServiceImpl>
 {
 public:
   // Error codes use this type
-  typedef boost::system::error_code ErrorCodeType;
+  typedef asio::error_code ErrorCodeType;
 
   // Handler type definition for connection operations
-  typedef boost::function<void(const ErrorCodeType&)> ConnectionHandlerType;
+  typedef std::function<void(const ErrorCodeType&)> ConnectionHandlerType;
 
   // Handler type definitions for transmission operations
-  typedef boost::function<void(const ErrorCodeType&, size_t)> TxHandlerType;
+  typedef std::function<void(const ErrorCodeType&, size_t)> TxHandlerType;
 
   // Handler type deduction template depending on the type of request
   template<typename TRequest>
   struct Handler
   {
     typedef typename TRequest::ResponseType::OptionalType ResponseType;
-    typedef boost::function<void(const ErrorCodeType&,
+    typedef std::function<void(const ErrorCodeType&,
                                  const ResponseType&)> Type;
   };
 
 private:
-  typedef boost::asio::ip::tcp::socket SocketType;
-  typedef boost::asio::deadline_timer DeadlineTimerType;
-  typedef boost::asio::ip::tcp::resolver ResolverType;
-  typedef boost::shared_ptr<boost::asio::streambuf> StreambufType;
+  typedef asio::ip::tcp::socket SocketType;
+  typedef asio::basic_waitable_timer<std::chrono::system_clock > DeadlineTimerType;
+  typedef asio::ip::tcp::resolver ResolverType;
+  typedef std::shared_ptr<asio::streambuf> StreambufType;
 
   enum ConnectionState
   {
@@ -122,7 +120,7 @@ private:
 public:
 
   // Construct a new connection service object
-  ConnectionServiceImpl(boost::asio::io_service& io_service);
+  ConnectionServiceImpl(asio::io_service& io_service);
 
   // Gets the connection configuration
   const ConnectionConfiguration& configuration() const;
@@ -234,7 +232,7 @@ private:
   TxState write_state_;
   TxState read_state_;
 
-  boost::asio::io_service& io_service_;
+  asio::io_service& io_service_;
   SocketType socket_;
   DeadlineTimerType connect_deadline_;
   DeadlineTimerType write_deadline_;

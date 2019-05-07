@@ -10,11 +10,7 @@
 #ifndef ERROR_H_20BBD26A_1B33_4F9E_94E9_5989EC105D5D
 #define ERROR_H_20BBD26A_1B33_4F9E_94E9_5989EC105D5D
 
-#include <boost/system/error_code.hpp>
-
-#ifndef BOOST_SYSTEM_NOEXCEPT
-#define BOOST_SYSTEM_NOEXCEPT
-#endif
+#include <asio.hpp>
 
 namespace libkafka_asio
 {
@@ -52,10 +48,10 @@ enum KafkaError
 };
 
 class ClientErrorCategory :
-  public boost::system::error_category
+  public asio::error_category
 {
 public:
-  inline const char *name() const BOOST_SYSTEM_NOEXCEPT
+	inline const char* name() const noexcept
   {
     return "libkafka_asio::ClientError";
   }
@@ -81,7 +77,7 @@ public:
     }
   }
 
-  inline static const boost::system::error_category& Instance()
+  inline static const asio::error_category& Instance()
   {
     static ClientErrorCategory instance;
     return instance;
@@ -89,10 +85,10 @@ public:
 };
 
 class KafkaErrorCategory :
-  public boost::system::error_category
+  public asio::error_category
 {
 public:
-  inline const char *name() const BOOST_SYSTEM_NOEXCEPT
+	inline const char* name()  const noexcept
   {
     return "libkafka_asio::KafkaError";
   }
@@ -145,7 +141,7 @@ public:
     }
   }
 
-  inline static const boost::system::error_category& Instance()
+  inline static const asio::error_category& Instance()
   {
     static KafkaErrorCategory instance;
     return instance;
@@ -153,26 +149,25 @@ public:
 };
 
 //
-// boost::system integration code following:
+// asio::system integration code following:
 //
 
-inline boost::system::error_code make_error_code(ClientError e)
+inline asio::error_code make_error_code(ClientError e)
 {
-  return boost::system::error_code(
+  return asio::error_code(
     static_cast<int>(e), ClientErrorCategory::Instance());
 }
 
-inline boost::system::error_code make_error_code(KafkaError e)
+inline asio::error_code make_error_code(KafkaError e)
 {
-  return boost::system::error_code(
+  return asio::error_code(
     static_cast<int>(e), KafkaErrorCategory::Instance());
 }
 
 }  // namespace libkafka_asio
 
-namespace boost
-{
-namespace system
+/*
+namespace asio
 {
 
 template<>
@@ -187,7 +182,7 @@ struct is_error_code_enum<libkafka_asio::KafkaError>
   static const bool value = true;
 };
 
-}  // namespace system
-}  // namespace boost
+}  // namespace asio
+*/
 
 #endif  // ERROR_H_20BBD26A_1B33_4F9E_94E9_5989EC105D5D

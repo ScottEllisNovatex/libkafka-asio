@@ -2,7 +2,6 @@
 #define CONNECTION_CONFIGURATION_H_0435D34D_97AC_4D67_8E3A_DEBAAC218C4D
 
 #include <libkafka_asio/constants.h>
-#include <boost/lexical_cast.hpp>
 
 namespace libkafka_asio
 {
@@ -19,7 +18,8 @@ inline void ConnectionConfiguration::SetBrokerFromString(const std::string& str)
 {
   if (str.empty())
   {
-    broker_address.reset();
+    broker_address.hostname = "";
+	broker_address.service = "";
     return;
   }
   BrokerAddress broker;
@@ -42,20 +42,18 @@ inline void ConnectionConfiguration::SetBrokerFromString(const std::string& str)
   }
   broker_address = broker;
 }
-
+/*
 template<typename T>
-inline void ConnectionConfiguration::SetBroker(const T& broker)
+inline void ConnectionConfiguration::SetBroker(const  BrokerAddress& broker)
 {
   SetBroker(broker.host, broker.port);
 }
-
-template<typename Tx, typename Ty>
-inline void ConnectionConfiguration::SetBroker(const Tx& hostname,
-                                               const Ty& service)
+*/
+inline void ConnectionConfiguration::SetBroker(const String& hostname, const uint32_t& service)
 {
   BrokerAddress broker;
-  broker.hostname = boost::lexical_cast<String>(hostname);
-  broker.service = boost::lexical_cast<String>(service);
+  broker.hostname = hostname;
+  broker.service = std::to_string(service);
   broker_address = broker;
 }
 

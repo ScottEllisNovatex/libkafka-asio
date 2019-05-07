@@ -10,7 +10,6 @@
 #ifndef OFFSET_REQUEST_WRITE_H_B5A2F2C0_18BC_4AD5_B892_27834F8D87DE
 #define OFFSET_REQUEST_WRITE_H_B5A2F2C0_18BC_4AD5_B892_27834F8D87DE
 
-#include <boost/foreach.hpp>
 #include <libkafka_asio/detail/request_write.h>
 
 namespace libkafka_asio
@@ -24,7 +23,7 @@ inline Int32 RequestMessageWireSize(const OffsetRequest& request)
 
   // Topics array
   size += sizeof(Int32);
-  BOOST_FOREACH(const OffsetRequest::Topic& topic, request.topics())
+  for(const OffsetRequest::Topic& topic: request.topics())
   {
     size += StringWireSize(topic.topic_name);
 
@@ -44,13 +43,13 @@ inline void WriteRequestMessage(const OffsetRequest& request, std::ostream& os)
 
   // Topics array
   WriteInt32(static_cast<Int32>(request.topics().size()), os);
-  BOOST_FOREACH(const OffsetRequest::Topic& topic, request.topics())
+ for(const OffsetRequest::Topic& topic: request.topics())
   {
     WriteString(topic.topic_name, os);
 
     // Partitions array
     WriteInt32(static_cast<Int32>(topic.partitions.size()), os);
-    BOOST_FOREACH(const OffsetRequest::Partition& partition, topic.partitions)
+    for(const OffsetRequest::Partition& partition: topic.partitions)
     {
       WriteInt32(partition.partition, os);
       WriteInt64(partition.time, os);

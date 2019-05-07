@@ -24,14 +24,14 @@ namespace detail
 {
 
 inline Bytes GZIPCompressionAlgorithm::Compress(
-  const Bytes& data, boost::system::error_code& ec)
+  const Bytes& data, asio::error_code& ec)
 {
   static const size_t kBufferSize = 32 * 1024;
   static const int kGZIPWindowBits = 15 + 16;
 
   if (!data || data->empty())
   {
-    ec = kErrorCompressionFailed;
+    ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
   // Initialize a new zlib stream
@@ -40,7 +40,7 @@ inline Bytes GZIPCompressionAlgorithm::Compress(
   if (::deflateInit2(&gz, Z_DEFAULT_COMPRESSION, Z_DEFLATED, kGZIPWindowBits,
                      8, Z_DEFAULT_STRATEGY) != Z_OK)
   {
-    ec = kErrorCompressionFailed;
+    ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
   gz.next_in = reinterpret_cast< ::Bytef *>(&(*data)[0]);
@@ -63,23 +63,23 @@ inline Bytes GZIPCompressionAlgorithm::Compress(
   ::deflateEnd(&gz);
   if (ret != Z_STREAM_END)
   {
-    ec = kErrorCompressionFailed;
+    ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
 
-  ec = kErrorSuccess;
+  ec = make_error_code(kErrorSuccess);
   return out;
 }
 
 inline Bytes GZIPCompressionAlgorithm::Decompress(
-  const Bytes& data, boost::system::error_code& ec)
+  const Bytes& data, asio::error_code& ec)
 {
   static const size_t kBufferSize = 32 * 1024;
   static const int kGZIPWindowBits = 15 + 32;
 
   if (!data || data->empty())
   {
-    ec = kErrorCompressionFailed;
+    ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
   // Initialize a new zlib stream
@@ -87,7 +87,7 @@ inline Bytes GZIPCompressionAlgorithm::Decompress(
   ::gz_header header = {};
   if (::inflateInit2(&gz, kGZIPWindowBits) != Z_OK)
   {
-    ec = kErrorCompressionFailed;
+    ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
   gz.next_in = reinterpret_cast< ::Bytef *>(&(*data)[0]);
@@ -112,11 +112,11 @@ inline Bytes GZIPCompressionAlgorithm::Decompress(
   ::inflateEnd(&gz);
   if (ret != Z_STREAM_END)
   {
-    ec = kErrorCompressionFailed;
+    ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
 
-  ec = kErrorSuccess;
+  ec = make_error_code(kErrorSuccess);
   return out;
 }
 

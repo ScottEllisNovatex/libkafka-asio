@@ -51,7 +51,7 @@ TEST_F(ProduceRequestWriteTest, WriteRequestMessage)
     = MessageSetWireSize(request.topics()[0].partitions[0].messages);
   ASSERT_EQ(expected_message_set_size, ReadInt32(*stream));  // MessageSetSize
   libkafka_asio::MessageSet message_set;
-  boost::system::error_code ec;
+  asio::error_code ec;
   ReadMessageSet(*stream, message_set, expected_message_set_size, ec);
 
   // Nothing else ...

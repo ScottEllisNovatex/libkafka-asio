@@ -31,19 +31,19 @@ struct SnappyCompressionAlgorithm
   static const Bytes& kSnappyStreamMagic();
 
   // Compress the given data using Snappy
-  static Bytes Compress(const Bytes& data, boost::system::error_code& ec);
+  static Bytes Compress(const Bytes& data, asio::error_code& ec);
 
   // Decompress the given data using Snappy
-  static Bytes Decompress(const Bytes& data, boost::system::error_code& ec);
+  static Bytes Decompress(const Bytes& data, asio::error_code& ec);
 
 private:
   // Decompress the given chunk
   static Bytes DecompressChunk(const Bytes& data,
-                               boost::system::error_code& ec);
+                               asio::error_code& ec);
 
   // Interprets the given data as Snappy stream (xerial OutputStream format)
   static Bytes DecompressStream(const Bytes& data,
-                                boost::system::error_code& ec);
+                                asio::error_code& ec);
 };
 
 // Register the algorithm

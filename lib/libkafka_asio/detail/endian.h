@@ -11,8 +11,9 @@
 #define ENDIAN_H_6E481133_65F6_495C_A384_557C81B0C628
 
 #include <libkafka_asio/primitives.h>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <boost/detail/endian.hpp>
+
 
 namespace libkafka_asio
 {

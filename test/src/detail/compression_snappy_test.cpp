@@ -69,7 +69,7 @@ protected:
 
 TEST_F(CompressionSnappyTest, SimpleDecompress)
 {
-  boost::system::error_code ec;
+  asio::error_code ec;
   using namespace libkafka_asio::constants;
   Bytes result = Decompress(TestCase1Compressed(), kCompressionSnappy, ec);
   Bytes expected_result = TestCase1Uncompressed();
@@ -79,7 +79,7 @@ TEST_F(CompressionSnappyTest, SimpleDecompress)
 
 TEST_F(CompressionSnappyTest, StreamDecompress)
 {
-  boost::system::error_code ec;
+  asio::error_code ec;
   using namespace libkafka_asio::constants;
   Bytes result = Decompress(TestCase2Compressed(), kCompressionSnappy, ec);
   Bytes expected_result = TestCase2Uncompressed();
@@ -91,7 +91,7 @@ TEST_F(CompressionSnappyTest, EmptyDecompress)
 {
   {
     Bytes test_data;
-    boost::system::error_code ec;
+    asio::error_code ec;
     using namespace libkafka_asio::constants;
     Bytes result = Decompress(test_data, kCompressionSnappy, ec);
     ASSERT_EQ(libkafka_asio::kErrorCompressionFailed, ec);
@@ -99,7 +99,7 @@ TEST_F(CompressionSnappyTest, EmptyDecompress)
   }
   {
     Bytes test_data(new Bytes::element_type());
-    boost::system::error_code ec;
+    asio::error_code ec;
     using namespace libkafka_asio::constants;
     Bytes result = Decompress(test_data, kCompressionSnappy, ec);
     ASSERT_EQ(libkafka_asio::kErrorCompressionFailed, ec);
@@ -109,7 +109,7 @@ TEST_F(CompressionSnappyTest, EmptyDecompress)
 
 TEST_F(CompressionSnappyTest, SimpleCompress)
 {
-  boost::system::error_code ec;
+  asio::error_code ec;
   using namespace libkafka_asio::constants;
   Bytes result = Compress(TestCase1Uncompressed(), kCompressionSnappy, ec);
   Bytes expected_result = TestCase1Compressed();
@@ -121,7 +121,7 @@ TEST_F(CompressionSnappyTest, EmptyCompress)
 {
   {
     Bytes test_data;
-    boost::system::error_code ec;
+    asio::error_code ec;
     using namespace libkafka_asio::constants;
     Bytes result = Compress(test_data, kCompressionSnappy, ec);
     ASSERT_EQ(libkafka_asio::kErrorCompressionFailed, ec);
@@ -129,7 +129,7 @@ TEST_F(CompressionSnappyTest, EmptyCompress)
   }
   {
     Bytes test_data(new Bytes::element_type());
-    boost::system::error_code ec;
+    asio::error_code ec;
     using namespace libkafka_asio::constants;
     Bytes result = Compress(test_data, kCompressionSnappy, ec);
     ASSERT_EQ(libkafka_asio::kErrorCompressionFailed, ec);

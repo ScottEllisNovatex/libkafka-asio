@@ -11,7 +11,6 @@
 #define RECURSIVE_MESSAGESET_ITERATOR_H_FDB00A65_7998_46B4_AF03_CCBB481582E2
 
 #include <boost/iterator/iterator_facade.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <libkafka_asio/message.h>
 
 namespace libkafka_asio
@@ -50,7 +49,7 @@ public:
 private:
   friend class boost::iterator_core_access;
 
-  typedef boost::scoped_ptr<RecursiveMessageSetIterator> InnerIteratorType;
+  typedef std::unique_ptr<RecursiveMessageSetIterator> InnerIteratorType;
 
   void increment();
 

@@ -10,7 +10,6 @@
 #ifndef OFFSET_RESPONSE_READ_H_BAFF7FC5_03CA_46CD_B8EC_AD2CDBFF19F0
 #define OFFSET_RESPONSE_READ_H_BAFF7FC5_03CA_46CD_B8EC_AD2CDBFF19F0
 
-#include <boost/foreach.hpp>
 #include <libkafka_asio/detail/response_read.h>
 
 namespace libkafka_asio
@@ -20,7 +19,7 @@ namespace detail
 
 inline void ReadResponseMessage(std::istream& is,
                                 MutableOffsetResponse& response,
-                                boost::system::error_code& ec)
+                                asio::error_code& ec)
 {
   int topic_count = ReadInt32(is);
   for (int t = 0; t < topic_count; ++t)
@@ -38,7 +37,7 @@ inline void ReadResponseMessage(std::istream& is,
       partition.error_code = ReadInt16(is);
       if (partition.error_code)
       {
-        ec = (KafkaError) partition.error_code;
+        ec = make_error_code((KafkaError) partition.error_code);
         return;
       }
       Int32 offsets_size = ReadInt32(is);

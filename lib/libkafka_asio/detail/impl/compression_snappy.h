@@ -35,11 +35,11 @@ inline const Bytes& SnappyCompressionAlgorithm::kSnappyStreamMagic()
 }
 
 inline Bytes SnappyCompressionAlgorithm::Compress(
-  const Bytes& data, boost::system::error_code& ec)
+  const Bytes& data, asio::error_code& ec)
 {
   if (!data || data->empty())
   {
-    ec = kErrorCompressionFailed;
+	  ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
   Bytes result(
@@ -50,16 +50,16 @@ inline Bytes SnappyCompressionAlgorithm::Compress(
   ::snappy::RawCompress(raw_input_ptr, data->size(), raw_output_ptr,
                         &result_size);
   result->resize(result_size);
-  ec = kErrorSuccess;
+  ec = make_error_code(kErrorSuccess);
   return result;
 }
 
 inline Bytes SnappyCompressionAlgorithm::Decompress(
-  const Bytes& data, boost::system::error_code& ec)
+  const Bytes& data, asio::error_code& ec)
 {
   if (!data || data->empty())
   {
-    ec = kErrorCompressionFailed;
+    ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
   bool is_stream = std::equal(kSnappyStreamMagic()->begin(),
@@ -76,7 +76,7 @@ inline Bytes SnappyCompressionAlgorithm::Decompress(
 }
 
 inline Bytes SnappyCompressionAlgorithm::DecompressChunk(
-  const Bytes& data, boost::system::error_code& ec)
+  const Bytes& data, asio::error_code& ec)
 {
   const char *raw_input_ptr = reinterpret_cast<const char *>(&(*data)[0]);
   size_t uncompressed_size = 0;
@@ -84,25 +84,25 @@ inline Bytes SnappyCompressionAlgorithm::DecompressChunk(
       !::snappy::GetUncompressedLength(raw_input_ptr, data->size(),
                                        &uncompressed_size))
   {
-    ec = kErrorCompressionFailed;
+    ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
   Bytes result(new Bytes::element_type(uncompressed_size));
   char *raw_output_ptr = reinterpret_cast<char *>(&(*result)[0]);
   if (!::snappy::RawUncompress(raw_input_ptr, data->size(), raw_output_ptr))
   {
-    ec = kErrorCompressionFailed;
+    ec = make_error_code(kErrorCompressionFailed);
     return Bytes();
   }
-  ec = kErrorSuccess;
+  ec = make_error_code(kErrorSuccess);
   return result;
 }
 
 inline Bytes SnappyCompressionAlgorithm::DecompressStream(
-  const Bytes& data, boost::system::error_code& ec)
+  const Bytes& data, asio::error_code& ec)
 {
   // Create intput and output streams
-  using boost::asio::streambuf;
+  using asio::streambuf;
   BytesStreambuf input_buffer(data);
   streambuf output_buffer;
   std::istream is(&input_buffer);
@@ -119,7 +119,7 @@ inline Bytes SnappyCompressionAlgorithm::DecompressStream(
     ReadBytes(is, chunk);
     if (!chunk)
     {
-      ec = kErrorCompressionFailed;
+      ec = make_error_code(kErrorCompressionFailed);
       return Bytes();
     }
     chunk = DecompressChunk(chunk, ec);
@@ -131,15 +131,15 @@ inline Bytes SnappyCompressionAlgorithm::DecompressStream(
     is.peek();
   }
   // Create the result object and copy all data into it
-  using boost::asio::buffer_cast;
-  using boost::asio::buffer_size;
+  using asio::buffer_cast;
+  using asio::buffer_size;
   streambuf::const_buffers_type output_buffer_data = output_buffer.data();
   Bytes result(new Bytes::element_type(
     buffer_cast<const Bytes::element_type::value_type *>(output_buffer_data),
     buffer_cast<const Bytes::element_type::value_type *>(output_buffer_data) +
     buffer_size(output_buffer_data)
   ));
-  ec = kErrorSuccess;
+  ec = make_error_code(kErrorSuccess);
   return result;
 }
 

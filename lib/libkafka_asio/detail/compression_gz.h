@@ -24,9 +24,9 @@ namespace detail
 // Compression/Decompression using the GZIP implementation of `zlib`.
 struct GZIPCompressionAlgorithm
 {
-  static Bytes Compress(const Bytes& data, boost::system::error_code& ec);
+  static Bytes Compress(const Bytes& data, asio::error_code& ec);
 
-  static Bytes Decompress(const Bytes& data, boost::system::error_code& ec);
+  static Bytes Decompress(const Bytes& data, asio::error_code& ec);
 };
 
 // Register the GZIP Algorithm

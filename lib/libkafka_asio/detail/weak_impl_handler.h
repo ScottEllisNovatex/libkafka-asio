@@ -10,8 +10,8 @@
 #ifndef WEAK_IMPL_HANDLER_H_1A3CF0E2_1A7C_4889_8C48_843FBDD9CFD0
 #define WEAK_IMPL_HANDLER_H_1A3CF0E2_1A7C_4889_8C48_843FBDD9CFD0
 
-#include <boost/asio.hpp>
-#include <boost/weak_ptr.hpp>
+#include <asio.hpp>
+
 
 namespace libkafka_asio
 {
@@ -22,7 +22,7 @@ template<typename Impl, typename Handler>
 class WeakImplNullaryHandlerType
 {
 public:
-  WeakImplNullaryHandlerType(boost::weak_ptr<Impl> impl,
+  WeakImplNullaryHandlerType(std::weak_ptr<Impl> impl,
                              const Handler& handler) :
     impl_(impl),
     handler_(handler)
@@ -39,7 +39,7 @@ public:
   }
 
 private:
-  boost::weak_ptr<Impl> impl_;
+  std::weak_ptr<Impl> impl_;
   Handler handler_;
 };
 
@@ -47,14 +47,14 @@ template<typename Impl, typename Handler>
 class WeakImplErrorHandlerType
 {
 public:
-  WeakImplErrorHandlerType(boost::weak_ptr<Impl> impl,
+  WeakImplErrorHandlerType(std::weak_ptr<Impl> impl,
                            const Handler& handler) :
     impl_(impl),
     handler_(handler)
   {
   }
 
-  void operator()(const boost::system::error_code& error)
+  void operator()(const asio::error_code& error)
   {
     if (impl_.expired())
     {
@@ -64,7 +64,7 @@ public:
   }
 
 private:
-  boost::weak_ptr<Impl> impl_;
+  std::weak_ptr<Impl> impl_;
   Handler handler_;
 };
 
@@ -72,15 +72,15 @@ template<typename Impl, typename Handler>
 class WeakImplIteratorHandlerType
 {
 public:
-  WeakImplIteratorHandlerType(boost::weak_ptr<Impl> impl,
+  WeakImplIteratorHandlerType(std::weak_ptr<Impl> impl,
                               const Handler& handler) :
     impl_(impl),
     handler_(handler)
   {
   }
 
-  void operator()(const boost::system::error_code& error,
-                  const boost::asio::ip::tcp::resolver::iterator& iterator)
+  void operator()(const asio::error_code& error,
+                  const asio::ip::tcp::resolver::iterator& iterator)
   {
     if (impl_.expired())
     {
@@ -90,7 +90,7 @@ public:
   }
 
 private:
-  boost::weak_ptr<Impl> impl_;
+  std::weak_ptr<Impl> impl_;
   Handler handler_;
 };
 
@@ -98,14 +98,14 @@ template<typename Impl, typename Handler>
 class WeakImplTxHandlerType
 {
 public:
-  WeakImplTxHandlerType(boost::weak_ptr<Impl> impl,
+  WeakImplTxHandlerType(std::weak_ptr<Impl> impl,
                         const Handler& handler) :
     impl_(impl),
     handler_(handler)
   {
   }
 
-  void operator()(const boost::system::error_code& error,
+  void operator()(const asio::error_code& error,
                   size_t transferred_bytes)
   {
     if (impl_.expired())
@@ -116,7 +116,7 @@ public:
   }
 
 private:
-  boost::weak_ptr<Impl> impl_;
+  std::weak_ptr<Impl> impl_;
   Handler handler_;
 };
 
@@ -126,49 +126,49 @@ struct WeakImpl
 
   template<typename Handler>
   static WeakImplNullaryHandlerType<Impl, Handler>
-  NullaryHandler(boost::weak_ptr<Impl> impl, const Handler& handler)
+  NullaryHandler(std::weak_ptr<Impl> impl, const Handler& handler)
   {
     return WeakImplNullaryHandlerType<Impl, Handler>(impl, handler);
   }
 
   template<typename Handler>
   static WeakImplErrorHandlerType<Impl, Handler>
-  ErrorHandler(boost::weak_ptr<Impl> impl, const Handler& handler)
+  ErrorHandler(std::weak_ptr<Impl> impl, const Handler& handler)
   {
     return WeakImplErrorHandlerType<Impl, Handler>(impl, handler);
   }
 
   template<typename Handler>
   static WeakImplIteratorHandlerType<Impl, Handler>
-  ResolveHandler(boost::weak_ptr<Impl> impl, const Handler& handler)
+  ResolveHandler(std::weak_ptr<Impl> impl, const Handler& handler)
   {
     return WeakImplIteratorHandlerType<Impl, Handler>(impl, handler);
   }
 
   template<typename Handler>
   static WeakImplIteratorHandlerType<Impl, Handler>
-  ConnectHandler(boost::weak_ptr<Impl> impl, const Handler& handler)
+  ConnectHandler(std::weak_ptr<Impl> impl, const Handler& handler)
   {
     return WeakImplIteratorHandlerType<Impl, Handler>(impl, handler);
   }
 
   template<typename Handler>
   static WeakImplTxHandlerType<Impl, Handler>
-  WriteHandler(boost::weak_ptr<Impl> impl, const Handler& handler)
+  WriteHandler(std::weak_ptr<Impl> impl, const Handler& handler)
   {
     return WeakImplTxHandlerType<Impl, Handler>(impl, handler);
   }
 
   template<typename Handler>
   static WeakImplTxHandlerType<Impl, Handler>
-  ReadHandler(boost::weak_ptr<Impl> impl, const Handler& handler)
+  ReadHandler(std::weak_ptr<Impl> impl, const Handler& handler)
   {
     return WeakImplTxHandlerType<Impl, Handler>(impl, handler);
   }
 
   template<typename Handler>
   static WeakImplErrorHandlerType<Impl, Handler>
-  DeadlineHandler(boost::weak_ptr<Impl> impl, const Handler& handler)
+  DeadlineHandler(std::weak_ptr<Impl> impl, const Handler& handler)
   {
     return WeakImplErrorHandlerType<Impl, Handler>(impl, handler);
   }

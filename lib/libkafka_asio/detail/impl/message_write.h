@@ -10,9 +10,8 @@
 #ifndef MESSAGE_WRITE_H_201F6605_6810_441C_9F25_47D8D669A771
 #define MESSAGE_WRITE_H_201F6605_6810_441C_9F25_47D8D669A771
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <boost/crc.hpp>
-#include <boost/foreach.hpp>
 #include <libkafka_asio/detail/request_write.h>
 
 namespace libkafka_asio
@@ -33,7 +32,7 @@ inline Int32 MessageWireSize(const Message& message)
 inline Int32 MessageSetWireSize(const MessageSet& message_set)
 {
   Int32 size = 0;
-  BOOST_FOREACH(const MessageAndOffset &message, message_set)
+  for(const MessageAndOffset &message: message_set)
   {
     size +=
       sizeof(Int64) +  // Offset
@@ -45,10 +44,10 @@ inline Int32 MessageSetWireSize(const MessageSet& message_set)
 
 inline void WriteMessage(const Message& value, std::ostream& os)
 {
-  using boost::asio::buffer_cast;
+  using asio::buffer_cast;
 
   // Write everything (except crc) to an intermediate buffer
-  boost::asio::streambuf intermediate_buffer;
+  asio::streambuf intermediate_buffer;
   std::ostream intermediate_os(&intermediate_buffer);
   WriteInt8(value.magic_byte(), intermediate_os);
   WriteInt8(value.attributes(), intermediate_os);
@@ -69,7 +68,7 @@ inline void WriteMessage(const Message& value, std::ostream& os)
 
 inline void WriteMessageSet(const MessageSet& value, std::ostream& os)
 {
-  BOOST_FOREACH(const MessageAndOffset &message, value)
+  for(const MessageAndOffset &message: value)
   {
     WriteInt64(message.offset(), os);
     WriteInt32(MessageWireSize(message), os);
