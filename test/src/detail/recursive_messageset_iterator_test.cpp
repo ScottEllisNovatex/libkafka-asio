@@ -10,8 +10,7 @@
 #include <algorithm>
 #include <iterator>
 
-
-#include <gtest/gtest.h>
+#include <catch.hpp>
 
 #include <libkafka_asio/detail/recursive_messageset_iterator.h>
 
@@ -42,32 +41,32 @@ private:
   Int64& count_;
 };
 
-TEST(RecursiveMessageSetIteratorTest, Empty)
+TEST_CASE("RecursiveMessageSetIteratorTest.Empty")
 {
   MessageSet empty_set;
   RecursiveMessageSetIterator iter(empty_set), end_iter;
-  ASSERT_EQ(0, std::distance(iter, end_iter));
-  ASSERT_EQ(end_iter, iter);
+  REQUIRE(0 == std::distance(iter, end_iter));
+  REQUIRE(end_iter == iter);
   ++iter;
-  ASSERT_EQ(end_iter, iter);
+  REQUIRE(end_iter == iter);
 }
 
-TEST(RecursiveMessageSetIteratorTest, Flat)
+TEST_CASE("RecursiveMessageSetIteratorTest.Flat")
 {
   MessageSet flat_messages;
   std::generate_n(std::back_inserter(flat_messages), 10, MessageGenerator());
-  ASSERT_EQ(10, std::distance(RecursiveMessageSetIterator(flat_messages),
+  REQUIRE(10 == std::distance(RecursiveMessageSetIterator(flat_messages),
                               RecursiveMessageSetIterator()));
   RecursiveMessageSetIterator iter(flat_messages), end_iter;
   Int64 count = 0;
   for (; iter != end_iter; ++iter)
   {
-    ASSERT_EQ(count, iter->offset());
+    REQUIRE(count == iter->offset());
     ++count;
   }
 }
 
-TEST(RecursiveMessageSetIteratorTest, Recurse)
+TEST_CASE("RecursiveMessageSetIteratorTest.Recurse")
 {
   // Construct the following hierarchy:
   //
@@ -118,8 +117,8 @@ TEST(RecursiveMessageSetIteratorTest, Recurse)
   RecursiveMessageSetIterator iter(messages), end_iter;
   for(Int64 expected_offset: expected_offsets)
   {
-    ASSERT_EQ(expected_offset, iter->offset());
+    REQUIRE(expected_offset == iter->offset());
     iter++;
   }
-  ASSERT_EQ(end_iter, iter);
+  REQUIRE(end_iter == iter);
 }

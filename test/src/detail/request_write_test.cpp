@@ -7,44 +7,33 @@
 // Distributed under MIT license. (See file LICENSE)
 //
 
-#include <gtest/gtest.h>
+#include <catch.hpp>
 #include <libkafka_asio/libkafka_asio.h>
-
 #include "StreamTest.h"
 
 using namespace libkafka_asio;
 using namespace libkafka_asio::detail;
 
-class RequestWriteTest :
-  public ::testing::Test,
-  public StreamTest
-{
-protected:
-  virtual void SetUp()
-  {
-    ResetStream();
-  }
-};
 
-TEST_F(RequestWriteTest, StringWireSize)
+TEST_CASE("RequestWriteTest.StringWireSize")
 {
   String test_string1 = "Hello World";
-  ASSERT_EQ(2 + 11, StringWireSize(test_string1));
+  REQUIRE(2 + 11 == StringWireSize(test_string1));
   String test_string2 = "";
-  ASSERT_EQ(2 + 0, StringWireSize(test_string2));
+  REQUIRE(2 + 0 == StringWireSize(test_string2));
 }
 
-TEST_F(RequestWriteTest, BytesWireSize)
+TEST_CASE("RequestWriteTest.BytesWireSize")
 {
   Bytes test_bytes1;
-  ASSERT_EQ(4 + 0, BytesWireSize(test_bytes1));
+  REQUIRE(4 + 0 == BytesWireSize(test_bytes1));
   Bytes test_bytes2(new Bytes::element_type());
-  ASSERT_EQ(4 + 0, BytesWireSize(test_bytes2));
+  REQUIRE(4 + 0 == BytesWireSize(test_bytes2));
   Bytes test_bytes3(new Bytes::element_type(1024, '\1'));
-  ASSERT_EQ(4 + 1024, BytesWireSize(test_bytes3));
+  REQUIRE(4 + 1024 == BytesWireSize(test_bytes3));
 }
 
-TEST_F(RequestWriteTest, MessageWireSize)
+TEST_CASE("RequestWriteTest.MessageWireSize")
 {
   Message test_message;
   test_message.mutable_key().reset(new Bytes::element_type(1024));
@@ -55,10 +44,10 @@ TEST_F(RequestWriteTest, MessageWireSize)
       1 +  // Attributes
       (4 + 1024) + // Key
       (4 + 2048);  // Value
-  ASSERT_EQ(expected_size, MessageWireSize(test_message));
+  REQUIRE(expected_size == MessageWireSize(test_message));
 }
 
-TEST_F(RequestWriteTest, MessageSetWireSize)
+TEST_CASE("RequestWriteTest.MessageSetWireSize")
 {
   MessageAndOffset test_message;
   test_message.mutable_key().reset(new Bytes::element_type(1024));
@@ -71,10 +60,10 @@ TEST_F(RequestWriteTest, MessageSetWireSize)
   size_t expected_message_size = MessageWireSize(test_message);
   // 3x (offset + msg_size + message)
   size_t expected_size = 3 * (8 + 4 + expected_message_size);
-  ASSERT_EQ(expected_size, MessageSetWireSize(test_message_set));
+  REQUIRE(expected_size == MessageSetWireSize(test_message_set));
 }
 
-TEST_F(RequestWriteTest, RequestMessageWireSize)
+TEST_CASE("RequestWriteTest.RequestMessageWireSize")
 {
   MessageAndOffset test_message;
   test_message.mutable_key().reset(new Bytes::element_type(1024));
@@ -90,7 +79,7 @@ TEST_F(RequestWriteTest, RequestMessageWireSize)
       4 +        // Array size
         (2 + 3) +  // 'foo'
         (2 + 4);   // 'bar'
-    ASSERT_EQ(expected_size, RequestMessageWireSize(req));
+    REQUIRE(expected_size == RequestMessageWireSize(req));
   }
   { // Produce Request
     ProduceRequest req;
@@ -104,7 +93,7 @@ TEST_F(RequestWriteTest, RequestMessageWireSize)
         4 +  // Partition
         4 +  // MessageSetSize
         (8 + 4 + expected_message_size);  // MessageSet
-    ASSERT_EQ(expected_size, RequestMessageWireSize(req));
+    REQUIRE(expected_size == RequestMessageWireSize(req));
   }
   { // Fetch Request
     FetchRequest req;
@@ -119,7 +108,7 @@ TEST_F(RequestWriteTest, RequestMessageWireSize)
         4 +  // Partition
         8 +  // Fetch Offset
         4;   // MaxBytes
-    ASSERT_EQ(expected_size, RequestMessageWireSize(req));
+    REQUIRE(expected_size == RequestMessageWireSize(req));
   }
   { // Offset Request
     OffsetRequest req;
@@ -132,173 +121,175 @@ TEST_F(RequestWriteTest, RequestMessageWireSize)
         4 +  // Partition
         8 +  // Time
         4;   // MaxNumberOfOffsets
-    ASSERT_EQ(expected_size, RequestMessageWireSize(req));
+    REQUIRE(expected_size== RequestMessageWireSize(req));
   }
 }
 
-TEST_F(RequestWriteTest, WriteInt8)
+TEST_CASE("RequestWriteTest.WriteInt8")
 {
   {
-    ResetStream();
-    WriteInt8(0, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(1, bytes->size());
-    ASSERT_EQ(0x00, bytes->front());
+		StreamTest s;
+    WriteInt8(0, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(1== bytes->size());
+    REQUIRE(0x00 == bytes->front());
   }
   {  // Big-endian
-    ResetStream();
-    WriteInt8(-1, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(1, bytes->size());
-    ASSERT_EQ(0xff, bytes->front());
+	  StreamTest s;
+    WriteInt8(-1, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(1 == bytes->size());
+    REQUIRE(0xff == bytes->front());
   }
 }
 
-TEST_F(RequestWriteTest, WriteInt16)
+TEST_CASE("RequestWriteTest.WriteInt16")
 {
   {
-    ResetStream();
-    WriteInt16(0, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(2, bytes->size());
-    ASSERT_EQ(0x00, bytes->at(0));
-    ASSERT_EQ(0x00, bytes->at(1));
+		StreamTest s;
+    WriteInt16(0, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(2 == bytes->size());
+    REQUIRE(0x00 == bytes->at(0));
+    REQUIRE(0x00 == bytes->at(1));
   }
   {
-    ResetStream();
-    WriteInt16(-1, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(2, bytes->size());
-    ASSERT_EQ(0xff, bytes->at(0));
-    ASSERT_EQ(0xff, bytes->at(1));
+	  StreamTest s;
+    WriteInt16(-1, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(2 == bytes->size());
+    REQUIRE(0xff == bytes->at(0));
+    REQUIRE(0xff == bytes->at(1));
   }
   {  // Big-endian
-    ResetStream();
-    WriteInt16(256, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(2, bytes->size());
-    ASSERT_EQ(0x01, bytes->at(0));
-    ASSERT_EQ(0x00, bytes->at(1));
+	  StreamTest s;
+    WriteInt16(256, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(2 == bytes->size());
+    REQUIRE(0x01 == bytes->at(0));
+    REQUIRE(0x00 == bytes->at(1));
   }
 }
 
-TEST_F(RequestWriteTest, WriteInt32)
+TEST_CASE("RequestWriteTest.WriteInt32")
 {
   {
-    ResetStream();
-    WriteInt32(0, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(4, bytes->size());
-    ASSERT_EQ(0x00, bytes->at(0));
-    ASSERT_EQ(0x00, bytes->at(1));
-    ASSERT_EQ(0x00, bytes->at(2));
-    ASSERT_EQ(0x00, bytes->at(3));
+		StreamTest s;
+    WriteInt32(0, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(4 == bytes->size());
+    REQUIRE(0x00 == bytes->at(0));
+    REQUIRE(0x00 == bytes->at(1));
+    REQUIRE(0x00 == bytes->at(2));
+    REQUIRE(0x00 == bytes->at(3));
   }
   {
-    ResetStream();
-    WriteInt32(-1, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(4, bytes->size());
-    ASSERT_EQ(0xff, bytes->at(0));
-    ASSERT_EQ(0xff, bytes->at(1));
-    ASSERT_EQ(0xff, bytes->at(2));
-    ASSERT_EQ(0xff, bytes->at(3));
+	  StreamTest s;
+    WriteInt32(-1, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(4 == bytes->size());
+    REQUIRE(0xff == bytes->at(0));
+    REQUIRE(0xff == bytes->at(1));
+    REQUIRE(0xff == bytes->at(2));
+    REQUIRE(0xff == bytes->at(3));
   }
   {  // Big-endian
-    ResetStream();
-    WriteInt32(65536, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(4, bytes->size());
-    ASSERT_EQ(0x00, bytes->at(0));
-    ASSERT_EQ(0x01, bytes->at(1));
-    ASSERT_EQ(0x00, bytes->at(2));
-    ASSERT_EQ(0x00, bytes->at(3));
+	  StreamTest s;
+    WriteInt32(65536, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(4 == bytes->size());
+    REQUIRE(0x00 == bytes->at(0));
+    REQUIRE(0x01 == bytes->at(1));
+    REQUIRE(0x00 == bytes->at(2));
+    REQUIRE(0x00 == bytes->at(3));
   }
 }
 
-TEST_F(RequestWriteTest, WriteInt64)
+TEST_CASE("RequestWriteTest.WriteInt64")
 {
   {
-    ResetStream();
-    WriteInt64(0, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(8, bytes->size());
-    ASSERT_EQ(0x00, bytes->at(0));
-    ASSERT_EQ(0x00, bytes->at(1));
-    ASSERT_EQ(0x00, bytes->at(2));
-    ASSERT_EQ(0x00, bytes->at(3));
-    ASSERT_EQ(0x00, bytes->at(4));
-    ASSERT_EQ(0x00, bytes->at(5));
-    ASSERT_EQ(0x00, bytes->at(6));
-    ASSERT_EQ(0x00, bytes->at(7));
+		StreamTest s;
+    WriteInt64(0, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(8 == bytes->size());
+    REQUIRE(0x00 == bytes->at(0));
+    REQUIRE(0x00 == bytes->at(1));
+    REQUIRE(0x00 == bytes->at(2));
+    REQUIRE(0x00 == bytes->at(3));
+    REQUIRE(0x00 == bytes->at(4));
+    REQUIRE(0x00 == bytes->at(5));
+    REQUIRE(0x00 == bytes->at(6));
+    REQUIRE(0x00 == bytes->at(7));
   }
   {
-    ResetStream();
-    WriteInt64(-1, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(8, bytes->size());
-    ASSERT_EQ(0xff, bytes->at(0));
-    ASSERT_EQ(0xff, bytes->at(1));
-    ASSERT_EQ(0xff, bytes->at(2));
-    ASSERT_EQ(0xff, bytes->at(3));
-    ASSERT_EQ(0xff, bytes->at(4));
-    ASSERT_EQ(0xff, bytes->at(5));
-    ASSERT_EQ(0xff, bytes->at(6));
-    ASSERT_EQ(0xff, bytes->at(7));
+	  StreamTest s;
+    WriteInt64(-1, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(8 == bytes->size());
+    REQUIRE(0xff == bytes->at(0));
+    REQUIRE(0xff == bytes->at(1));
+    REQUIRE(0xff == bytes->at(2));
+    REQUIRE(0xff == bytes->at(3));
+    REQUIRE(0xff == bytes->at(4));
+    REQUIRE(0xff == bytes->at(5));
+    REQUIRE(0xff == bytes->at(6));
+    REQUIRE(0xff == bytes->at(7));
   }
   {  // Big-endian
-    ResetStream();
-    WriteInt64(4294967296, *stream);
-    Bytes bytes = ReadEverything();
-    ASSERT_TRUE(static_cast<bool>(bytes));
-    ASSERT_EQ(8, bytes->size());
-    ASSERT_EQ(0x00, bytes->at(0));
-    ASSERT_EQ(0x00, bytes->at(1));
-    ASSERT_EQ(0x00, bytes->at(2));
-    ASSERT_EQ(0x01, bytes->at(3));
-    ASSERT_EQ(0x00, bytes->at(4));
-    ASSERT_EQ(0x00, bytes->at(5));
-    ASSERT_EQ(0x00, bytes->at(6));
-    ASSERT_EQ(0x00, bytes->at(7));
+	  StreamTest s;
+    WriteInt64(4294967296, *s.stream);
+    Bytes bytes = s.ReadEverything();
+    REQUIRE(static_cast<bool>(bytes));
+    REQUIRE(8 == bytes->size());
+    REQUIRE(0x00 == bytes->at(0));
+    REQUIRE(0x00 == bytes->at(1));
+    REQUIRE(0x00 == bytes->at(2));
+    REQUIRE(0x01 == bytes->at(3));
+    REQUIRE(0x00 == bytes->at(4));
+    REQUIRE(0x00 == bytes->at(5));
+    REQUIRE(0x00 == bytes->at(6));
+    REQUIRE(0x00 == bytes->at(7));
   }
 }
 
-TEST_F(RequestWriteTest, WriteString)
+TEST_CASE("RequestWriteTest.WriteString")
 {
+	StreamTest s;
   String test_string = "foo";
-  WriteString(test_string, *stream);
-  Bytes bytes = ReadEverything();
-  ASSERT_TRUE(static_cast<bool>(bytes));
-  ASSERT_EQ(2 + 3, bytes->size());
-  ASSERT_EQ(0, bytes->at(0));
-  ASSERT_EQ(3, bytes->at(1));
-  ASSERT_EQ('f', bytes->at(2));
-  ASSERT_EQ('o', bytes->at(3));
-  ASSERT_EQ('o', bytes->at(4));
+  WriteString(test_string, *s.stream);
+  Bytes bytes = s.ReadEverything();
+  REQUIRE(static_cast<bool>(bytes));
+  REQUIRE(2 + 3 == bytes->size());
+  REQUIRE(0 == bytes->at(0));
+  REQUIRE(3 == bytes->at(1));
+  REQUIRE('f' == bytes->at(2));
+  REQUIRE('o' == bytes->at(3));
+  REQUIRE('o' == bytes->at(4));
 }
 
-TEST_F(RequestWriteTest, WriteBytes)
+TEST_CASE("RequestWriteTest.WriteBytes")
 {
+	StreamTest s;
   Bytes test_bytes(new Bytes::element_type(3, 0xfe));
-  WriteBytes(test_bytes, *stream);
-  Bytes bytes = ReadEverything();
-  ASSERT_TRUE(static_cast<bool>(bytes));
-  ASSERT_EQ(4 + 3, bytes->size());
-  ASSERT_EQ(0, bytes->at(0));
-  ASSERT_EQ(0, bytes->at(1));
-  ASSERT_EQ(0, bytes->at(2));
-  ASSERT_EQ(3, bytes->at(3));
-  ASSERT_EQ(0xfe, bytes->at(4));
-  ASSERT_EQ(0xfe, bytes->at(5));
-  ASSERT_EQ(0xfe, bytes->at(6));
+  WriteBytes(test_bytes, *s.stream);
+  Bytes bytes = s.ReadEverything();
+  REQUIRE(static_cast<bool>(bytes));
+  REQUIRE(4 + 3 == bytes->size());
+  REQUIRE(0 == bytes->at(0));
+  REQUIRE(0 == bytes->at(1));
+  REQUIRE(0 == bytes->at(2));
+  REQUIRE(3 == bytes->at(3));
+  REQUIRE(0xfe == bytes->at(4));
+  REQUIRE(0xfe == bytes->at(5));
+  REQUIRE(0xfe == bytes->at(6));
 }

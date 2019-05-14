@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <!-- Configurations that affect the Test Framework -->
+  <RunConfiguration>
+    <MaxCpuCount>4</MaxCpuCount>
+    <ResultsDirectory>.\TestResults</ResultsDirectory><!-- Path relative to solution directory -->
+    <TestSessionTimeout>60000</TestSessionTimeout><!-- Milliseconds -->
+
+  </RunConfiguration>
+
+  <!-- Adapter Specific sections -->
+
+  <!-- Catch2 adapter -->
+  <Catch2Adapter disabled="false">
+    <DebugBreak>on</DebugBreak>
+    <DiscoverCommandLine>--list-tests</DiscoverCommandLine><!-- Default for catch2 -->
+    <DiscoverTimeout>1000</DiscoverTimeout>
+    <FilenameFilter>test</FilenameFilter> <!-- Find and run any exe with test in the name -->
+    <IncludeHidden>true</IncludeHidden>
+    <Logging>Verbose</Logging>
+    <MessageFormat>AdditionalInfo</MessageFormat>
+    <StackTraceFormat>ShortInfo</StackTraceFormat>
+    <StackTracePointReplacement>,</StackTracePointReplacement>
+    <TestCaseTimeout>20000</TestCaseTimeout><!-- Milliseconds -->
+    <WorkingDirectory></WorkingDirectory>
+    <WorkingDirectoryRoot>Executable</WorkingDirectoryRoot>
+  </Catch2Adapter>
+
+</RunSettings>

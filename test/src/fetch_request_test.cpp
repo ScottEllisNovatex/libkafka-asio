@@ -7,62 +7,57 @@
 // Distributed under MIT license. (See file LICENSE)
 //
 
-#include <gtest/gtest.h>
+#include <catch.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
-class FetchRequestTest :
-  public ::testing::Test
+TEST_CASE("FetchRequestTest.FetchTopic_New")
 {
-protected:
-  virtual void SetUp()
-  {
-    ASSERT_EQ(0, request.topics().size());
-  }
-
-  libkafka_asio::FetchRequest request;
-};
-
-TEST_F(FetchRequestTest, FetchTopic_New)
-{
-  request.FetchTopic("mytopic", 1, 2);
-  ASSERT_EQ(1, request.topics().size());
-  ASSERT_EQ(1, request.topics()[0].partitions.size());
-  ASSERT_STREQ("mytopic", request.topics()[0].topic_name.c_str());
-  ASSERT_EQ(1, request.topics()[0].partitions[0].partition);
-  ASSERT_EQ(2, request.topics()[0].partitions[0].fetch_offset);
-  ASSERT_EQ(libkafka_asio::constants::kDefaultFetchMaxBytes,
-            request.topics()[0].partitions[0].max_bytes);
+	libkafka_asio::FetchRequest request;
+	REQUIRE(0 == request.topics().size());
+	request.FetchTopic("mytopic", 1, 2);
+	REQUIRE(1 == request.topics().size());
+	REQUIRE(1 == request.topics()[0].partitions.size());
+	REQUIRE("mytopic" == request.topics()[0].topic_name);
+	REQUIRE(1 == request.topics()[0].partitions[0].partition);
+	REQUIRE(2 == request.topics()[0].partitions[0].fetch_offset);
+	REQUIRE(libkafka_asio::constants::kDefaultFetchMaxBytes == request.topics()[0].partitions[0].max_bytes);
 }
 
-TEST_F(FetchRequestTest, FetchTopic_Override)
+TEST_CASE("FetchRequestTest.FetchTopic_Override")
 {
-  request.FetchTopic("mytopic", 1, 2);
-  ASSERT_EQ(1, request.topics().size());
-  ASSERT_EQ(1, request.topics()[0].partitions.size());
-  ASSERT_EQ(2, request.topics()[0].partitions[0].fetch_offset);
-  request.FetchTopic("mytopic", 1, 4);
-  ASSERT_EQ(1, request.topics().size());
-  ASSERT_EQ(1, request.topics()[0].partitions.size());
-  ASSERT_EQ(4, request.topics()[0].partitions[0].fetch_offset);
+	libkafka_asio::FetchRequest request;
+	REQUIRE(0 == request.topics().size());
+	request.FetchTopic("mytopic", 1, 2);
+	REQUIRE(1 == request.topics().size());
+	REQUIRE(1 == request.topics()[0].partitions.size());
+	REQUIRE(2 == request.topics()[0].partitions[0].fetch_offset);
+	request.FetchTopic("mytopic", 1, 4);
+	REQUIRE(1 == request.topics().size());
+	REQUIRE(1 == request.topics()[0].partitions.size());
+	REQUIRE(4 == request.topics()[0].partitions[0].fetch_offset);
 }
 
-TEST_F(FetchRequestTest, FetchTopic_MultiplePartitions)
+TEST_CASE("FetchRequestTest.FetchTopic_MultiplePartitions")
 {
-  request.FetchTopic("mytopic", 0, 2);
-  request.FetchTopic("mytopic", 1, 4);
-  ASSERT_EQ(1, request.topics().size());
-  ASSERT_EQ(2, request.topics()[0].partitions.size());
-  ASSERT_EQ(2, request.topics()[0].partitions[0].fetch_offset);
-  ASSERT_EQ(4, request.topics()[0].partitions[1].fetch_offset);
+	libkafka_asio::FetchRequest request;
+	REQUIRE(0 == request.topics().size());
+	request.FetchTopic("mytopic", 0, 2);
+	request.FetchTopic("mytopic", 1, 4);
+	REQUIRE(1 == request.topics().size());
+	REQUIRE(2 == request.topics()[0].partitions.size());
+	REQUIRE(2 == request.topics()[0].partitions[0].fetch_offset);
+	REQUIRE(4 == request.topics()[0].partitions[1].fetch_offset);
 }
 
-TEST_F(FetchRequestTest, FetchTopic_MultipleTopics)
+TEST_CASE("FetchRequestTest.FetchTopic_MultipleTopics")
 {
-  request.FetchTopic("foo", 0, 2);
-  request.FetchTopic("bar", 1, 4);
-  ASSERT_EQ(2, request.topics().size());
-  ASSERT_EQ(1, request.topics()[0].partitions.size());
-  ASSERT_EQ(1, request.topics()[1].partitions.size());
-  ASSERT_EQ(2, request.topics()[0].partitions[0].fetch_offset);
-  ASSERT_EQ(4, request.topics()[1].partitions[0].fetch_offset);
+	libkafka_asio::FetchRequest request;
+	REQUIRE(0 == request.topics().size());
+	request.FetchTopic("foo", 0, 2);
+	request.FetchTopic("bar", 1, 4);
+	REQUIRE(2 == request.topics().size());
+	REQUIRE(1 == request.topics()[0].partitions.size());
+	REQUIRE(1 == request.topics()[1].partitions.size());
+	REQUIRE(2 == request.topics()[0].partitions[0].fetch_offset);
+	REQUIRE(4 == request.topics()[1].partitions[0].fetch_offset);
 }

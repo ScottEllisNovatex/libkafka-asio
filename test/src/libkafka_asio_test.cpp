@@ -7,10 +7,21 @@
 // Distributed under MIT license. (See file LICENSE)
 //
 
-#include <gtest/gtest.h>
+#define CATCH_CONFIG_RUNNER
+#include <catch.hpp>
 
-int main(int argc, char** argv)
+TEST_CASE("Root.Catch2Test")
 {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+	INFO("Message From Catch2");
+	REQUIRE(true);
+
+}
+int main(int argc, char* argv[])
+{
+	// Create loggers for tests here
+	//CommandLineLoggingSetup();
+
+	return Catch::Session().run(argc, argv);
+	// And release here.
+//	CommandLineLoggingCleanup();
 }

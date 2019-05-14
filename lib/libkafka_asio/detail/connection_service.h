@@ -46,7 +46,7 @@ public:
   // Construct a new connection service implementation
   void construct(implementation_type& impl)
   {
-    impl.reset(new Service(get_io_context()));	// Was get_io_servce() SJE change to get Boost 1.70 / asio 1.12.2 working
+    impl.reset(new Service(get_io_service()));	// Was get_io_servce() get_io_context() SJE change to get Boost 1.70 / asio 1.12.2 working
   }
 
   // Destroy a connection service implementation

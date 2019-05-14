@@ -7,70 +7,59 @@
 // Distributed under MIT license. (See file LICENSE)
 //
 
-#include <gtest/gtest.h>
+#include <catch.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
 #include "StreamTest.h"
 
 using libkafka_asio::FetchRequest;
 
-class FetchRequestWriteTest :
-  public ::testing::Test,
-  public StreamTest
+TEST_CASE("FetchRequestWriteTest.WriteRequestMessage")
 {
-protected:
-  void SetUp()
-  {
-    ResetStream();
-  }
-};
+	FetchRequest request;
+	StreamTest s;
+	request.set_max_wait_time(100);
+	request.set_min_bytes(1);
+	request.FetchTopic("Topic1", 0, 123);
+	request.FetchTopic("Topic2", 1, 456, 1024);
 
-TEST_F(FetchRequestWriteTest, WriteRequestMessage)
-{
-  FetchRequest request;
-  request.set_max_wait_time(100);
-  request.set_min_bytes(1);
-  request.FetchTopic("Topic1", 0, 123);
-  request.FetchTopic("Topic2", 1, 456, 1024);
+	libkafka_asio::detail::WriteRequestMessage(request, *s.stream);
 
-  libkafka_asio::detail::WriteRequestMessage(request, *stream);
+	using namespace libkafka_asio::detail;
+	REQUIRE(-1 == ReadInt32(*s.stream));  // ReplicaId
+	REQUIRE(100 == ReadInt32(*s.stream));  // MaxWaitTime
+	REQUIRE(1 == ReadInt32(*s.stream));  // MinBytes
+	REQUIRE(2 == ReadInt32(*s.stream));  // Topic array size
 
-  using namespace libkafka_asio::detail;
-  ASSERT_EQ(-1, ReadInt32(*stream));  // ReplicaId
-  ASSERT_EQ(100, ReadInt32(*stream));  // MaxWaitTime
-  ASSERT_EQ(1, ReadInt32(*stream));  // MinBytes
-  ASSERT_EQ(2, ReadInt32(*stream));  // Topic array size
+	REQUIRE("Topic1" == ReadString(*s.stream));  // TopicName
+	REQUIRE(1 == ReadInt32(*s.stream));  // Partition array size
+	REQUIRE(0 == ReadInt32(*s.stream));  // Partition 0
+	REQUIRE(123 == ReadInt64(*s.stream));  // FetchOffset 123
+	REQUIRE(libkafka_asio::constants::kDefaultFetchMaxBytes == ReadInt32(*s.stream));  // MaxBytes (default)
 
-  ASSERT_STREQ("Topic1", ReadString(*stream).c_str());  // TopicName
-  ASSERT_EQ(1, ReadInt32(*stream));  // Partition array size
-  ASSERT_EQ(0, ReadInt32(*stream));  // Partition 0
-  ASSERT_EQ(123, ReadInt64(*stream));  // FetchOffset 123
-  ASSERT_EQ(libkafka_asio::constants::kDefaultFetchMaxBytes,
-            ReadInt32(*stream));  // MaxBytes (default)
+	REQUIRE("Topic2" == ReadString(*s.stream));  // TopicName
+	REQUIRE(1 == ReadInt32(*s.stream));  // Partition array size
+	REQUIRE(1 == ReadInt32(*s.stream));  // Partition 1
+	REQUIRE(456 == ReadInt64(*s.stream));  // FetchOffset 456
+	REQUIRE(1024 == ReadInt32(*s.stream));  // MaxBytes 1024
 
-  ASSERT_STREQ("Topic2", ReadString(*stream).c_str());  // TopicName
-  ASSERT_EQ(1, ReadInt32(*stream));  // Partition array size
-  ASSERT_EQ(1, ReadInt32(*stream));  // Partition 1
-  ASSERT_EQ(456, ReadInt64(*stream));  // FetchOffset 456
-  ASSERT_EQ(1024, ReadInt32(*stream));  // MaxBytes 1024
-
-  // Nothing else ...
-  ASSERT_EQ(0, streambuf->size());
+	// Nothing else ...
+	REQUIRE(0 == s.streambuf->size());
 }
 
-TEST_F(FetchRequestWriteTest, WriteRequestMessage_Empty)
+TEST_CASE("FetchRequestWriteTest.WriteRequestMessage_Empty")
 {
-  FetchRequest request;
+	FetchRequest request;
+	StreamTest s;
+	libkafka_asio::detail::WriteRequestMessage(request, *s.stream);
 
-  libkafka_asio::detail::WriteRequestMessage(request, *stream);
+	using namespace libkafka_asio::detail;
+	using namespace libkafka_asio::constants;
+	REQUIRE(-1 == ReadInt32(*s.stream));  // ReplicaId
+	REQUIRE(kDefaultFetchMaxWaitTime == ReadInt32(*s.stream));  // MaxWaitTime
+	REQUIRE(kDefaultFetchMinBytes == ReadInt32(*s.stream));  // MinBytes
+	REQUIRE(0 == ReadInt32(*s.stream));  // Topic array size
 
-  using namespace libkafka_asio::detail;
-  using namespace libkafka_asio::constants;
-  ASSERT_EQ(-1, ReadInt32(*stream));  // ReplicaId
-  ASSERT_EQ(kDefaultFetchMaxWaitTime, ReadInt32(*stream));  // MaxWaitTime
-  ASSERT_EQ(kDefaultFetchMinBytes, ReadInt32(*stream));  // MinBytes
-  ASSERT_EQ(0, ReadInt32(*stream));  // Topic array size
-
-  // Nothing else ...
-  ASSERT_EQ(0, streambuf->size());
+	// Nothing else ...
+	REQUIRE(0 == s.streambuf->size());
 }

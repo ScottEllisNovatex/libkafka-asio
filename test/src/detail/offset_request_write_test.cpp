@@ -7,62 +7,55 @@
 // Distributed under MIT license. (See file LICENSE)
 //
 
-#include <gtest/gtest.h>
+#include <catch.hpp>
 #include <libkafka_asio/libkafka_asio.h>
 
 #include "StreamTest.h"
 
 using libkafka_asio::OffsetRequest;
 
-class OffsetRequestWriteTest :
-  public ::testing::Test,
-  public StreamTest
+
+
+TEST_CASE("OffsetRequestWriteTest.WriteRequestMessage")
 {
-protected:
-  void SetUp()
-  {
-    ResetStream();
-  }
-};
+	StreamTest s;
+	OffsetRequest request;
+	request.FetchTopicOffset("Topic1", 1);
+	request.FetchTopicOffset("Topic2", 3, -2, 5);
+	libkafka_asio::detail::WriteRequestMessage(request, *s.stream);
 
-TEST_F(OffsetRequestWriteTest, WriteRequestMessage)
-{
-  OffsetRequest request;
-  request.FetchTopicOffset("Topic1", 1);
-  request.FetchTopicOffset("Topic2", 3, -2, 5);
-  libkafka_asio::detail::WriteRequestMessage(request, *stream);
+	using namespace libkafka_asio::detail;
+	using namespace libkafka_asio::constants;
+	REQUIRE(-1 == ReadInt32(*s.stream));  // ReplicaId
+	REQUIRE(2 == ReadInt32(*s.stream));  // Topic array size
 
-  using namespace libkafka_asio::detail;
-  using namespace libkafka_asio::constants;
-  ASSERT_EQ(-1, ReadInt32(*stream));  // ReplicaId
-  ASSERT_EQ(2, ReadInt32(*stream));  // Topic array size
+	REQUIRE("Topic1" == ReadString(*s.stream));  // TopicName
+	REQUIRE(1 == ReadInt32(*s.stream));  // Partition array size
+	REQUIRE(1 == ReadInt32(*s.stream));  // Partition
+	REQUIRE(kOffsetTimeLatest == ReadInt64(*s.stream));  // Time
+	REQUIRE(kDefaultOffsetMaxNumberOfOffsets == ReadInt32(*s.stream));
 
-  ASSERT_STREQ("Topic1", ReadString(*stream).c_str());  // TopicName
-  ASSERT_EQ(1, ReadInt32(*stream));  // Partition array size
-  ASSERT_EQ(1, ReadInt32(*stream));  // Partition
-  ASSERT_EQ(kOffsetTimeLatest, ReadInt64(*stream));  // Time
-  ASSERT_EQ(kDefaultOffsetMaxNumberOfOffsets, ReadInt32(*stream));
+	REQUIRE("Topic2" == ReadString(*s.stream));  // TopicName
+	REQUIRE(1 == ReadInt32(*s.stream));  // Partition array size
+	REQUIRE(3 == ReadInt32(*s.stream));  // Partition
+	REQUIRE(-2 == ReadInt64(*s.stream));  // Time
+	REQUIRE(5 == ReadInt32(*s.stream));  // MaxNumberOfOffsets
 
-  ASSERT_STREQ("Topic2", ReadString(*stream).c_str());  // TopicName
-  ASSERT_EQ(1, ReadInt32(*stream));  // Partition array size
-  ASSERT_EQ(3, ReadInt32(*stream));  // Partition
-  ASSERT_EQ(-2, ReadInt64(*stream));  // Time
-  ASSERT_EQ(5, ReadInt32(*stream));  // MaxNumberOfOffsets
-
-  // Nothing else ...
-  ASSERT_EQ(0, streambuf->size());
+	// Nothing else ...
+	REQUIRE(0 == s.streambuf->size());
 }
 
-TEST_F(OffsetRequestWriteTest, WriteRequestMessage_Empty)
+TEST_CASE("OffsetRequestWriteTest.WriteRequestMessage_Empty")
 {
-  OffsetRequest request;
-  libkafka_asio::detail::WriteRequestMessage(request, *stream);
+	StreamTest s;
+	OffsetRequest request;
+	libkafka_asio::detail::WriteRequestMessage(request, *s.stream);
 
-  using namespace libkafka_asio::detail;
-  using namespace libkafka_asio::constants;
-  ASSERT_EQ(-1, ReadInt32(*stream));  // ReplicaId
-  ASSERT_EQ(0, ReadInt32(*stream));  // Topic array size
+	using namespace libkafka_asio::detail;
+	using namespace libkafka_asio::constants;
+	REQUIRE(-1 == ReadInt32(*s.stream));  // ReplicaId
+	REQUIRE(0 == ReadInt32(*s.stream));  // Topic array size
 
-  // Nothing else ...
-  ASSERT_EQ(0, streambuf->size());
+	// Nothing else ...
+	REQUIRE(0 == s.streambuf->size());
 }

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project(libkafka_asio)
 
 option(USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON)
+option(ADD_TESTS "Build the tests" ON)
 
 # Only when we use asio standalone.. 
 add_definitions(-DASIO_STANDALONE) # required for ASIO in C++11 only mode
@@ -14,7 +15,6 @@ if(WIN32)
 	add_definitions(-D_WIN32_WINNT=0x0502)		# Windows Server 2003 and up
 	add_definitions(-DBOOST_ALL_NO_LIB)				# Otherwise, boost trys to tell the linker where the libraries are.
 	add_definitions(-DASIO_HAS_STD_SYSTEM_ERROR)
-#	add_definitions(-DASIO_HAS_BOOST_DATE_TIME)	#SJE
 	add_definitions(-DVC_EXTRALEAN)				# This and next one reduce size of windows header files.
 	add_definitions(-DWIN32_LEAN_AND_MEAN)
 	
@@ -137,7 +137,12 @@ else()
 	endif()
 endif()
 
-enable_testing()
-
 add_subdirectory("${PROJECT_SOURCE_DIR}/examples")
-add_subdirectory("${PROJECT_SOURCE_DIR}/test")
+
+if (ADD_TESTS)
+	enable_testing()
+	add_subdirectory("${PROJECT_SOURCE_DIR}/test")
+endif()
+
+
+
