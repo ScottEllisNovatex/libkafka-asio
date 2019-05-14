@@ -3,7 +3,7 @@ project(libkafka_asio_test)
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/Modules")
 
-find_package(Boost REQUIRED) # COMPONENTS thread system)
+find_package(Boost REQUIRED) 
 find_package(ZLIB REQUIRED)
 find_package(Snappy REQUIRED)
 

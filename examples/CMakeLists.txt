@@ -4,7 +4,7 @@ project(libkafka_asio_examples)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/Modules")
 
 # add_definitions("-DLIBKAFKAASIO_NO_COMPRESSION")
-find_package(Boost REQUIRED) # COMPONENTS thread system)
+find_package(Boost REQUIRED) 
 find_package(ZLIB REQUIRED)
 find_package(Snappy REQUIRED)
 
