@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.2)
 project(libkafka_asio)
+
+include(buildsubmodule.cmake)
 
 option(USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON)
 option(USE_ZLIB_SUBMODULE "Use git submodule to download zlib code/library" ON)
@@ -124,11 +126,15 @@ if(CMAKE_USE_PTHREADS_INIT)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 endif()
 
+
 # Locate SNAPPY
 set(SNAPPY_HOME_INSTRUCTIONS "Choose the location of Snappy where it was installed - there should be lib and include directories within")
 if(USE_SNAPPY_SUBMODULE)
 	set(SNAPPY_HOME "${CMAKE_BINARY_DIR}/submodules/Snappy/install" CACHE PATH ${SNAPPY_HOME_INSTRUCTIONS} FORCE)
-	add_subdirectory(submodules/SNAPPY)
+	
+	build_submodule(snappy ${SNAPPY_HOME} "-DSNAPPY_BUILD_TESTS=OFF")
+	
+	#add_subdirectory(submodules/SNAPPY)	# this would build at build time which does not work well for VS
 else()
 	if(DEFINED SNAPPY_HOME)
 		set(SNAPPY_HOME ${SNAPPY_HOME} CACHE PATH ${SNAPPY_HOME_INSTRUCTIONS})
@@ -136,13 +142,16 @@ else()
 		set(SNAPPY_HOME "/usr" CACHE PATH ${SNAPPY_HOME_INSTRUCTIONS})
 	endif()
 endif()
-
+message("Snappy_home - ${SNAPPY_HOME}")
 
 # Locate ZLIB
 set(ZLIB_HOME_INSTRUCTIONS "Choose the location of ZLIB where it was installed - there should be lib and include directories within")
 if(USE_ZLIB_SUBMODULE)
 	set(ZLIB_HOME "${CMAKE_BINARY_DIR}/submodules/ZLIB/install" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS} FORCE)
-	add_subdirectory(submodules/ZLIB)
+	
+	#build_submodule(zlib ${ZLIB_HOME} "")
+	
+	#add_subdirectory(submodules/ZLIB)
 else()
 	if(DEFINED ZLIB_HOME)
 		set(ZLIB_HOME ${ZLIB_HOME} CACHE PATH ${ZLIB_HOME_INSTRUCTIONS})
@@ -150,6 +159,7 @@ else()
 		set(ZLIB_HOME "/usr" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS})
 	endif()
 endif()
+message("Zlib_home - ${ZLIB_HOME}")
 
 
 #ASIO

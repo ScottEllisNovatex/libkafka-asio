@@ -7,10 +7,11 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/Modules")
 list(APPEND CMAKE_PREFIX_PATH "${ZLIB_HOME}")
 list(APPEND CMAKE_PREFIX_PATH "${SNAPPY_HOME}")
 
-# add_definitions("-DLIBKAFKAASIO_NO_COMPRESSION")
 find_package(Boost REQUIRED) 
 find_package(ZLIB REQUIRED)
 find_package(Snappy REQUIRED)
+
+# add_definitions("-DLIBKAFKAASIO_NO_COMPRESSION")
 
 include_directories(
         "${PROJECT_SOURCE_DIR}/../lib"

@@ -20,10 +20,12 @@ include(FindPackageHandleStandardArgs)
 
 find_package_handle_standard_args(
   Snappy DEFAULT_MSG
-  SNAPPY_LIBRARIES
+  SNAPPY_LIBRARY
+  SNAPPY_DEBUG_LIBRARY
   SNAPPY_INCLUDE_DIR)
 
 mark_as_advanced(
   SNAPPY_ROOT_DIR
-  SNAPPY_LIBRARIES
+  SNAPPY_LIBRARY
+  SNAPPY_DEBUG_LIBRARY
   SNAPPY_INCLUDE_DIR)
