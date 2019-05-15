@@ -4,9 +4,17 @@ find_path(
   HINTS ${SNAPPY_ROOT_DIR}/include)
 
 find_library(
-  SNAPPY_LIBRARIES
-  NAMES snappy
+  SNAPPY_LIBRARY
+  NAMES snappy 
   HINTS ${SNAPPY_ROOT_DIR}/lib)
+  
+find_library(
+  SNAPPY_DEBUG_LIBRARY
+  NAMES snappyd
+  HINTS ${SNAPPY_ROOT_DIR}/lib)
+
+# The snappy.cmake file gives us the path to each, choose the right one. Probably a better way to do this.
+set(SNAPPY_LINK_LIBRARY optimized ${SNAPPY_LIBRARY} debug ${SNAPPY_DEBUG_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
 

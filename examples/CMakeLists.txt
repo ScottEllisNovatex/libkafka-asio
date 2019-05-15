@@ -3,6 +3,10 @@ project(libkafka_asio_examples)
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/Modules")
 
+#Give a pointer on where to find our installed pakages.
+list(APPEND CMAKE_PREFIX_PATH "${ZLIB_HOME}")
+list(APPEND CMAKE_PREFIX_PATH "${SNAPPY_HOME}")
+
 # add_definitions("-DLIBKAFKAASIO_NO_COMPRESSION")
 find_package(Boost REQUIRED) 
 find_package(ZLIB REQUIRED)
@@ -15,7 +19,7 @@ include_directories(
 		"${ZLIB_INCLUDE_DIR}"
 		"${SNAPPY_INCLUDE_DIR}")
 
-set(examples_LINK_LIBRARIES  ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES} ) #${Boost_LIBRARIES})	
+set(examples_LINK_LIBRARIES  ${ZLIB_LIBRARIES} ${SNAPPY_LINK_LIBRARY} ) 
 
 #if (UNIX)
  #   list(APPEND examples_LINK_LIBRARIES pthread)

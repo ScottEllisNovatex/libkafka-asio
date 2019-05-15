@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 project(libkafka_asio)
 
 option(USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON)
 option(USE_ZLIB_SUBMODULE "Use git submodule to download zlib code/library" ON)
 option(USE_SNAPPY_SUBMODULE "Use git submodule to download snappy code/library" ON)
-option(ADD_TESTS "Build the tests" ON)
+option(LIBKAFKA_ASIO_BUILD_TESTS "Build the libkafka-asio catch2 based tests" ON)
 
 # Only when we use asio standalone.. 
 add_definitions(-DASIO_STANDALONE) # required for ASIO in C++11 only mode
@@ -125,68 +125,10 @@ if(CMAKE_USE_PTHREADS_INIT)
 endif()
 
 # Locate SNAPPY
-option(USE_SNAPPY_SUBMODULE "Use git submodule to download and build snappy libraries" ON)
-set(SNAPPY_HOME_INSTRUCTIONS "Choose the location of snappy where it was installed - there should be lib and include directories within")
+set(SNAPPY_HOME_INSTRUCTIONS "Choose the location of Snappy where it was installed - there should be lib and include directories within")
 if(USE_SNAPPY_SUBMODULE)
-	set(SNAPPY_SOURCE "${CMAKE_SOURCE_DIR}/submodules/SNAPPY")
-	set(SNAPPY_BUILD "${CMAKE_BINARY_DIR}/submodules/SNAPPY")
-	mark_as_advanced(FORCE SNAPPY_SOURCE)
-	mark_as_advanced(FORCE SNAPPY_BUILD)
-	set(SNAPPY_HOME "${SNAPPY_BUILD}/install" CACHE PATH ${SNAPPY_HOME_INSTRUCTIONS} FORCE)
-	set(
-		SNAPPY_CMAKE_OPTS
-			-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-			-DCMAKE_INSTALL_PREFIX=${SNAPPY_HOME}/
-			-DCMAKE_DEBUG_POSTFIX=${CMAKE_DEBUG_POSTFIX}
-			-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-			-DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-		CACHE STRING "cmake options to use when building SNAPPY submodule"
-	)
-
-	if(NOT EXISTS "${SNAPPY_SOURCE}/.git")
-		execute_process(COMMAND git submodule update --init -- submodules/snappy WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-	endif()
-	if(NOT EXISTS "${SNAPPY_BUILD}")
-		file(MAKE_DIRECTORY "${SNAPPY_BUILD}")
-	endif()
-	if(DEFINED ${CMAKE_GENERATOR_PLATFORM})
-		set(PLATFORM_OPT "-A${CMAKE_GENERATOR_PLATFORM}")
-	elseif(DEFINED ${CMAKE_VS_PLATFORM_NAME})
-		set(PLATFORM_OPT "-A${CMAKE_VS_PLATFORM_NAME}")
-	else()
-		set(PLATFORM_OPT "")
-	endif()
-	message("${CMAKE_COMMAND} ${SNAPPY_CMAKE_OPTS} -G${CMAKE_GENERATOR} ${PLATFORM_OPT} ${SNAPPY_SOURCE}")
-	execute_process(
-		COMMAND ${CMAKE_COMMAND} ${SNAPPY_CMAKE_OPTS} -G${CMAKE_GENERATOR} ${PLATFORM_OPT} ${SNAPPY_SOURCE}
-		WORKING_DIRECTORY "${SNAPPY_BUILD}"
-		RESULT_VARIABLE EXEC_RESULT
-	)
-	if(EXEC_RESULT)
-		message( FATAL_ERROR "Failed to run cmake for SNAPPY submodule, exiting")
-	endif()
-	set(CONFIGS "${CMAKE_BUILD_TYPE}")
-	if("${CMAKE_CONFIGURATION_TYPES}" MATCHES ".*Rel.*")
-		list(APPEND CONFIGS "Release")
-	endif()
-	if("${CMAKE_CONFIGURATION_TYPES}" MATCHES ".*Deb.*")
-		list(APPEND CONFIGS "Debug")
-	endif()
-	foreach(CONF ${CONFIGS})
-		message("Building SNAPPY dependency")
-		execute_process(
-			COMMAND ${CMAKE_COMMAND} --build ${SNAPPY_BUILD} --config ${CONF} --target install
-			WORKING_DIRECTORY "${SNAPPY_BUILD}"
-			RESULT_VARIABLE EXEC_RESULT
-		)
-		if(EXEC_RESULT)
-			message( FATAL_ERROR "Failed to build SNAPPY submodule, exiting")
-		endif()
-	endforeach()
-	add_custom_target( build_SNAPPY
-		WORKING_DIRECTORY "${SNAPPY_BUILD}"
-		COMMAND ${CMAKE_COMMAND} --build ${SNAPPY_BUILD} --config $<CONFIG> --target install
-	)
+	set(SNAPPY_HOME "${CMAKE_BINARY_DIR}/submodules/Snappy/install" CACHE PATH ${SNAPPY_HOME_INSTRUCTIONS} FORCE)
+	add_subdirectory(submodules/SNAPPY)
 else()
 	if(DEFINED SNAPPY_HOME)
 		set(SNAPPY_HOME ${SNAPPY_HOME} CACHE PATH ${SNAPPY_HOME_INSTRUCTIONS})
@@ -195,6 +137,22 @@ else()
 	endif()
 endif()
 
+
+# Locate ZLIB
+set(ZLIB_HOME_INSTRUCTIONS "Choose the location of ZLIB where it was installed - there should be lib and include directories within")
+if(USE_ZLIB_SUBMODULE)
+	set(ZLIB_HOME "${CMAKE_BINARY_DIR}/submodules/ZLIB/install" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS} FORCE)
+	add_subdirectory(submodules/ZLIB)
+else()
+	if(DEFINED ZLIB_HOME)
+		set(ZLIB_HOME ${ZLIB_HOME} CACHE PATH ${ZLIB_HOME_INSTRUCTIONS})
+	else()
+		set(ZLIB_HOME "/usr" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS})
+	endif()
+endif()
+
+
+#ASIO
 set(ASIO_HOME_INSTRUCTIONS "Choose the location of asio header library: where it was installed - there should be an include directory within")
 if(USE_ASIO_SUBMODULE)
 	set(ASIO_HOME "${CMAKE_SOURCE_DIR}/submodules/asio/asio" CACHE PATH ${ASIO_HOME_INSTRUCTIONS} FORCE)
@@ -212,7 +170,7 @@ endif()
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/examples")
 
-if (ADD_TESTS)
+if (LIBKAFKA_ASIO_BUILD_TESTS)
 	enable_testing()
 	add_subdirectory("${PROJECT_SOURCE_DIR}/test")
 endif()

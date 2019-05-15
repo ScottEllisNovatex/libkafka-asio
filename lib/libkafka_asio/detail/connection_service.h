@@ -22,38 +22,42 @@ namespace detail
 
 template<typename Service>
 class BasicConnectionService :
-  public asio::io_service::service
+	public asio::io_service::service
 {
 public:
 
-  // Service implementation type
-  typedef std::shared_ptr<Service> implementation_type;
+	// Service implementation type
+	typedef std::shared_ptr<Service> implementation_type;
 
-  // Unique service identifier
-  static asio::io_service::id id;
+	// Unique service identifier
+	static asio::io_service::id id;
 
-  // Construct a new connection service
-  explicit BasicConnectionService(asio::io_service& io_service) :
-    asio::io_service::service(io_service)
-  {
-  }
+	// Construct a new connection service
+	explicit BasicConnectionService(asio::io_service& io_service) :
+		asio::io_service::service(io_service)
+	{
+	}
 
-  // Destroy all user-defined handler objects owned by the service
-  void shutdown_service()
-  {
-  }
+	// Destroy all user-defined handler objects owned by the service
+	void shutdown_service()
+	{
+	}
 
-  // Construct a new connection service implementation
-  void construct(implementation_type& impl)
-  {
-    impl.reset(new Service(get_io_service()));	// Was get_io_servce() get_io_context() SJE change to get Boost 1.70 / asio 1.12.2 working
-  }
+	// Construct a new connection service implementation
+	void construct(implementation_type& impl)
+	{
+#if (ASIO_VERSION > 101100)
+		impl.reset(new Service(get_io_context()));	// Was get_io_servce() get_io_context() SJE change to get Boost 1.70 / asio 1.12.2 working
+#else
+		impl.reset(new Service(get_io_service()));
+#endif
+	}
 
-  // Destroy a connection service implementation
-  void destroy(implementation_type& impl)
-  {
-    impl.reset();
-  }
+	// Destroy a connection service implementation
+	void destroy(implementation_type& impl)
+	{
+		impl.reset();
+	}
 };
 
 //
