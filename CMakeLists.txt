@@ -126,6 +126,7 @@ if(CMAKE_USE_PTHREADS_INIT)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 endif()
 
+set( Boost_DIR "${CMAKE_SOURCE_DIR}/submodules/boost_1_70_0" )
 
 # Locate SNAPPY
 set(SNAPPY_HOME_INSTRUCTIONS "Choose the location of Snappy where it was installed - there should be lib and include directories within")
@@ -149,9 +150,8 @@ set(ZLIB_HOME_INSTRUCTIONS "Choose the location of ZLIB where it was installed -
 if(USE_ZLIB_SUBMODULE)
 	set(ZLIB_HOME "${CMAKE_BINARY_DIR}/submodules/ZLIB/install" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS} FORCE)
 	
-	#build_submodule(zlib ${ZLIB_HOME} "")
+	build_submodule(zlib ${ZLIB_HOME} "")
 	
-	#add_subdirectory(submodules/ZLIB)
 else()
 	if(DEFINED ZLIB_HOME)
 		set(ZLIB_HOME ${ZLIB_HOME} CACHE PATH ${ZLIB_HOME_INSTRUCTIONS})

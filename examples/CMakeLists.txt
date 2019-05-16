@@ -6,6 +6,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/Modules")
 #Give a pointer on where to find our installed pakages.
 list(APPEND CMAKE_PREFIX_PATH "${ZLIB_HOME}")
 list(APPEND CMAKE_PREFIX_PATH "${SNAPPY_HOME}")
+list(APPEND CMAKE_PREFIX_PATH "${Boost_DIR}")
 
 find_package(Boost REQUIRED) 
 find_package(ZLIB REQUIRED)
