@@ -12,6 +12,9 @@ find_package(Boost REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Snappy REQUIRED)
 
+message( "ZLIB_LIBRARIES - ${ZLIB_LIBRARIES}")
+message( "SNAPPY_LIBRARIES - ${SNAPPY_LIBRARIES}")
+
 # add_definitions("-DLIBKAFKAASIO_NO_COMPRESSION")
 
 include_directories(
@@ -21,7 +24,7 @@ include_directories(
 		"${ZLIB_INCLUDE_DIR}"
 		"${SNAPPY_INCLUDE_DIR}")
 
-set(examples_LINK_LIBRARIES  ${ZLIB_LIBRARIES} ${SNAPPY_LINK_LIBRARY} ) 
+set(examples_LINK_LIBRARIES  ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES} ) 
 
 #if (UNIX)
  #   list(APPEND examples_LINK_LIBRARIES pthread)

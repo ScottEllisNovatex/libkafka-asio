@@ -8,24 +8,24 @@ find_library(
   NAMES snappy 
   HINTS ${SNAPPY_ROOT_DIR}/lib)
   
-find_library(
+ find_library(
   SNAPPY_DEBUG_LIBRARY
-  NAMES snappyd
-  HINTS ${SNAPPY_ROOT_DIR}/lib)
+  NAMES snappyd 
+  HINTS ${SNAPPY_ROOT_DIR}/lib) 
 
 # The snappy.cmake file gives us the path to each, choose the right one. Probably a better way to do this.
-set(SNAPPY_LINK_LIBRARY optimized ${SNAPPY_LIBRARY} debug ${SNAPPY_DEBUG_LIBRARY})
+#set(SNAPPY_LINK_LIBRARY optimized ${SNAPPY_LIBRARY} debug ${SNAPPY_DEBUG_LIBRARY})
+
+set( SNAPPY_LIBRARIES optimized ${SNAPPY_LIBRARY} debug ${SNAPPY_DEBUG_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
 
 find_package_handle_standard_args(
   Snappy DEFAULT_MSG
-  SNAPPY_LIBRARY
-  SNAPPY_DEBUG_LIBRARY
+  SNAPPY_LIBRARIES
   SNAPPY_INCLUDE_DIR)
 
 mark_as_advanced(
   SNAPPY_ROOT_DIR
-  SNAPPY_LIBRARY
-  SNAPPY_DEBUG_LIBRARY
+  SNAPPY_LIBRARIES
   SNAPPY_INCLUDE_DIR)

@@ -12,6 +12,8 @@ find_package(Boost REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Snappy REQUIRED)
 
+message( "ZLIB_LIBRARIES - ${ZLIB_LIBRARIES}")
+message( "SNAPPY_LIBRARIES - ${SNAPPY_LIBRARIES}")
 
 include_directories(
     "${PROJECT_SOURCE_DIR}/src"
@@ -25,7 +27,7 @@ file(GLOB_RECURSE ${PROJECT_NAME}_SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp" "${P
 
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
-target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARIES} ${SNAPPY_LINK_LIBRARY})
+target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 #if(UNIX)
