@@ -18,6 +18,8 @@ find_library(
 
 set( SNAPPY_LIBRARIES optimized ${SNAPPY_LIBRARY} debug ${SNAPPY_DEBUG_LIBRARY})
 
+message( "FindSnappy - SNAPPY_LIBRARIES - ${SNAPPY_LIBRARIES}")
+
 include(FindPackageHandleStandardArgs)
 
 find_package_handle_standard_args(

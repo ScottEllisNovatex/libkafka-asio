@@ -128,6 +128,22 @@ endif()
 
 set( Boost_DIR "${CMAKE_SOURCE_DIR}/submodules/boost_1_70_0" )
 
+# Locate ZLIB
+set(ZLIB_HOME_INSTRUCTIONS "Choose the location of ZLIB where it was installed - there should be lib and include directories within")
+if(USE_ZLIB_SUBMODULE)
+	set(ZLIB_HOME "${CMAKE_BINARY_DIR}/submodules/ZLIB/install" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS} FORCE)
+	
+	build_submodule(zlib ${ZLIB_HOME} "")
+	
+else()
+	if(DEFINED ZLIB_HOME)
+		set(ZLIB_HOME ${ZLIB_HOME} CACHE PATH ${ZLIB_HOME_INSTRUCTIONS})
+	else()
+		set(ZLIB_HOME "/usr" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS})
+	endif()
+endif()
+message("Zlib_home - ${ZLIB_HOME}")
+
 # Locate SNAPPY
 set(SNAPPY_HOME_INSTRUCTIONS "Choose the location of Snappy where it was installed - there should be lib and include directories within")
 if(USE_SNAPPY_SUBMODULE)
@@ -145,21 +161,7 @@ else()
 endif()
 message("Snappy_home - ${SNAPPY_HOME}")
 
-# Locate ZLIB
-set(ZLIB_HOME_INSTRUCTIONS "Choose the location of ZLIB where it was installed - there should be lib and include directories within")
-if(USE_ZLIB_SUBMODULE)
-	set(ZLIB_HOME "${CMAKE_BINARY_DIR}/submodules/ZLIB/install" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS} FORCE)
-	
-	build_submodule(zlib ${ZLIB_HOME} "")
-	
-else()
-	if(DEFINED ZLIB_HOME)
-		set(ZLIB_HOME ${ZLIB_HOME} CACHE PATH ${ZLIB_HOME_INSTRUCTIONS})
-	else()
-		set(ZLIB_HOME "/usr" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS})
-	endif()
-endif()
-message("Zlib_home - ${ZLIB_HOME}")
+
 
 
 #ASIO

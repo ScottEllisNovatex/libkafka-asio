@@ -7,7 +7,7 @@ include(ExternalProject)
 #
 macro(build_submodule name modulehome cmake_opts)
 
-	message("Build Submodule - ${name}, Modulehome - ${modulehome}")
+	message("AusGrid Build Submodule - ${name}, Modulehome - ${modulehome}")
  	set(${name}_SOURCE "${CMAKE_SOURCE_DIR}/submodules/${name}")
 	set(${name}_BUILD "${CMAKE_BINARY_DIR}/submodules/${name}")
 	mark_as_advanced(FORCE ${name}_SOURCE)
