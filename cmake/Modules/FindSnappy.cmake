@@ -16,8 +16,9 @@ find_library(
 # The snappy.cmake file gives us the path to each, choose the right one. Probably a better way to do this.
 #set(SNAPPY_LINK_LIBRARY optimized ${SNAPPY_LIBRARY} debug ${SNAPPY_DEBUG_LIBRARY})
 
-set( SNAPPY_LIBRARIES optimized ${SNAPPY_LIBRARY} debug ${SNAPPY_DEBUG_LIBRARY})
+set( SNAPPY_LIBRARIES optimized "${SNAPPY_LIBRARY}" debug "${SNAPPY_DEBUG_LIBRARY}")
 
+message( "FindSnappy - SNAPPY_LIBRARIES - ${SNAPPY_LIBRARY} - ${SNAPPY_DEBUG_LIBRARY}")
 message( "FindSnappy - SNAPPY_LIBRARIES - ${SNAPPY_LIBRARIES}")
 
 include(FindPackageHandleStandardArgs)
