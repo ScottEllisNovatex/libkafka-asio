@@ -52,7 +52,14 @@ build_script:
 #- cmd: cmake --build %cmake_builddir% --config %configuration% --target INSTALL    # Nothing we need to install. Just run tests where they were built.
 
 test_script:
-- cmd: '%cmake_builddir%\test\%configuration%\libkafka_asio_test.exe'
+- ps: |
+      cd '%cmake_builddir%\test\%configuration%\'
+      ls
+      .\libkafka_asio_test.exe -s -r junit -o junit_test_results.xml
+      $wc = New-Object 'System.Net.WebClient'
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\junit_test_results.xml))
+      
+#- cmd: '%cmake_builddir%\test\%configuration%\libkafka_asio_test.exe'
 #C:\projects\libkafka-asio\build-win32\test\Release\libkafka_asio_test.exe"
 #artifacts:
 #  - path: $(cmake_builddir)\libkafka-asio-*.*.*-*-*-*-*-*.exe
