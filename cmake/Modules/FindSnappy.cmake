@@ -25,9 +25,6 @@ if (NOT (${SNAPPY_DEBUG_LIBRARY} STREQUAL "SNAPPY_DEBUG_LIBRARY-NOTFOUND"))
 	list( APPEND SNAPPY_LIBRARIES debug "${SNAPPY_DEBUG_LIBRARY}")
 endif()
 
-message( "FindSnappy - INDIVIDUAL_SNAPPY_LIBRARIES - ${SNAPPY_LIBRARY} - ${SNAPPY_DEBUG_LIBRARY}")
-message( "FindSnappy - SNAPPY_LIBRARIES - ${SNAPPY_LIBRARIES}")
-
 include(FindPackageHandleStandardArgs)
 
 find_package_handle_standard_args(

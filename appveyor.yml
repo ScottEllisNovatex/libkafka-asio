@@ -49,25 +49,15 @@ before_build:
 
 build_script:
 - cmd: cmake --build %cmake_builddir% --config %configuration%
-- cmd: cmake --build %cmake_builddir% --config %configuration% --target PACKAGE
+#- cmd: cmake --build %cmake_builddir% --config %configuration% --target INSTALL    # Nothing we need to install. Just run tests where they were built.
 
 test_script:
 - cmd: '%cmake_builddir%\%configuration%\libkafka_asio_tests.exe'
 
-artifacts:
-  - path: $(cmake_builddir)\libkafka-asio-*.*.*-*-*-*-*-*.exe
-    name: Releases
+#artifacts:
+#  - path: $(cmake_builddir)\libkafka-asio-*.*.*-*-*-*-*-*.exe
+#    name: Releases
 
-deploy:
-  release: 'libkafka-asio $(APPVEYOR_REPO_TAG_NAME)'
-  description: ''
-  provider: GitHub
-  auth_token:
-    secure: MuDZnJV9gGH51bmihPpcFDEyAVC3bU9BPaciSz48OI3sZfe1j4Y7BaMLV4qJqwIC
-  draft: false
-  prerelease: false
-  tag: $(APPVEYOR_REPO_TAG_NAME)
-  on:
-    appveyor_repo_tag: true
+
 
 

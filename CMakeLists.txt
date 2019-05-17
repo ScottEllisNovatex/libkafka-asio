@@ -161,9 +161,6 @@ else()
 endif()
 message("Snappy_home - ${SNAPPY_HOME}")
 
-
-
-
 #ASIO
 set(ASIO_HOME_INSTRUCTIONS "Choose the location of asio header library: where it was installed - there should be an include directory within")
 if(USE_ASIO_SUBMODULE)
@@ -187,5 +184,11 @@ if (LIBKAFKA_ASIO_BUILD_TESTS)
 	add_subdirectory("${PROJECT_SOURCE_DIR}/test")
 endif()
 
-
+# Test and demo exe's, so they can be run in appveyor - may not be needed, run tests from where they are built...
+install(TARGETS libkafka_asio_test produce_cxx11 metadata_cxx11 fetch_cxx11 offset_cxx11 offset_fetch_cxx11
+  EXPORT libkafka-asioTargets
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+#dont need to install files, will be used as asubmodule of include only files.
+#install(  FILES     "${PROJECT_SOURCE_DIR}/snappy-c.h"   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )
 
