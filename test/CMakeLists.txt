@@ -34,8 +34,7 @@ if(UNIX)
 	target_link_libraries(${PROJECT_NAME} pthread)
 endif()
 
-message("Testing Enabled - test project ${PROJECT_NAME})
+message("Testing Enabled - test project ${PROJECT_NAME}")
 
 enable_testing()
 add_test(${PROJECT_NAME} ${PROJECT_NAME})
-
