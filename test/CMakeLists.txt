@@ -30,11 +30,12 @@ add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
 target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
-#if(UNIX)
-#target_link_libraries(${PROJECT_NAME} pthread)
-#endif()
-
-if(ADD_TESTS)
-    enable_testing()
-    #ADD_TESTS(${PROJECT_NAME} "" ${${PROJECT_NAME}_SOURCES})
+if(UNIX)
+	target_link_libraries(${PROJECT_NAME} pthread)
 endif()
+
+message("Testing Enabled - test project ${PROJECT_NAME})
+
+enable_testing()
+add_test(${PROJECT_NAME} ${PROJECT_NAME})
+

@@ -180,7 +180,6 @@ endif()
 add_subdirectory("${PROJECT_SOURCE_DIR}/examples")
 
 if (LIBKAFKA_ASIO_BUILD_TESTS)
-	enable_testing()
 	add_subdirectory("${PROJECT_SOURCE_DIR}/test")
 endif()
 
