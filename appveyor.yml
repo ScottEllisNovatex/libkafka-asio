@@ -58,7 +58,7 @@ test_script:
       cd $($env:CONFIGURATION)
       ls
       #.\libkafka_asio_test.exe -s -r junit -o .\junit_test_results.xml
-      .\libkafka_asio_test.exe
+      .\libkafka_asio_test.exe -r console
       $testresult = $LastExitCode
       ls
       #$wc = New-Object 'System.Net.WebClient'
