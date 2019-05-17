@@ -52,8 +52,8 @@ build_script:
 #- cmd: cmake --build %cmake_builddir% --config %configuration% --target INSTALL    # Nothing we need to install. Just run tests where they were built.
 
 test_script:
-- cmd: '%cmake_builddir%\%configuration%\libkafka_asio_tests.exe'
-
+- cmd: '%cmake_builddir%\test\%configuration%\libkafka_asio_tests.exe'
+#C:\projects\libkafka-asio\build-win32\test\Release\libkafka_asio_test.exe"
 #artifacts:
 #  - path: $(cmake_builddir)\libkafka-asio-*.*.*-*-*-*-*-*.exe
 #    name: Releases
