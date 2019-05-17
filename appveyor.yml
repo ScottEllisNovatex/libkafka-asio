@@ -57,10 +57,10 @@ test_script:
       cd test
       cd $($env:CONFIGURATION)
       ls
-      .\libkafka_asio_test.exe -s -r junit -o junit_test_results.xml
+      .\libkafka_asio_test.exe -s -r junit -o .\junit_test_results.xml
       ls
-      #$wc = New-Object 'System.Net.WebClient'
-      #$wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\junit_test_results.xml))
+      $wc = New-Object 'System.Net.WebClient'
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\junit_test_results.xml))
       
 #- cmd: '%cmake_builddir%\test\%configuration%\libkafka_asio_test.exe'
 #C:\projects\libkafka-asio\build-win32\test\Release\libkafka_asio_test.exe"
