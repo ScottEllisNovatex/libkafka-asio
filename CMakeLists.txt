@@ -3,6 +3,8 @@ project(libkafka_asio)
 
 include(buildsubmodule.cmake)
 
+# BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to make it prominent in the GUI.
+option(BUILD_SHARED_LIBS "Build shared libraries(DLLs)." OFF)
 option(USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON)
 option(USE_ZLIB_SUBMODULE "Use git submodule to download zlib code/library" ON)
 option(USE_SNAPPY_SUBMODULE "Use git submodule to download snappy code/library" ON)

@@ -8,8 +8,16 @@ list(APPEND CMAKE_PREFIX_PATH "${ZLIB_HOME}")
 list(APPEND CMAKE_PREFIX_PATH "${SNAPPY_HOME}")
 list(APPEND CMAKE_PREFIX_PATH "${Boost_DIR}")
 
+include(CheckLibraryExists)
+check_library_exists(z zlibVersion "${ZLIB_HOME}" HAVE_LIBZ)
+
+if (NOT(${HAVE_LIBZ}))
+	find_package(ZLIB REQUIRED)
+else()
+	set(SNAPPY_LIBRARIES z)
+endif()
+
 find_package(Boost REQUIRED) 
-find_package(ZLIB REQUIRED)
 find_package(Snappy REQUIRED)
 
 message( "ZLIB_LIBRARIES - ${ZLIB_LIBRARIES}")
