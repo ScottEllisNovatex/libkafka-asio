@@ -42,7 +42,7 @@ before_script:
   
   
 script: 
-  - cmake -DCMAKE_BUILD_TYPE=$BUILD_CONFIG -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX ..
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_CONFIG -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX -D_GLIBCXX_USE_CXX11_ABI=1 ..
   - cmake --build .
  # - make install
   - ls ./examples
