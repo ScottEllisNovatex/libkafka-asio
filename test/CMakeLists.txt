@@ -28,6 +28,7 @@ else()
 	if (NOT (${ZLIB_STATICD} STREQUAL "ZLIB_STATICD-NOTFOUND"))
 		list( APPEND ZLIB_LIBRARIES debug ${ZLIB_STATICD})
 	endif()
+	set(ZLIB_INCLUDE_DIR "${ZLIB_HOME}/include")
 endif()
 
 find_package(Boost REQUIRED) 
