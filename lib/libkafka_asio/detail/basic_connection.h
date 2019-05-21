@@ -101,7 +101,7 @@ public:
                     const ConnectionHandlerType& handler)
   {
     this->AsyncConnect(to_string(host),
-                       to_string>(service),
+                       to_string(service),
                        handler);
   }
 
