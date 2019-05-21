@@ -46,6 +46,6 @@ script:
   - cmake --build .
  # - make install
   - ls 
-  - ls ./install
+  - ls ./install/bin
   - ls ./test
   - ./install/bin/libkafka_asio_test
