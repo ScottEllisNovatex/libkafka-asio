@@ -187,10 +187,10 @@ if (LIBKAFKA_ASIO_BUILD_TESTS)
 endif()
 
 # Test and demo exe's, so they can be run in appveyor - may not be needed, run tests from where they are built...
-install(TARGETS  examples/produce_cxx11 examples/metadata_cxx11 examples/fetch_cxx11 examples/offset_cxx11 examples/offset_fetch_cxx11 test/libkafka_asio_test
-  EXPORT libkafka-asioTargets
-  RUNTIME DESTINATION ${INSTALLDIR_BINS}
-)
+#install(TARGETS  examples/produce_cxx11 examples/metadata_cxx11 examples/fetch_cxx11 examples/offset_cxx11 examples/offset_fetch_cxx11 test/libkafka_asio_test
+#  EXPORT libkafka-asioTargets
+#  RUNTIME DESTINATION ${INSTALLDIR_BINS}
+#)
 #dont need to install files, will be used as a submodule of include only files.
 #install(  FILES     "${PROJECT_SOURCE_DIR}/snappy-c.h"   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )
 
