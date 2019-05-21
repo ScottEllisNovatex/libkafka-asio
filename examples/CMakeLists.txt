@@ -50,9 +50,9 @@ include_directories(
 
 set(examples_LINK_LIBRARIES  ${ZLIB_LIBRARIES} ${SNAPPY_LIBRARIES} ) 
 
-#if (UNIX)
- #   list(APPEND examples_LINK_LIBRARIES pthread)
-#endif ()
+if (UNIX)
+    list(APPEND examples_LINK_LIBRARIES pthread)
+endif ()
 
 file(GLOB_RECURSE ${PROJECT_NAME}_SOURCES "${PROJECT_SOURCE_DIR}/../lib/*.h")
 

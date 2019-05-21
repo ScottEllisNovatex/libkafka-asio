@@ -37,19 +37,14 @@ before_install:
 install:
     - mkdir -p build/install && cd build
     - export INSTALL_PREFIX=$(pwd)/install
-  #- sudo apt-get install g++ 
-  #- sudo apt-get install gcc
-  # boost1.55 libgtest-dev libsnappy-dev
-  #- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++
-  #- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc
-  # - "cd /usr/src/gtest && sudo cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
-  
+    - ls
+    
 before_script:
   
   
 script: 
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_CONFIG -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX ..
   - make
-  - make install
-  - ls install
-  - install/test/libkafka_asio_test
+ # - make install
+  - ls 
+  - ./test/libkafka_asio_test
