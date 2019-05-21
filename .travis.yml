@@ -44,8 +44,9 @@ before_script:
 script: 
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_CONFIG -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX  ..
   - cmake --build .
- # - make install
+  - make install
   - ls ./examples
   - ls ./install/bin
   - ls ./test
   - ./test/libkafka_asio_test
+  - ./install/bin/libkafka_asio_test

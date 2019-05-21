@@ -75,3 +75,5 @@ set_property(TARGET offset_cxx11 PROPERTY CXX_STANDARD 11)
 add_executable(offset_fetch_cxx11 ${PROJECT_SOURCE_DIR}/offset_fetch.cpp ${${PROJECT_NAME}_SOURCES})
 target_link_libraries(offset_fetch_cxx11 ${examples_LINK_LIBRARIES})
 set_property(TARGET offset_fetch_cxx11 PROPERTY CXX_STANDARD 11)
+
+install(TARGETS fetch_cxx11 produce_cxx11 metadata_cxx11 offset_cxx11 offset_fetch_cxx11 RUNTIME DESTINATION ${INSTALLDIR_BINS})

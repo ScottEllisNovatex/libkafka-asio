@@ -64,3 +64,5 @@ message("Testing Enabled - test project ${PROJECT_NAME}")
 
 enable_testing()
 add_test( NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
+
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${INSTALLDIR_BINS})
