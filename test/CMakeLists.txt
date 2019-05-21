@@ -15,14 +15,18 @@ else()
 	if(UNIX)	
 		find_library(ZLIB_STATIC zlib.a PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)	##static linux equivalent.. (.so dynamic). We want to use our version, not one somewhere else in the system
 		find_library(ZLIB_STATICD zlibd.a PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)
-		set(ZLIB_LIBRARIES optimized;${ZLIB_STATIC};debug;${ZLIB_STATICD})
 	else()
 		find_library(ZLIB_STATIC zlibstatic PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)	#We want to use our version, not one somewhere else in the system
 		find_library(ZLIB_STATICD zlibstaticd PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)
-		set(ZLIB_LIBRARIES optimized;${ZLIB_STATIC};debug;${ZLIB_STATICD})
 	endif()
-	if (NOT(ZLIB_STATIC) OR NOT(ZLIB_STATICD))	# not empty
-		message( FATAL_ERROR "A Static ZLIB library was not found - exiting - ${ZLIB_LIBRARIES}" )
+	
+	# Handle appveyor only building the single target.
+	set( ZLIB_LIBRARIES "")
+	if (NOT (${ZLIB_STATIC STREQUAL "ZLIB_STATIC-NOTFOUND"))
+		list( APPEND ZLIB_LIBRARIES optimized ${ZLIB_STATIC})
+	endif()
+	if (NOT (${ZLIB_STATICD STREQUAL "ZLIB_STATICD-NOTFOUND"))
+		list( APPEND ZLIB_LIBRARIES debug ${ZLIB_STATICD})
 	endif()
 endif()
 
