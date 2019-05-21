@@ -36,7 +36,7 @@ inline Bytes GZIPCompressionAlgorithm::Compress(
   }
   // Initialize a new zlib stream
   ::z_stream gz = {};
-  ::gz_header header = {};
+  //::gz_header header = {};
   if (::deflateInit2(&gz, Z_DEFAULT_COMPRESSION, Z_DEFLATED, kGZIPWindowBits,
                      8, Z_DEFAULT_STRATEGY) != Z_OK)
   {
