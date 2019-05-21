@@ -1,8 +1,21 @@
 # libkafka-asio
 C++ Kafka Client Library using Boost Asio
 
-[![Build Status](https://travis-ci.org/danieljoos/libkafka-asio.svg?branch=master)](https://travis-ci.org/danieljoos/libkafka-asio)
 [![Documentation Status](https://readthedocs.org/projects/libkafka-asio/badge/?version=latest)](https://readthedocs.org/projects/libkafka-asio/?badge=latest)
+
+## Changes from Original  (danieljoos)
+Now depends on C++11 features
+Changed to use asio instead of boost::asio. This means asio is include file only, with no linking required.
+Tried to remove as much boost dependency as possible, by using C++11 features.
+Remaining boost dependancies are: crc, endian, iterator_facade. 
+Have included in submodules the boost files 1.70.0 that are required.
+Added submodules for zlib and snappy.
+Added appveyor configuration to do windows builds. This also builds the submodules, but in the configuration stage.
+Changed testing library from google test to catch2. (Again header only)
+
+Also added a runsettings file,so that the Catch test runner for Visual Studio will work. https://marketplace.visualstudio.com/items?itemName=JohnnyHendriks.ext01
+
+Why all the changes? This is so that it fits better with our target project OpenDataCon.
 
 ## Introduction
 
@@ -15,8 +28,7 @@ protocol. All Kafka APIs, including offset commit/fetch, are implemented:
 * [Offset](https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol#AGuideToTheKafkaProtocol-OffsetAPI)
 * [Offset Commit/Fetch](https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol#AGuideToTheKafkaProtocol-OffsetCommit/FetchAPI)
 
-It supports GZIP and Snappy message compression and therefore relies on the [zlib](http://www.zlib.net/) and [Snappy](https://code.google.com/p/snappy/) libraries.
-Message compression can optionally be turned off.
+It supports GZIP and Snappy message compression.
 
 The library was tested on Linux (GCC 4.9, clang 3.5.1) and Windows (MSVC 10, 11, 12). There is a set of unit tests available under [`test`](test/).
 
@@ -32,18 +44,9 @@ Also consult the documentation: [libkafka-asio Reference](http://libkafka-asio.r
 
 ## Dependencies
 
-`libkafka-asio` depends on the [Boost C++ libraries](http://www.boost.org/) -- specially on Boost Asio. The following Boost sub-libraries are explicitly used in the project:
-
-* [boost asio](http://www.boost.org/doc/libs/release/doc/html/boost_asio.html)
-* [boost bind](http://www.boost.org/doc/libs/release/libs/bind/bind.html)
-* [boost crc](http://www.boost.org/doc/libs/release/libs/crc/)
-* [boost foreach](http://www.boost.org/doc/libs/release/doc/html/foreach.html)
-* [boost integer](http://www.boost.org/doc/libs/release/libs/integer/doc/html/index.html)
-* [boost iterator](http://www.boost.org/doc/libs/release/libs/iterator/doc/index.html)
-* [boost optional](http://www.boost.org/doc/libs/release/libs/optional/doc/html/index.html)
-* [boost smart ptr](http://www.boost.org/doc/libs/release/libs/smart_ptr/smart_ptr.htm)
-* [boost system](http://www.boost.org/doc/libs/release/libs/system/doc/index.html)
-
-You need to link against `boost_thread` and `boost_system`.
-
-So installing the boost library package on your distribution should do the trick (e.g. `apt-get install libboost-dev` on Ubuntu, or `pacman -S boost` on Arch).
+asio - https://think-async.com/Asio
+zlib - https://github.com/madler/zlib
+snappy - https://github.com/google/snappy
+catch2 - https://github.com/catchorg/Catch2
+Boost 1.70.0 Dont need to install Boost, we have a reduced set in the repo
+spdlog - https://github.com/gabime/spdlog
