@@ -36,11 +36,10 @@ inline void OffsetFetchRequest::set_consumer_group(const String& consumer_group)
   consumer_group_ = consumer_group;
 }
 
-inline void OffsetFetchRequest::FetchOffset(const String& topic_name,
-                                            Int32 partition)
+inline void OffsetFetchRequest::FetchOffset(const String& topic_name, Int32 partition)
 {
   Topics::iterator topic_iter = detail::FindTopicByName(topic_name, topics_);
-  Partitions::iterator partition_iter =
+  // Gives unused warning in clang - Partitions::iterator partition_iter =
     detail::FindTopicPartitionByNumber(partition, topic_iter->partitions);
 }
 
