@@ -12,6 +12,7 @@ C++ Kafka Client Library using Boost Asio
 * Added submodules for zlib and snappy.
 * Added appveyor configuration to do windows builds. This also builds the submodules, but in the configuration stage.
 * Changed testing library from google test to catch2. (Again header only)
+* Added logging commands using spdlog
 * Also added a runsettings file,so that the Catch test runner for Visual Studio will work. https://marketplace.visualstudio.com/items?itemName=JohnnyHendriks.ext01
 
 Why all the changes? This is so that it fits better with our target project OpenDataCon.
