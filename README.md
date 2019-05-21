@@ -4,16 +4,15 @@ C++ Kafka Client Library using Boost Asio
 [![Documentation Status](https://readthedocs.org/projects/libkafka-asio/badge/?version=latest)](https://readthedocs.org/projects/libkafka-asio/?badge=latest)
 
 ## Changes from Original  (danieljoos)
-Now depends on C++11 features
-Changed to use asio instead of boost::asio. This means asio is include file only, with no linking required.
-Tried to remove as much boost dependency as possible, by using C++11 features.
-Remaining boost dependancies are: crc, endian, iterator_facade. 
-Have included in submodules the boost files 1.70.0 that are required.
-Added submodules for zlib and snappy.
-Added appveyor configuration to do windows builds. This also builds the submodules, but in the configuration stage.
-Changed testing library from google test to catch2. (Again header only)
-
-Also added a runsettings file,so that the Catch test runner for Visual Studio will work. https://marketplace.visualstudio.com/items?itemName=JohnnyHendriks.ext01
+* Now depends on C++11 features
+* Changed to use asio instead of boost::asio. This means asio is include file only, with no linking required.
+* Tried to remove as much boost dependency as possible, by using C++11 features.
+* Remaining boost dependancies are: crc, endian, iterator_facade. 
+* Have included in submodules the boost files 1.70.0 that are required.
+* Added submodules for zlib and snappy.
+* Added appveyor configuration to do windows builds. This also builds the submodules, but in the configuration stage.
+* Changed testing library from google test to catch2. (Again header only)
+* Also added a runsettings file,so that the Catch test runner for Visual Studio will work. https://marketplace.visualstudio.com/items?itemName=JohnnyHendriks.ext01
 
 Why all the changes? This is so that it fits better with our target project OpenDataCon.
 
@@ -44,9 +43,9 @@ Also consult the documentation: [libkafka-asio Reference](http://libkafka-asio.r
 
 ## Dependencies
 
-asio - https://think-async.com/Asio
-zlib - https://github.com/madler/zlib
-snappy - https://github.com/google/snappy
-catch2 - https://github.com/catchorg/Catch2
-Boost 1.70.0 Dont need to install Boost, we have a reduced set in the repo
-spdlog - https://github.com/gabime/spdlog
+* asio - https://think-async.com/Asio
+* zlib - https://github.com/madler/zlib
+* snappy - https://github.com/google/snappy
+* catch2 - https://github.com/catchorg/Catch2
+* Boost 1.70.0 Dont need to install Boost, we have a reduced set in the repo
+* spdlog - https://github.com/gabime/spdlog
