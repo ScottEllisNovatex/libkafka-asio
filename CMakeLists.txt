@@ -187,7 +187,7 @@ if (LIBKAFKA_ASIO_BUILD_TESTS)
 endif()
 
 # Test and demo exe's, so they can be run in appveyor - may not be needed, run tests from where they are built...
-install(TARGETS libkafka_asio_test produce_cxx11 metadata_cxx11 fetch_cxx11 offset_cxx11 offset_fetch_cxx11
+install(TARGETS  produce_cxx11 metadata_cxx11 fetch_cxx11 offset_cxx11 offset_fetch_cxx11 libkafka_asio_test
   EXPORT libkafka-asioTargets
   RUNTIME DESTINATION ${INSTALLDIR_BINS}
 )

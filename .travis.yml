@@ -37,7 +37,6 @@ before_install:
 install:
     - mkdir -p build/install/bin && cd build
     - export INSTALL_PREFIX=$(pwd)/install
-    - ls
     
 before_script:
   
@@ -47,4 +46,6 @@ script:
   - cmake --build .
  # - make install
   - ls 
+  - ls ./install
+  - ls ./test
   - ./install/bin/libkafka_asio_test
