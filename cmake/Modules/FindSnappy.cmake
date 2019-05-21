@@ -13,16 +13,24 @@ find_library(
   NAMES snappyd 
   HINTS ${SNAPPY_ROOT_DIR}/lib) 
 
-#Handle the case where we are only building for only optimized or debug release. 
+#TODO Find dynamic libraries if specified
+#if (BUILD_SHARED_LIBS)
+
 
 set( SNAPPY_LIBRARIES "")
+if(UNIX)
+	if (NOT (${SNAPPY_LIBRARY} STREQUAL "SNAPPY_LIBRARY-NOTFOUND"))
+		list( APPEND SNAPPY_LIBRARIES "${SNAPPY_LIBRARY}")
+	endif()
+else()
+	#Handle the case where we are only building for only optimized or debug release. 
+	if (NOT (${SNAPPY_LIBRARY} STREQUAL "SNAPPY_LIBRARY-NOTFOUND"))
+		list( APPEND SNAPPY_LIBRARIES optimized "${SNAPPY_LIBRARY}")
+	endif()
 
-if (NOT (${SNAPPY_LIBRARY} STREQUAL "SNAPPY_LIBRARY-NOTFOUND"))
-	list( APPEND SNAPPY_LIBRARIES optimized "${SNAPPY_LIBRARY}")
-endif()
-
-if (NOT (${SNAPPY_DEBUG_LIBRARY} STREQUAL "SNAPPY_DEBUG_LIBRARY-NOTFOUND"))
-	list( APPEND SNAPPY_LIBRARIES debug "${SNAPPY_DEBUG_LIBRARY}")
+	if (NOT (${SNAPPY_DEBUG_LIBRARY} STREQUAL "SNAPPY_DEBUG_LIBRARY-NOTFOUND"))
+		list( APPEND SNAPPY_LIBRARIES debug "${SNAPPY_DEBUG_LIBRARY}")
+	endif()
 endif()
 
 include(FindPackageHandleStandardArgs)

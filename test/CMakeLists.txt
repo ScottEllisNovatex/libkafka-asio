@@ -12,21 +12,25 @@ list(APPEND CMAKE_PREFIX_PATH "${Boost_DIR}")
 if (BUILD_SHARED_LIBS)
 	find_package(ZLIB REQUIRED)
 else()
+	# Handle appveyor only building the single target.
+	set( ZLIB_LIBRARIES "")
+	
 	if(UNIX)	
-		find_library(ZLIB_STATIC zlib.a PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)	##static linux equivalent.. (.so dynamic). We want to use our version, not one somewhere else in the system
-		find_library(ZLIB_STATICD zlibd.a PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)
+		find_library(ZLIB_STATIC libz.a PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)	##static linux equivalent.. (.so dynamic). We want to use our version, not one somewhere else in the system
+		
+		if (NOT (${ZLIB_STATIC} STREQUAL "ZLIB_STATIC-NOTFOUND"))
+			list( APPEND ZLIB_LIBRARIES  ${ZLIB_STATIC})
+		endif()
 	else()
 		find_library(ZLIB_STATIC zlibstatic PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)	#We want to use our version, not one somewhere else in the system
 		find_library(ZLIB_STATICD zlibstaticd PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)
-	endif()
 	
-	# Handle appveyor only building the single target.
-	set( ZLIB_LIBRARIES "")
-	if (NOT (${ZLIB_STATIC} STREQUAL "ZLIB_STATIC-NOTFOUND"))
-		list( APPEND ZLIB_LIBRARIES optimized ${ZLIB_STATIC})
-	endif()
-	if (NOT (${ZLIB_STATICD} STREQUAL "ZLIB_STATICD-NOTFOUND"))
-		list( APPEND ZLIB_LIBRARIES debug ${ZLIB_STATICD})
+		if (NOT (${ZLIB_STATIC} STREQUAL "ZLIB_STATIC-NOTFOUND"))
+			list( APPEND ZLIB_LIBRARIES optimized ${ZLIB_STATIC})
+		endif()
+		if (NOT (${ZLIB_STATICD} STREQUAL "ZLIB_STATICD-NOTFOUND"))
+			list( APPEND ZLIB_LIBRARIES debug ${ZLIB_STATICD})
+		endif()
 	endif()
 	set(ZLIB_INCLUDE_DIR "${ZLIB_HOME}/include")
 endif()

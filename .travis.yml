@@ -35,6 +35,7 @@ before_install:
   - sudo apt-get update -qq
   
 install:
+    - mkdir -p build/install && cd build
     - export INSTALL_PREFIX=$(pwd)/install
   #- sudo apt-get install g++ 
   #- sudo apt-get install gcc
@@ -46,10 +47,9 @@ install:
 before_script:
   
   
-  
 script: 
-  - mkdir build
-  - cd build
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_CONFIG -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX ..
-  - cmake --build .
-  - test/libkafka_asio_test
+  - make
+  - make install
+  - ls install
+  - install/test/libkafka_asio_test
