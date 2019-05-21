@@ -22,10 +22,10 @@ else()
 	
 	# Handle appveyor only building the single target.
 	set( ZLIB_LIBRARIES "")
-	if (NOT (${ZLIB_STATIC STREQUAL "ZLIB_STATIC-NOTFOUND"))
+	if (NOT (${ZLIB_STATIC} STREQUAL "ZLIB_STATIC-NOTFOUND"))
 		list( APPEND ZLIB_LIBRARIES optimized ${ZLIB_STATIC})
 	endif()
-	if (NOT (${ZLIB_STATICD STREQUAL "ZLIB_STATICD-NOTFOUND"))
+	if (NOT (${ZLIB_STATICD} STREQUAL "ZLIB_STATICD-NOTFOUND"))
 		list( APPEND ZLIB_LIBRARIES debug ${ZLIB_STATICD})
 	endif()
 endif()
