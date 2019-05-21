@@ -35,10 +35,11 @@ before_install:
   - sudo apt-get update -qq
   
 install:
-  - sudo apt-get install g++ 
+  #- sudo apt-get install g++ 
+  #- sudo apt-get install gcc
   # boost1.55 libgtest-dev libsnappy-dev
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc
+  #- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++
+  #- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc
   # - "cd /usr/src/gtest && sudo cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
   
 before_script:
