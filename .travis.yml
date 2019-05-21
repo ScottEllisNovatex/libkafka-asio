@@ -13,10 +13,10 @@ os:
   
 compiler:
   - gcc
-#  - clang
+  - clang
   
 env:
-#  - BUILD_CONFIG=Release
+  - BUILD_CONFIG=Release
   - BUILD_CONFIG=Debug
   
   
