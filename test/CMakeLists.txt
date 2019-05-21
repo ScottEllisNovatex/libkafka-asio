@@ -8,13 +8,22 @@ list(APPEND CMAKE_PREFIX_PATH "${ZLIB_HOME}")
 list(APPEND CMAKE_PREFIX_PATH "${SNAPPY_HOME}")
 list(APPEND CMAKE_PREFIX_PATH "${Boost_DIR}")
 
-include(CheckLibraryExists)
-check_library_exists(z zlibVersion "${ZLIB_HOME}" HAVE_LIBZ)
-
-if (NOT(${HAVE_LIBZ}))
+#Have to stuff around to get the correct ZLIB libraries, the find package always seems to come back with the DLL version.
+if (BUILD_SHARED_LIBS)
 	find_package(ZLIB REQUIRED)
 else()
-	set(SNAPPY_LIBRARIES z)
+	if(UNIX)	
+		find_library(ZLIB_STATIC zlib.a PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)	##static linux equivalent.. (.so dynamic). We want to use our version, not one somewhere else in the system
+		find_library(ZLIB_STATICD zlibd.a PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)
+		set(ZLIB_LIBRARIES optimized;${ZLIB_STATIC};debug;${ZLIB_STATICD})
+	else()
+		find_library(ZLIB_STATIC zlibstatic PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)	#We want to use our version, not one somewhere else in the system
+		find_library(ZLIB_STATICD zlibstaticd PATHS "${ZLIB_HOME}" NO_SYSTEM_ENVIRONMENT_PATH)
+		set(ZLIB_LIBRARIES optimized;${ZLIB_STATIC};debug;${ZLIB_STATICD})
+	endif()
+	if (NOT(ZLIB_STATIC) OR NOT(ZLIB_STATICD))	# not empty
+		message( FATAL_ERROR "A Static ZLIB library was not found - exiting - ${ZLIB_LIBRARIES}" )
+	endif()
 endif()
 
 find_package(Boost REQUIRED) 

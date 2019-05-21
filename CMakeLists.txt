@@ -13,6 +13,7 @@ option(LIBKAFKA_ASIO_BUILD_TESTS "Build the libkafka-asio catch2 based tests" ON
 # Only when we use asio standalone.. 
 add_definitions(-DASIO_STANDALONE) # required for ASIO in C++11 only mode
 
+
 # Platform configuration
 if(WIN32)
 	set(CMAKE_SUPPRESS_REGENERATION true)	# removes the ZERO_CHECK project for VS, which rebuilds on CMake file change.
@@ -151,7 +152,7 @@ set(SNAPPY_HOME_INSTRUCTIONS "Choose the location of Snappy where it was install
 if(USE_SNAPPY_SUBMODULE)
 	set(SNAPPY_HOME "${CMAKE_BINARY_DIR}/submodules/Snappy/install" CACHE PATH ${SNAPPY_HOME_INSTRUCTIONS} FORCE)
 	
-	build_submodule(snappy ${SNAPPY_HOME} "-DSNAPPY_BUILD_TESTS=OFF")
+	build_submodule(snappy ${SNAPPY_HOME} "-DSNAPPY_BUILD_TESTS=OFF;-DHAVE_LIBZ=1")
 	
 	#add_subdirectory(submodules/SNAPPY)	# this would build at build time which does not work well for VS
 else()
