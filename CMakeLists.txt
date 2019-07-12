@@ -5,10 +5,10 @@ include(buildsubmodule.cmake)
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries(DLLs)." OFF)
-option(USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON)
-option(USE_ZLIB_SUBMODULE "Use git submodule to download zlib code/library" ON)
-option(USE_SNAPPY_SUBMODULE "Use git submodule to download snappy code/library" ON)
-option(USE_SPDLOG_SUBMODULE "Use git submodule to download spdlog header library" ON)
+option(KAFKA_USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON)
+option(KAFKA_USE_ZLIB_SUBMODULE "Use git submodule to download zlib code/library" ON)
+option(KAFKA_USE_SNAPPY_SUBMODULE "Use git submodule to download snappy code/library" ON)
+option(KAFKA_USE_SPDLOG_SUBMODULE "Use git submodule to download spdlog header library" ON)
 
 option(KAFKA_BUILD_TESTS "Build the libkafka-asio catch2 based tests" ON)
 option(KAFKA_BUILD_EXAMPLES "Build the libkafka-asio example code" ON)
@@ -136,7 +136,7 @@ set( Boost_DIR "${CMAKE_SOURCE_DIR}/submodules/boost_1_70_0" )
 
 # Locate ZLIB
 set(ZLIB_HOME_INSTRUCTIONS "Choose the location of ZLIB where it was installed - there should be lib and include directories within")
-if(USE_ZLIB_SUBMODULE)
+if(KAFKA_USE_ZLIB_SUBMODULE)
 	set(ZLIB_HOME "${CMAKE_BINARY_DIR}/submodules/ZLIB/install" CACHE PATH ${ZLIB_HOME_INSTRUCTIONS} FORCE)
 	
 	build_submodule(zlib ${ZLIB_HOME} "")
@@ -152,7 +152,7 @@ message("Zlib_home - ${ZLIB_HOME}")
 
 # Locate SNAPPY
 set(SNAPPY_HOME_INSTRUCTIONS "Choose the location of Snappy where it was installed - there should be lib and include directories within")
-if(USE_SNAPPY_SUBMODULE)
+if(KAFKA_USE_SNAPPY_SUBMODULE)
 	set(SNAPPY_HOME "${CMAKE_BINARY_DIR}/submodules/Snappy/install" CACHE PATH ${SNAPPY_HOME_INSTRUCTIONS} FORCE)
 	
 	build_submodule(snappy ${SNAPPY_HOME} "-DSNAPPY_BUILD_TESTS=OFF;-DHAVE_LIBZ=1")
@@ -168,7 +168,7 @@ message("Snappy_home - ${SNAPPY_HOME}")
 
 #ASIO
 set(ASIO_HOME_INSTRUCTIONS "Choose the location of asio header library: where it was installed - there should be an include directory within")
-if(USE_ASIO_SUBMODULE)
+if(KAFKA_USE_ASIO_SUBMODULE)
 	set(ASIO_HOME "${CMAKE_SOURCE_DIR}/submodules/asio/asio" CACHE PATH ${ASIO_HOME_INSTRUCTIONS} FORCE)
 	if(NOT EXISTS "${ASIO_HOME}/.git")
 		execute_process(COMMAND git submodule update --init -- submodules/asio
@@ -183,7 +183,7 @@ else()
 endif()
 #Spdlog
 set(SPDLOG_HOME_INSTRUCTIONS "Choose the location of spdlog header library: where it was installed - there should be an include directory within")
-if(USE_SPDLOG_SUBMODULE)
+if(KAFKA_USE_SPDLOG_SUBMODULE)
 	set(SPDLOG_HOME "${CMAKE_SOURCE_DIR}/submodules/spdlog" CACHE PATH ${SPDLOG_HOME_INSTRUCTIONS} FORCE)
 	if(NOT EXISTS "${SPDLOG_HOME}/.git")
 		execute_process(COMMAND git submodule update --init -- submodules/spdlog
