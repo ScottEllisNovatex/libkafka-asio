@@ -1,4 +1,3 @@
-include(ExternalProject)
 #
 #   Build a sub module in the configure phase. Used for submodules that do not change
 #   and we need available (and installed) for the main build.
