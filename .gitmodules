@@ -3,7 +3,7 @@
 	url = https://github.com/google/snappy.git
 [submodule "submodules/zlib"]
 	path = submodules/zlib
-	url = https://github.com/madler/zlib
+url=https://github.com/madler/zlib.git
 [submodule "submodules/asio"]
 	path = submodules/asio
 	url = https://github.com/chriskohlhoff/asio.git
