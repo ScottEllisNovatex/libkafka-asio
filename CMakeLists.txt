@@ -8,7 +8,10 @@ option(BUILD_SHARED_LIBS "Build shared libraries(DLLs)." OFF)
 option(USE_ASIO_SUBMODULE "Use git submodule to download asio header library" ON)
 option(USE_ZLIB_SUBMODULE "Use git submodule to download zlib code/library" ON)
 option(USE_SNAPPY_SUBMODULE "Use git submodule to download snappy code/library" ON)
-option(LIBKAFKA_ASIO_BUILD_TESTS "Build the libkafka-asio catch2 based tests" ON)
+option(USE_SPDLOG_SUBMODULE "Use git submodule to download spdlog header library" ON)
+
+option(KAFKA_BUILD_TESTS "Build the libkafka-asio catch2 based tests" ON)
+option(KAFKA_BUILD_EXAMPLES "Build the libkafka-asio example code" ON)
 
 # Only when we use asio standalone.. 
 add_definitions(-DASIO_STANDALONE) # required for ASIO in C++11 only mode
@@ -154,7 +157,6 @@ if(USE_SNAPPY_SUBMODULE)
 	
 	build_submodule(snappy ${SNAPPY_HOME} "-DSNAPPY_BUILD_TESTS=OFF;-DHAVE_LIBZ=1")
 	
-	#add_subdirectory(submodules/SNAPPY)	# this would build at build time which does not work well for VS
 else()
 	if(DEFINED SNAPPY_HOME)
 		set(SNAPPY_HOME ${SNAPPY_HOME} CACHE PATH ${SNAPPY_HOME_INSTRUCTIONS})
@@ -179,10 +181,26 @@ else()
 		set(ASIO_HOME "/usr" CACHE PATH ${ASIO_HOME_INSTRUCTIONS})
 	endif()
 endif()
+#Spdlog
+if(USE_SPDLOG_SUBMODULE)
+	set(SPDLOG_HOME "${CMAKE_SOURCE_DIR}/submodules/spdlog" CACHE PATH ${SPDLOG_HOME_INSTRUCTIONS} FORCE)
+	if(NOT EXISTS "${SPDLOG_HOME}/.git")
+		execute_process(COMMAND git submodule update --init -- submodules/spdlog
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+	endif()
+else()
+	if(DEFINED SPDLOG_HOME)
+		set(SPDLOG_HOME ${SPDLOG_HOME} CACHE PATH ${SPDLOG_HOME_INSTRUCTIONS})
+	else()
+		set(SPDLOG_HOME "/usr" CACHE PATH ${SPDLOG_HOME_INSTRUCTIONS})
+	endif()
+endif()
 
-add_subdirectory("${PROJECT_SOURCE_DIR}/examples")
+if (KAFKA_BUILD_EXAMPLES)
+	add_subdirectory("${PROJECT_SOURCE_DIR}/examples")
+endif()
 
-if (LIBKAFKA_ASIO_BUILD_TESTS)
+if (KAFKA_BUILD_TESTS)
 	add_subdirectory("${PROJECT_SOURCE_DIR}/test")
 endif()
 
