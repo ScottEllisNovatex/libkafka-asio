@@ -182,6 +182,7 @@ else()
 	endif()
 endif()
 #Spdlog
+set(SPDLOG_HOME_INSTRUCTIONS "Choose the location of spdlog header library: where it was installed - there should be an include directory within")
 if(USE_SPDLOG_SUBMODULE)
 	set(SPDLOG_HOME "${CMAKE_SOURCE_DIR}/submodules/spdlog" CACHE PATH ${SPDLOG_HOME_INSTRUCTIONS} FORCE)
 	if(NOT EXISTS "${SPDLOG_HOME}/.git")
